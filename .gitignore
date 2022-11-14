@@ -20,8 +20,9 @@ ios/Pods
 .flutter-plugins
 .flutter-plugins-dependencies
 ios/Flutter
-downloads_path_provider/example/.flutter-plugins-dependencies
 ios/Runner/GeneratedPluginRegistrant.m
+downloads_path_provider/example/.flutter-plugins-dependencies
+
 
 # Avoid committing generated Javascript files:
 *.dart.js
