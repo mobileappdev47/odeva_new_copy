@@ -1,0 +1,16 @@
+name: downloads_path_provider_28
+description: Flutter plugin to get the download directory for Android modified for sdk version 28+. Forked from Daniel MF.
+version: 0.1.0
+homepage: https://github.com/chitgoks/downloads_path_provider
+
+environment:
+  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+flutter:
+  plugin:
+    androidPackage: it.nplace.downloadspathprovider
+    pluginClass: DownloadsPathProviderPlugin

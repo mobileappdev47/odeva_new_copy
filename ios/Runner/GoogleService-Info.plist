@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>118961537-63uq4ivsqmij9kijic0ige2rc8mqpmpm.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.118961537-63uq4ivsqmij9kijic0ige2rc8mqpmpm</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>118961537-1v74874r3s1b0ruc9797nd88mco6vhhp.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAdNZ1ir_RhfOaby4j34j8f_pUEzFeCu9s</string>
+	<key>GCM_SENDER_ID</key>
+	<string>118961537</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>odeva.click</string>
+	<key>PROJECT_ID</key>
+	<string>odeva-8713d</string>
+	<key>STORAGE_BUCKET</key>
+	<string>odeva-8713d.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:118961537:ios:7a46e33deb3cd00e592480</string>
+</dict>
+</plist>
