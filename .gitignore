@@ -13,6 +13,9 @@ doc/api/
 .idea
 android/.gitignore
 android/.idea
+android/app/release/app-release.aab
+ios/.symlinks
+ios/Podfile.lock
 
 # Avoid committing generated Javascript files:
 *.dart.js
