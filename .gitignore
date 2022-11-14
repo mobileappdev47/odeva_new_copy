@@ -16,6 +16,7 @@ android/.idea
 android/app/release/app-release.aab
 ios/.symlinks
 ios/Podfile.lock
+ios/Pods
 
 # Avoid committing generated Javascript files:
 *.dart.js
