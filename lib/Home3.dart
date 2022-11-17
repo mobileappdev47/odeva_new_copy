@@ -2173,6 +2173,8 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
                         ),
                       ),
 
+
+
                       ///price and offpricw
                       Positioned(
                         top: deviceWidth * 0.430, //deviceHeight*0.210,
@@ -2230,7 +2232,7 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
                                           child: Container(
                                             padding: EdgeInsets.all(4),
                                             child: Icon(
-                                              Icons.remove,
+                                              Icons.add,
                                               size: 18,
                                               color: colors.darkColor,
                                             ),

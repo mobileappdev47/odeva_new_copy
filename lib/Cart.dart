@@ -2314,7 +2314,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                                     showWallet(),
                                                     cartItems(),
                                                     moredeliveryamt(),
-                                                    promo(),
+                                                    //promo(),
                                                     deliveryTextInformation(),
                                                     orderSummary(),
                                                     opencontainer(),
@@ -3372,7 +3372,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
       selectedDateTime = "Date : " + selDate + " " + "Time : " + selTime;
     }
     return Column(children: [
-      Card(
+      /*Card(
         elevation: 0,
         child: InkWell(
           borderRadius: BorderRadius.circular(4),
@@ -3408,7 +3408,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
             ),
           ),
         ),
-      ),
+      ),*/
       // Card(
       //   elevation: 0,
       //   child: InkWell(
@@ -3923,7 +3923,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Column(
+                 /*             Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
@@ -4067,7 +4067,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                                     fontSize: 15))),
                                   )
                                 ],
-                              )
+                              )*/
                             ],
                           ),
                         )

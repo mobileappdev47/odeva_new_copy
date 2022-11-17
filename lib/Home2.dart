@@ -1952,7 +1952,7 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
                                     // margin: EdgeInsetsDirectional.only(
                                     //     end: 8),
                                     child: Icon(
-                                      Icons.remove,
+                                      Icons.add,
                                       size: 18,
                                       color: colors.darkColor,
                                     ),

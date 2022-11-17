@@ -299,6 +299,13 @@ class StatePayment extends State<Payment> with TickerProviderStateMixin {
                                         )
                                       : Container(),
                                 ),*/
+
+
+
+
+
+
+
                                 isTimeSlot
                                     ? Card(
                                         elevation: 0,
@@ -551,10 +558,14 @@ class StatePayment extends State<Payment> with TickerProviderStateMixin {
             var data = getdata["data"];
             var time_slot = data["time_slot_config"];
             allowDay = time_slot["allowed_days"];
-            isTimeSlot =
-                time_slot["is_time_slots_enabled"] == "1" ? true : false;
+           /* isTimeSlot =
+                time_slot["is_time_slots_enabled"] == "1" ? true : false;*/
+            isTimeSlot = false;
             startingDate = time_slot["starting_date"];
-            codAllowed=data["is_cod_allowed"]==1?true:false;
+
+
+            /*codAllowed=data["is_cod_allowed"]==1?true:false;*/
+            codAllowed= true;
 
             var timeSlots = data["time_slots"];
             timeSlotList = (timeSlots as List)
@@ -607,7 +618,8 @@ class StatePayment extends State<Payment> with TickerProviderStateMixin {
 
 
 
-            cod = codAllowed?payment["cod_method"] == "1" ? true : false:false;
+            /*cod = codAllowed?payment["cod_method"] == "1" ? true : false:false;*/
+            cod = true;
             paypal = payment["paypal_payment_method"] == "1" ? true : false;
             paumoney =
                 payment["payumoney_payment_method"] == "1" ? true : false;

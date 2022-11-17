@@ -1287,7 +1287,8 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
                                       color: Color(0xfff6b343),
                                       fontWeight: FontWeight.bold,fontSize: 14),),
                             ),
-                            ///for offprice
+                            ///for offprice 1
+
                             Positioned(
                               top: 202,
                               left: 12,
