@@ -141,7 +141,7 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
                         style: Theme.of(context)
                             .textTheme
                             .subtitle1
-                            .copyWith(color: colors.fontColor),
+                            .copyWith(color: colors.white),
                       ),
                       email != null
                           ? Text(
@@ -149,7 +149,7 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
                               style: Theme.of(context)
                                   .textTheme
                                   .subtitle2
-                                  .copyWith(color: colors.fontColor),
+                                  .copyWith(color: colors.white),
                             )
                           : Container(),
                       CUR_BALANCE != null &&
@@ -163,7 +163,7 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
                               style: Theme.of(context)
                                   .textTheme
                                   .subtitle2
-                                  .copyWith(color: colors.fontColor))
+                                  .copyWith(color: colors.white))
                           : Container(),
                       CUR_USERNAME == "" || CUR_USERNAME == null
                           ? Padding(
@@ -201,10 +201,10 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
                                         style: Theme.of(context)
                                             .textTheme
                                             .caption
-                                            .copyWith(color: colors.primary)),
+                                            .copyWith(color: colors.white)),
                                     Icon(
                                       Icons.arrow_right_outlined,
-                                      color: colors.primary,
+                                      color: colors.white,
                                       size: 20,
                                     ),
                                   ],
@@ -564,7 +564,7 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
 
   _getDrawerFirst() {
     return Card(
-      color: Color(0xff200738),
+      color: colors.darkColor,
       margin: EdgeInsetsDirectional.only(start: 10.0, end: 10.0),
       elevation: 0,
       child: ListView(
@@ -620,7 +620,7 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
 
   _getDrawerSecond() {
     return Card(
-      color: Color(0xff200738),
+      color: colors.darkColor,
       margin: EdgeInsetsDirectional.only(
           start: 10.0, end: 10.0, top: 15.0, bottom: 15.0),
       elevation: 0,
@@ -656,8 +656,8 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
           _getDivider(),
           /*       _getDrawerItem(getTranslated(context, 'chat'),
               'assets/images/pro_customersupport.svg'),*/
-          _getDrawerItem(getTranslated(context, 'livechat'),
-              'assets/images/pro_customersupport.svg'),
+          // _getDrawerItem(getTranslated(context, 'livechat'),
+          //     'assets/images/pro_customersupport.svg'),
           _getDrawerItem(getTranslated(context, 'SHARE_APP'),
               'assets/images/pro_share.svg'),
           CUR_USERID == "" || CUR_USERID == null ? Container() : _getDivider(),
@@ -1277,7 +1277,7 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xff200738),
+        backgroundColor: colors.darkColor,
         key: scaffoldKey,
         body: SafeArea(
           child: SingleChildScrollView(

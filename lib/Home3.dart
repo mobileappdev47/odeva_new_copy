@@ -16,6 +16,7 @@ import 'package:eshop/chat_manager/chat_manager.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:flutter/services.dart';
+import 'package:get/get.dart' as g;
 
 import 'package:marquee/marquee.dart';
 import 'package:eshop/All_Category.dart';
@@ -184,7 +185,7 @@ class StateHome extends State<Home> {
       titleSpacing: 15,
       title: Text(
         "Notifications",
-        style: TextStyle(color: colors.fontColor, fontWeight: FontWeight.bold),
+        style: TextStyle(color: colors.white, fontWeight: FontWeight.bold),
       ),
       centerTitle: false,
       iconTheme: new IconThemeData(color: colors.primary),
@@ -252,7 +253,7 @@ class StateHome extends State<Home> {
           ),
         ),
       ],
-      backgroundColor: Color(0xff200738),
+      backgroundColor: colors.darkColor,
       //curSelected == 0 ? Colors.transparent : colors.white,
       elevation: 0,
     );
@@ -268,7 +269,7 @@ class StateHome extends State<Home> {
       titleSpacing: 15,
       title: Text(
         "Favorites",
-        style: TextStyle(color: colors.fontColor, fontWeight: FontWeight.bold),
+        style: TextStyle(color: colors.white, fontWeight: FontWeight.bold),
       ),
       centerTitle: false,
       iconTheme: new IconThemeData(color: colors.primary),
@@ -336,7 +337,7 @@ class StateHome extends State<Home> {
           ),
         ),
       ],
-      backgroundColor: Color(0xff200738),
+      backgroundColor: colors.darkColor,
       //curSelected == 0 ? Colors.transparent : colors.white,
       elevation: 0,
     );
@@ -353,7 +354,8 @@ class StateHome extends State<Home> {
           ? Container(
               height: 73,
               width: 200,
-              child: Image.asset('assets/images/titleicon.png'))
+              // child: Image.asset('assets/images/titleicon.png')
+            )
           : Text(
               title,
               style: TextStyle(
@@ -574,7 +576,7 @@ class StateHome extends State<Home> {
         //key: bottomNavigationKey,
         //backgroundColor: isDarkTheme ? colors.darkColor : colors.lightWhite,
         type: BottomNavigationBarType.fixed,
-        backgroundColor: Color(0xff341069),
+        backgroundColor: colors.darkColor,
         //colors.lightWhite,
         //color: isDarkTheme ? colors.darkColor2 : colors.white,
         items: [
@@ -827,7 +829,6 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
 
   init() {
     print("This is Home Page");
-
     print(totalmessageCount);
     //callApi();
     getCat();
@@ -958,7 +959,7 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
           appBar: AppBar(
             toolbarHeight: 150, //deviceHeight*0.207,
             backgroundColor:
-                curhome3Selected == 0 ? Color(0xFF200738) : colors.white,
+                curhome3Selected == 0 ? colors.darkColor : colors.white,
             elevation: 0,
             //centerTitle: true,
             flexibleSpace: SafeArea(
@@ -973,8 +974,13 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
                         Container(
                           height: deviceWidth * 0.216,
                           width: deviceWidth * 0.586,
-                          child: Image.asset('assets/images/titleicon.png',
-                              fit: BoxFit.fill),
+                          ///todo : home icon
+                          // child: Image.asset(
+                          //   'assets/images/titleicon.png',
+                          //   fit: BoxFit.fill,
+                          //   color: colors.white,
+                          // ),
+                          child: Image.asset("assets/images/new_title_logo.png"),
                         ),
                         Padding(
                           padding: const EdgeInsetsDirectional.only(
@@ -1050,11 +1056,11 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
                       decoration: BoxDecoration(
                         border: Border(
                           top: BorderSide(
-                            color: Color(0xFF200738), //Color(0xfff1f1f1),
+                            color: colors.darkColor, //Color(0xfff1f1f1),
                             width: 1,
                           ),
                         ),
-                        color: Color(0xFF200738),
+                        color: colors.darkColor,
                       ),
                       height: 30,
                       padding: EdgeInsets.symmetric(horizontal: 10),
@@ -1221,8 +1227,8 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
                             colors: [
                               // Color(0xFF280F43),
                               // Color(0xffE5CCFF),
-                              Color(0xFF200738),
-                              Color(0xFF3B147A),
+                              colors.darkColor,
+                              colors.darkColor.withOpacity(0.8),
                               Color(0xFFF8F8FF),
                             ]),
                       ),
@@ -1233,190 +1239,193 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
                             controller: _tc,
                             children: _views.map((view) => view).toList(),
                           ),
-                          Positioned(
-                              bottom: 5,
-                              right: 10,
-                              child: FloatingActionButton(
-                                backgroundColor: Color(0xff341069),
-                                onPressed: () async {
-                                  CUR_USERID = await getPrefrence(ID);
-                                  if (CUR_USERID != null) {
-                                    setState(() {});
 
-                                    isManager = await getPrefrence("isManager");
-
-                                    if (isManager == "true") {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (_) => ChatManager()));
-                                    } else {
-                                      showModalBottomSheet(
-                                          isScrollControlled: true,
-                                          context: context,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            topRight: Radius.circular(10),
-                                          )),
-                                          builder: (builder) {
-                                            return StatefulBuilder(
-                                              builder: (BuildContext context,
-                                                  StateSetter setState) {
-                                                setState = setState;
-                                                return Container(
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height /
-                                                      1.1,
-                                                  child: ChatFireScreen(
-                                                    isManager: false,
-                                                    roomId: null,
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          }).then((value) {
-                                        init();
-                                      });
-                                    }
-                                  } else {
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => Login(),
-                                        ));
-                                  }
-                                  // Future.delayed(Duration(milliseconds: 100), () {
-                                  //   isShow = true;
-                                  // });
-                                  // Future.delayed(Duration(seconds: 5), () {
-                                  //   isShow1 = true;
-                                  // });
-
-                                  // showModalBottomSheet(
-                                  //     isScrollControlled: true,
-                                  //     shape: RoundedRectangleBorder(
-                                  //         borderRadius: BorderRadius.only(
-                                  //             topLeft: Radius.circular(10),
-                                  //             topRight: Radius.circular(10))),
-                                  //     context: context,
-                                  //     builder: (builder) {
-                                  //       return StatefulBuilder(builder:
-                                  //           (BuildContext context, StateSetter setState) {
-                                  //         stateSet = setState;
-                                  //         return Padding(
-                                  //           padding: MediaQuery.of(context).viewInsets,
-                                  //           child: Stack(
-                                  //             children: [
-                                  //               Container(
-                                  //                 height: MediaQuery.of(context).size.height /
-                                  //                     1.2,
-                                  //                 child: Tawk(
-                                  //                   directChatLink:
-                                  //                   'https://tawk.to/chat/623b7e145a88d50db1a702f4/1fus690c2',
-                                  //                   visitor: TawkVisitor(
-                                  //                     name: 'Ayoub AMINE',
-                                  //                     email: 'ayoubamine2a@gmail.com',
-                                  //                   ),
-                                  //                   onLoad: () {
-                                  //                     Future.delayed(
-                                  //                         Duration(milliseconds: 100), () {
-                                  //                       stateSet(() {
-                                  //                         isShow = true;
-                                  //                       });
-                                  //                       setState(() {});
-                                  //                     });
-                                  //                     Future.delayed(Duration(seconds: 5),
-                                  //                             () {
-                                  //                           stateSet(() {
-                                  //                             isShow1 = true;
-                                  //                           });
-                                  //                           setState(() {});
-                                  //                         });
-                                  //                     print('Hello Tawk!');
-                                  //                   },
-                                  //                   onLinkTap: (String url) {
-                                  //                     print(url);
-                                  //                   },
-                                  //                   placeholder: Center(
-                                  //                     child: Text('Loading...'),
-                                  //                   ),
-                                  //                 ),
-                                  //               ),
-                                  //               isShow == true
-                                  //                   ? Positioned(
-                                  //                   top: 25,
-                                  //                   left: 30,
-                                  //                   child: InkWell(
-                                  //                     onTap: () {
-                                  //                       stateSet(() {
-                                  //                         isShow = false;
-                                  //                         isShow1 = false;
-                                  //                       });
-                                  //                       setState(() {});
-                                  //                       Navigator.pop(context);
-                                  //                     },
-                                  //                     child: Container(
-                                  //                         decoration: BoxDecoration(
-                                  //                             color: Color(0xFF111f70),
-                                  //                             borderRadius:
-                                  //                             BorderRadius.circular(
-                                  //                                 20)),
-                                  //                         child: Icon(
-                                  //                           Icons.close,
-                                  //                           color: Colors.white,
-                                  //                         )),
-                                  //                   ))
-                                  //                   : SizedBox(),
-                                  //               isShow1 == true
-                                  //                   ? Positioned(
-                                  //                   top: 20,
-                                  //                   left: 300,
-                                  //                   right: 30,
-                                  //                   child: Container(
-                                  //                       height: MediaQuery.of(context)
-                                  //                           .size
-                                  //                           .height /
-                                  //                           19,
-                                  //                       color: Color(0xFF111f70)))
-                                  //                   : SizedBox(),
-                                  //             ],
-                                  //           ),
-                                  //         );
-                                  //       });
-                                  //     }).then((value){
-                                  //   setState(() {
-                                  //     stateSet((){
-                                  //       isShow = false;
-                                  //       isShow1 = false;
-                                  //     });
-                                  //   });
-                                  // });
-                                },
-                                child: Center(
-                                  child: Stack(
-                                    children: [
-                                      Icon(
-                                        Icons.chat,
-                                        color: Colors.white,
-                                      ),
-                                      totalmessageCount >= 1
-                                          ? Positioned(
-                                              right: 0,
-                                              child: Container(
-                                                height: 8,
-                                                width: 8,
-                                                decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: Colors.red),
-                                              ),
-                                            )
-                                          : SizedBox()
-                                    ],
-                                  ),
-                                ),
-                              )),
+                          ///todo : chat button 1 (Home)
+                          // Positioned(
+                          //   bottom: 5,
+                          //   right: 10,
+                          //   child: FloatingActionButton(
+                          //     backgroundColor: Color(0xff341069),
+                          //     onPressed: () async {
+                          //       CUR_USERID = await getPrefrence(ID);
+                          //       if (CUR_USERID != null) {
+                          //         setState(() {});
+                          //
+                          //         isManager = await getPrefrence("isManager");
+                          //
+                          //         if (isManager == "true") {
+                          //           Navigator.push(
+                          //               context,
+                          //               MaterialPageRoute(
+                          //                   builder: (_) => ChatManager()));
+                          //         } else {
+                          //           showModalBottomSheet(
+                          //               isScrollControlled: true,
+                          //               context: context,
+                          //               shape: RoundedRectangleBorder(
+                          //                   borderRadius: BorderRadius.only(
+                          //                 topLeft: Radius.circular(10),
+                          //                 topRight: Radius.circular(10),
+                          //               )),
+                          //               builder: (builder) {
+                          //                 return StatefulBuilder(
+                          //                   builder: (BuildContext context,
+                          //                       StateSetter setState) {
+                          //                     setState = setState;
+                          //                     return Container(
+                          //                       height: MediaQuery.of(context)
+                          //                               .size
+                          //                               .height /
+                          //                           1.1,
+                          //                       child: ChatFireScreen(
+                          //                         isManager: false,
+                          //                         roomId: null,
+                          //                       ),
+                          //                     );
+                          //                   },
+                          //                 );
+                          //               }).then((value) {
+                          //             init();
+                          //           });
+                          //         }
+                          //       } else {
+                          //         Navigator.pushReplacement(
+                          //             context,
+                          //             MaterialPageRoute(
+                          //               builder: (context) => Login(),
+                          //             ));
+                          //       }
+                          //       // Future.delayed(Duration(milliseconds: 100), () {
+                          //       //   isShow = true;
+                          //       // });
+                          //       // Future.delayed(Duration(seconds: 5), () {
+                          //       //   isShow1 = true;
+                          //       // });
+                          //
+                          //       // showModalBottomSheet(
+                          //       //     isScrollControlled: true,
+                          //       //     shape: RoundedRectangleBorder(
+                          //       //         borderRadius: BorderRadius.only(
+                          //       //             topLeft: Radius.circular(10),
+                          //       //             topRight: Radius.circular(10))),
+                          //       //     context: context,
+                          //       //     builder: (builder) {
+                          //       //       return StatefulBuilder(builder:
+                          //       //           (BuildContext context, StateSetter setState) {
+                          //       //         stateSet = setState;
+                          //       //         return Padding(
+                          //       //           padding: MediaQuery.of(context).viewInsets,
+                          //       //           child: Stack(
+                          //       //             children: [
+                          //       //               Container(
+                          //       //                 height: MediaQuery.of(context).size.height /
+                          //       //                     1.2,
+                          //       //                 child: Tawk(
+                          //       //                   directChatLink:
+                          //       //                   'https://tawk.to/chat/623b7e145a88d50db1a702f4/1fus690c2',
+                          //       //                   visitor: TawkVisitor(
+                          //       //                     name: 'Ayoub AMINE',
+                          //       //                     email: 'ayoubamine2a@gmail.com',
+                          //       //                   ),
+                          //       //                   onLoad: () {
+                          //       //                     Future.delayed(
+                          //       //                         Duration(milliseconds: 100), () {
+                          //       //                       stateSet(() {
+                          //       //                         isShow = true;
+                          //       //                       });
+                          //       //                       setState(() {});
+                          //       //                     });
+                          //       //                     Future.delayed(Duration(seconds: 5),
+                          //       //                             () {
+                          //       //                           stateSet(() {
+                          //       //                             isShow1 = true;
+                          //       //                           });
+                          //       //                           setState(() {});
+                          //       //                         });
+                          //       //                     print('Hello Tawk!');
+                          //       //                   },
+                          //       //                   onLinkTap: (String url) {
+                          //       //                     print(url);
+                          //       //                   },
+                          //       //                   placeholder: Center(
+                          //       //                     child: Text('Loading...'),
+                          //       //                   ),
+                          //       //                 ),
+                          //       //               ),
+                          //       //               isShow == true
+                          //       //                   ? Positioned(
+                          //       //                   top: 25,
+                          //       //                   left: 30,
+                          //       //                   child: InkWell(
+                          //       //                     onTap: () {
+                          //       //                       stateSet(() {
+                          //       //                         isShow = false;
+                          //       //                         isShow1 = false;
+                          //       //                       });
+                          //       //                       setState(() {});
+                          //       //                       Navigator.pop(context);
+                          //       //                     },
+                          //       //                     child: Container(
+                          //       //                         decoration: BoxDecoration(
+                          //       //                             color: Color(0xFF111f70),
+                          //       //                             borderRadius:
+                          //       //                             BorderRadius.circular(
+                          //       //                                 20)),
+                          //       //                         child: Icon(
+                          //       //                           Icons.close,
+                          //       //                           color: Colors.white,
+                          //       //                         )),
+                          //       //                   ))
+                          //       //                   : SizedBox(),
+                          //       //               isShow1 == true
+                          //       //                   ? Positioned(
+                          //       //                   top: 20,
+                          //       //                   left: 300,
+                          //       //                   right: 30,
+                          //       //                   child: Container(
+                          //       //                       height: MediaQuery.of(context)
+                          //       //                           .size
+                          //       //                           .height /
+                          //       //                           19,
+                          //       //                       color: Color(0xFF111f70)))
+                          //       //                   : SizedBox(),
+                          //       //             ],
+                          //       //           ),
+                          //       //         );
+                          //       //       });
+                          //       //     }).then((value){
+                          //       //   setState(() {
+                          //       //     stateSet((){
+                          //       //       isShow = false;
+                          //       //       isShow1 = false;
+                          //       //     });
+                          //       //   });
+                          //       // });
+                          //     },
+                          //     child: Center(
+                          //       child: Stack(
+                          //         children: [
+                          //           Icon(
+                          //             Icons.chat,
+                          //             color: Colors.white,
+                          //           ),
+                          //           totalmessageCount >= 1
+                          //               ? Positioned(
+                          //                   right: 0,
+                          //                   child: Container(
+                          //                     height: 8,
+                          //                     width: 8,
+                          //                     decoration: BoxDecoration(
+                          //                         shape: BoxShape.circle,
+                          //                         color: Colors.red),
+                          //                   ),
+                          //                 )
+                          //               : SizedBox()
+                          //         ],
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                     )
@@ -2005,7 +2014,7 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
                       : GridView.count(
                           shrinkWrap: true,
                           crossAxisCount: 2,
-                          childAspectRatio: 0.78,
+                          childAspectRatio: 0.75,
                           physics: NeverScrollableScrollPhysics(),
                           children: List.generate(
                             subItem.length,
@@ -2048,12 +2057,43 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
             _controller2[tabIndex].length.toString());
       }
       _controller2[tabIndex][index].text = getQty(model);
+      print("QTY FROM API : ${_controller2[tabIndex][index].text}");
+      String dropdownValue = "${subItem[index].defaultOrder}";
+
+      var items = [
+        '50',
+        '100',
+        '250',
+        '500',
+        '1000',
+      ];
+      if(int.parse(subItem[index].minimumOrderQuantity) == 100 ){
+        items.remove("50");
+      }else if(int.parse(subItem[index].minimumOrderQuantity) == 250){
+        items.remove("50");
+        items.remove("100");
+      }else if(int.parse(subItem[index].minimumOrderQuantity) == 500){
+        items.remove("50");
+        items.remove("100");
+        items.remove("250");
+      }else if(int.parse(subItem[index].minimumOrderQuantity) == 1000){
+        items.remove("50");
+        items.remove("100");
+        items.remove("250");
+        items.remove("500");
+      }
+
+      if(!items.contains(subItem[index].defaultOrder)){
+        items.add(subItem[index].defaultOrder);
+      }
+
 
       return subItem.length >= index
           ? Padding(
               padding: const EdgeInsets.all(10.0),
               child: Container(
                 decoration: BoxDecoration(
+                  // border: Border.all(color: Colors.red),
                   borderRadius: BorderRadius.only(
                     bottomRight: Radius.circular(15),
                     bottomLeft: Radius.circular(15),
@@ -2068,11 +2108,13 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
                         bottom: 0,
                         right: 0,
                         left: 0,
-                        top: deviceWidth * 0.293,
+                        top: deviceWidth * 0.293 - 3,
                         //deviceWidtgh*0.293,
                         child: Container(
                           decoration: BoxDecoration(
+                            // border: Border.all(color: Colors.green),
                             color: Color(0xffFBFBFB), ////313237
+                            // color: Colors.purple, ////313237
                             borderRadius: BorderRadius.all(
                               Radius.circular(15),
                             ),
@@ -2085,7 +2127,7 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
                                 child: Container(
                                   decoration: BoxDecoration(
                                     color: Color(0xffFFFFFF), //313237
-
+                                    // color: Colors.yellow,
                                     borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(15),
                                       topRight: Radius.circular(15),
@@ -2102,9 +2144,30 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
                                 ),
                               ),
                               Expanded(
-                                flex: 1,
+                                  flex: 1,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Color(0xffFFFFFF), //313237
+                                      // color: Colors.orange,
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(15),
+                                        topRight: Radius.circular(15),
+                                        //bottomLeft: Radius.circular(15),bottomRight: Radius.circular(15),
+                                      ),
+                                      boxShadow: [
+                                        //BoxShadow(blurRadius: 33.0),
+                                        BoxShadow(
+                                            color: shadowColor(),
+                                            offset: Offset(0, -2),
+                                            blurRadius: 33),
+                                      ],
+                                    ),
+                                  )),
+                              Expanded(
+                                flex: 2,
                                 child: Container(
                                   decoration: BoxDecoration(
+                                    // color:Colors.red,
                                     color: Color(0xffFFFFFF), //313237
                                     // borderRadius: BorderRadius.all(
                                     //  Radius.circular(15),
@@ -2126,7 +2189,7 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
                       Positioned(
                         left: deviceWidth * 0.038,
                         child: Container(
-                          //color: Colors.tealAccent,
+                          // color: Colors.tealAccent,
                           height: deviceWidth * 0.350, //deviceHeight * 0.185,
                           width: deviceWidth * 0.370,
                           child: GestureDetector(
@@ -2156,7 +2219,7 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
 
                       ///for name
                       Positioned(
-                        top: deviceWidth * 0.370, //deviceHeight * 0.182,
+                        top: deviceWidth * 0.370 - 3, //deviceHeight * 0.182,
                         left: deviceWidth * 0.0255,
                         right: deviceWidth * 0.0127,
                         child: Container(
@@ -2173,11 +2236,63 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
                         ),
                       ),
 
-
-
-                      ///price and offpricw
+                      ///DropDown
                       Positioned(
-                        top: deviceWidth * 0.430, //deviceHeight*0.210,
+                        top: deviceWidth * 0.425 - 20, //deviceHeight*0.210,
+                        left: deviceWidth * 0.0210,
+                        child: Container(
+                          width: g.Get.width / 3,
+                          // decoration: BoxDecoration(
+                          //     // color: Colors.white38,
+                          //     border: Border.all()),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                              underline: Divider(
+                                color: Colors.teal,
+                              ),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                              value: dropdownValue,
+                              icon: const Icon(Icons.keyboard_arrow_down),
+                              items: items.map((String items) {
+                                return DropdownMenuItem(
+                                  enabled: true,
+                                  value: items,
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                        border: Border(
+                                            bottom: BorderSide(
+                                                color: Colors.grey))),
+                                    margin: EdgeInsets.only(bottom: 5),
+                                    child: Text(
+                                      "$items gm",
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (val) {
+                                setState(() {
+                                  dropdownValue = val;
+                                  subItem[index].defaultOrder = val;
+                                });
+                                setState(() {
+                                  _views[_tc.index] =
+                                      createTabContent(_tc.index, subList);
+                                });
+                                print("SELECTED DROPDOWN VAL : $dropdownValue");
+                                // updateHomePage();
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      ///price and off price
+                      Positioned(
+                        top: deviceWidth * 0.495 - 10,
+                        //deviceWidth * 0.430 + 25, //deviceHeight*0.210,
                         left: deviceWidth * 0.0210,
                         child: Container(
                           child: Row(
@@ -2201,9 +2316,9 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
                               ),
                               Text(
                                 " " +
-                                    CUR_CURRENCY +
+                                    CUR_CURRENCY+
                                     " " +
-                                    price.toStringAsFixed(2),
+                                  priceUpdate(price2: price.toStringAsFixed(2),grams2: subItem[index].defaultOrder) ,
                                 style: TextStyle(
                                     fontSize: deviceHeight * 0.0200,
                                     color: colors.darkColor,
@@ -2218,7 +2333,8 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
                           ? Container()
                           //: cartBtnList
                           : Positioned(
-                              top: deviceWidth * 0.500, //deviceHeight * 0.243,
+                              top: deviceWidth * 0.55 - 12,
+                              // deviceWidth * 0.500 +25, //deviceHeight * 0.243,
                               left: deviceWidth * 0.0255,
                               child: Container(
                                 width: deviceWidth * 0.43,
@@ -2232,7 +2348,7 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
                                           child: Container(
                                             padding: EdgeInsets.all(4),
                                             child: Icon(
-                                              Icons.add,
+                                              Icons.remove,
                                               size: 18,
                                               color: colors.darkColor,
                                             ),
@@ -2443,6 +2559,21 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
     } else
       return Container();
   }
+
+
+  String priceUpdate({String grams2, String price2}) {
+    double price = double.parse(price2.toString());
+    int gram = int.parse(grams2.toString());
+    var gramPrice;
+    if(gram == 0){
+      gramPrice = price;
+    }else{
+       gramPrice = (price * gram) / 1000;
+    }
+
+    return gramPrice.toString();
+  }
+
 
   _setFav(int index, List<Product> subItem) async {
     if (index < subItem.length) {
@@ -2697,17 +2828,21 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
         _isProgress = true;
         _views[_tc.index] = createTabContent(_tc.index, subList);
       });
-
-    if (int.parse(qty) < model.minOrderQuntity) {
+///TODO : QTY REMOVE
+    ///if (int.parse(qty) < model.minOrderQuntity)
+    if (int.parse(qty) < 1) {
       qty = model.minOrderQuntity.toString();
       setSnackbar('Minimum order quantity is $qty');
     }
 
+    print("DD Grams ===> ${model.defaultOrder}");
     var parameter = {
       USER_ID: CUR_USERID,
       PRODUCT_VARIENT_ID: model.prVarientList[model.selVarient].id,
-      QTY: qty
+      QTY: qty,
+      "gram":model.defaultOrder
     };
+    print("manageCartApi Pass BODY ===> $parameter");
 
     Response response =
         await post(manageCartApi, body: parameter, headers: headers)
@@ -2750,8 +2885,8 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
           addItem(qty: qty, context: context, index: index, model: model);
 /*          print("OPEN_STORE_TIME : ${model.openStoreTime} ");
           print("CLOSE_STORE_TIME  ${model.closeStoreTime}");
-    *//*      model.openStoreTime = "7:0:0";
-          model.closeStoreTime = "10:0:0";*//*
+    */ /*      model.openStoreTime = "7:0:0";
+          model.closeStoreTime = "10:0:0";*/ /*
           DateTime now = DateTime.now();
           DateTime openStoreTime = DateTime(
               now.year,
@@ -2879,16 +3014,18 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
           qty = (int.parse(model.prVarientList[model.selVarient].cartCount) -
               int.parse(model.qtyStepSize));
 
-          if (qty < model.minOrderQuntity) {
-            qty = 0;
-          }
+          ///MINIMUM QUANTITY
+          // if (qty < model.minOrderQuntity) {
+          //   qty = 0;
+          // }
 
           var parameter = {
             PRODUCT_VARIENT_ID: model.prVarientList[model.selVarient].id,
             USER_ID: CUR_USERID,
-            QTY: qty.toString()
+            QTY: qty.toString(),
+            "gram":model.defaultOrder
           };
-
+          print("manageCartApi Pass BODY ===> $parameter");
           Response response =
               await post(manageCartApi, body: parameter, headers: headers)
                   .timeout(Duration(seconds: timeOut));

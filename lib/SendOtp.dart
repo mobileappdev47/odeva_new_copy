@@ -32,7 +32,7 @@ class _SendOtpState extends State<SendOtp> with TickerProviderStateMixin {
   final mobileController = TextEditingController();
   final ccodeController = TextEditingController();
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-  String mobile, id, countrycode, countryName, mobileno;
+  String mobile, id, countrycode = "91", countryName = "India", mobileno;
   bool _isNetworkAvail = true, ischecked = false;
   Animation buttonSqueezeanimation;
   AnimationController buttonController;
@@ -306,9 +306,9 @@ class _SendOtpState extends State<SendOtp> with TickerProviderStateMixin {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Expanded(
-                  flex: 2,
-                  child: setCountryCode(),
-                ),
+                    flex: 2,
+                    child: Container(
+                        alignment: Alignment.center, child: Text("+91"))),
                 Expanded(
                   flex: 4,
                   child: setMono(),
@@ -317,34 +317,34 @@ class _SendOtpState extends State<SendOtp> with TickerProviderStateMixin {
             )));
   }
 
-  setCountryCode() {
-    double width = deviceWidth;
-    double height = deviceHeight * 0.9;
-    return CountryCodePicker(
-        showCountryOnly: false,
-        flagWidth: 20,
-        boxDecoration: BoxDecoration(
-          color: colors.lightWhite,
-        ),
-        searchDecoration: InputDecoration(
-          hintText: getTranslated(context, 'COUNTRY_CODE_LBL'),
-          hintStyle: TextStyle(color: colors.fontColor),
-          fillColor: colors.fontColor,
-        ),
-        showOnlyCountryWhenClosed: false,
-        initialSelection: 'GB',
-        dialogSize: Size(width, height),
-        alignLeft: true,
-        textStyle:
-            TextStyle(color: colors.fontColor, fontWeight: FontWeight.bold),
-        onChanged: (CountryCode countryCode) {
-          countrycode = countryCode.toString().replaceFirst("+", "");
-          countryName = countryCode.name;
-        },
-        onInit: (code) {
-          countrycode = code.toString().replaceFirst("+", "");
-        });
-  }
+  // setCountryCode() {
+  //   double width = deviceWidth;
+  //   double height = deviceHeight * 0.9;
+  //   return CountryCodePicker(
+  //       showCountryOnly: false,
+  //       flagWidth: 20,
+  //       boxDecoration: BoxDecoration(
+  //         color: colors.lightWhite,
+  //       ),
+  //       searchDecoration: InputDecoration(
+  //         hintText: getTranslated(context, 'COUNTRY_CODE_LBL'),
+  //         hintStyle: TextStyle(color: colors.fontColor),
+  //         fillColor: colors.fontColor,
+  //       ),
+  //       showOnlyCountryWhenClosed: false,
+  //       initialSelection: 'GB',
+  //       dialogSize: Size(width, height),
+  //       alignLeft: true,
+  //       textStyle:
+  //           TextStyle(color: colors.fontColor, fontWeight: FontWeight.bold),
+  //       onChanged: (CountryCode countryCode) {
+  //         countrycode = countryCode.toString().replaceFirst("+", "");
+  //         countryName = countryCode.name;
+  //       },
+  //       onInit: (code) {
+  //         countrycode = code.toString().replaceFirst("+", "");
+  //       });
+  // }
 
   setMono() {
     return TextFormField(
@@ -504,7 +504,10 @@ class _SendOtpState extends State<SendOtp> with TickerProviderStateMixin {
   expandedBottomView() {
     return Expanded(
       child: Container(
-        padding: EdgeInsets.only(top:widget.title == getTranslated(context, 'SEND_OTP_TITLE') ? 10:30),
+        padding: EdgeInsets.only(
+            top: widget.title == getTranslated(context, 'SEND_OTP_TITLE')
+                ? 10
+                : 30),
         alignment: Alignment.center,
         child: ScrollConfiguration(
             behavior: MyBehavior(),

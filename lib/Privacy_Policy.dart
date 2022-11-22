@@ -101,7 +101,7 @@ class StatePrivacy extends State<PrivacyPolicy> with TickerProviderStateMixin {
         ? Scaffold(
             key: _scaffoldKey,
             appBar: AppBar(
-              backgroundColor: Color(0xFF200738),
+              backgroundColor: colors.darkColor,
               titleSpacing: 0,
               leading: Builder(builder: (BuildContext context) {
                 return Container(
@@ -134,7 +134,7 @@ class StatePrivacy extends State<PrivacyPolicy> with TickerProviderStateMixin {
         : privacy != null
             ? WebviewScaffold(
                 appBar: AppBar(
-                  backgroundColor: Color(0xFF200738),
+                  backgroundColor: colors.darkColor,
                   titleSpacing: 0,
                   leading: Builder(builder: (BuildContext context) {
                     return Container(

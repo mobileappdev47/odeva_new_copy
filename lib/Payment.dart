@@ -81,13 +81,13 @@ class StatePayment extends State<Payment> with TickerProviderStateMixin {
 
       paymentMethodList = [
         getTranslated(context, 'COD_LBL'),
-        getTranslated(context, 'PAYPAL_LBL'),
-        getTranslated(context, 'PAYUMONEY_LBL'),
-        getTranslated(context, 'RAZORPAY_LBL'),
-        getTranslated(context, 'PAYSTACK_LBL'),
-        getTranslated(context, 'FLUTTERWAVE_LBL'),
-        getTranslated(context, 'STRIPE_LBL'),
-        getTranslated(context, 'PAYTM_LBL'),
+        // getTranslated(context, 'PAYPAL_LBL'),
+        // getTranslated(context, 'PAYUMONEY_LBL'),
+        // getTranslated(context, 'RAZORPAY_LBL'),
+        // getTranslated(context, 'PAYSTACK_LBL'),
+        // getTranslated(context, 'FLUTTERWAVE_LBL'),
+        // getTranslated(context, 'STRIPE_LBL'),
+        // getTranslated(context, 'PAYTM_LBL'),
       ];
     });
     if (widget.msg != '')
@@ -154,7 +154,7 @@ class StatePayment extends State<Payment> with TickerProviderStateMixin {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Color(0xFF200738),
+        backgroundColor: colors.darkColor,
         titleSpacing: 0,
         leading: Builder(builder: (BuildContext context) {
           return Container(
@@ -176,7 +176,7 @@ class StatePayment extends State<Payment> with TickerProviderStateMixin {
           );
         }),
         title: Text(
-          "Delivery Date and Time",
+          "Payment",
           style: TextStyle(
             color: colors.fontColor,
           ),
@@ -192,8 +192,9 @@ class StatePayment extends State<Payment> with TickerProviderStateMixin {
               colors: [
                 // Color(0xFF280F43),
                 // Color(0xffE5CCFF),
-                Color(0xFF200738),
-                Color(0xFF3B147A),
+               colors.darkColor,
+               colors.darkColor.withOpacity(0.8),
+                // Color(0xFF3B147A),
                 Color(0xFFF8F8FF),
               ]),
         ),

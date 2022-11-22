@@ -1,4 +1,4 @@
-package odeva.clickk;
+package com.ramanandi.fruits;
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity;

@@ -22,7 +22,8 @@ class StateSuccess extends State<OrderSuccess> {
     deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF200738),
+        backgroundColor: colors.darkColor,
+        elevation: 0,
         leading: InkWell(
           onTap: (){
             Navigator.of(context).pushNamedAndRemoveUntil(
@@ -68,8 +69,10 @@ class StateSuccess extends State<OrderSuccess> {
               colors: [
                 // Color(0xFF280F43),
                 // Color(0xffE5CCFF),
-                Color(0xFF200738),
-                Color(0xFF3B147A),
+                // Color(0xff315835),
+                // Color(0xff315835).withOpacity(0.5),
+                colors.darkColor,
+                colors.darkColor2,
                 Color(0xFFF8F8FF),
               ]),
         ),
@@ -153,86 +156,86 @@ class StateSuccess extends State<OrderSuccess> {
                     },
                   ),
                   SizedBox(height: 20,),
-                  Container(
-                    padding: EdgeInsets.only(left: 60),
-                    width: Get.width,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          getTranslated(context, 'flllows'),
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 20,),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 60),
-                    child: Row(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            url("https://www.facebook.com/Odeva.click/");
-                          },
-                          child: Container(
-                              height: 40,
-                              width: 40,
-                              child: Image.asset(
-                                "assets/images/facebook.png",
-                                fit: BoxFit.cover,
-                              )),
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            url("https://www.instagram.com/accounts/login/?next=/odeva.click/");
-                          },
-                          child: Container(
-                              height: 40,
-                              width: 40,
-                              child: Image.asset(
-                                "assets/images/Instagram.png",
-                                fit: BoxFit.cover,
-                              )),
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            url("https://www.tiktok.com/@odevaapp");
-                          },
-                          child: Container(
-                              height: 40,
-                              width: 40,
-                              child: Image.asset(
-                                "assets/images/tiktok.png",
-                                fit: BoxFit.cover,
-                              )),
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            url("https://twitter.com/Odeva_app");
-                          },
-                          child: Container(
-                              height: 40,
-                              width: 40,
-                              child: Image.asset(
-                                "assets/images/twitter.png",
-                                fit: BoxFit.cover,
-                              )),
-                        )
-                      ],
-                    ),
-                  ),
+                  // Container(
+                  //   padding: EdgeInsets.only(left: 60),
+                  //   width: Get.width,
+                  //   child: Column(
+                  //     mainAxisAlignment: MainAxisAlignment.start,
+                  //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //     children: [
+                  //       Text(
+                  //         getTranslated(context, 'flllows'),
+                  //         style: TextStyle(
+                  //             color: Colors.white, fontWeight: FontWeight.bold),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+                  // SizedBox(height: 20,),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(left: 60),
+                  //   child: Row(
+                  //     children: [
+                  //       InkWell(
+                  //         onTap: () {
+                  //           url("https://www.facebook.com/Odeva.click/");
+                  //         },
+                  //         child: Container(
+                  //             height: 40,
+                  //             width: 40,
+                  //             child: Image.asset(
+                  //               "assets/images/facebook.png",
+                  //               fit: BoxFit.cover,
+                  //             )),
+                  //       ),
+                  //       SizedBox(
+                  //         width: 20,
+                  //       ),
+                  //       InkWell(
+                  //         onTap: () {
+                  //           url("https://www.instagram.com/accounts/login/?next=/odeva.click/");
+                  //         },
+                  //         child: Container(
+                  //             height: 40,
+                  //             width: 40,
+                  //             child: Image.asset(
+                  //               "assets/images/Instagram.png",
+                  //               fit: BoxFit.cover,
+                  //             )),
+                  //       ),
+                  //       SizedBox(
+                  //         width: 20,
+                  //       ),
+                  //       InkWell(
+                  //         onTap: () {
+                  //           url("https://www.tiktok.com/@odevaapp");
+                  //         },
+                  //         child: Container(
+                  //             height: 40,
+                  //             width: 40,
+                  //             child: Image.asset(
+                  //               "assets/images/tiktok.png",
+                  //               fit: BoxFit.cover,
+                  //             )),
+                  //       ),
+                  //       SizedBox(
+                  //         width: 20,
+                  //       ),
+                  //       InkWell(
+                  //         onTap: () {
+                  //           url("https://twitter.com/Odeva_app");
+                  //         },
+                  //         child: Container(
+                  //             height: 40,
+                  //             width: 40,
+                  //             child: Image.asset(
+                  //               "assets/images/twitter.png",
+                  //               fit: BoxFit.cover,
+                  //             )),
+                  //       )
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               )),
         ),

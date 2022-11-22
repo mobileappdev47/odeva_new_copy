@@ -119,7 +119,7 @@ class StateNoti extends State<NotificationList> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xff200738),
+        backgroundColor: colors.darkColor,
         key: _scaffoldKey,
         body:Stack(
           children: [
@@ -137,8 +137,8 @@ class StateNoti extends State<NotificationList> with TickerProviderStateMixin {
                         colors: [
                           // Color(0xFF280F43),
                           // Color(0xffE5CCFF),
-                          Color(0xFF200738),
-                          Color(0xFF3B147A),
+                          colors.darkColor,
+                          colors.darkColor.withOpacity(0.8),
                           Color(0xFFF8F8FF),
                         ]),
                   ),
@@ -155,8 +155,8 @@ class StateNoti extends State<NotificationList> with TickerProviderStateMixin {
                         colors: [
                           // Color(0xFF280F43),
                           // Color(0xffE5CCFF),
-                          Color(0xFF200738),
-                          Color(0xFF3B147A),
+                          colors.darkColor,
+                          colors.darkColor.withOpacity(0.8),
                           Color(0xFFF8F8FF),
                         ]),
                   ),
@@ -175,7 +175,9 @@ class StateNoti extends State<NotificationList> with TickerProviderStateMixin {
                   ),
                 ))
                 : noInternet(context),
-            Positioned(
+
+            ///todo : chat button 4 (Notification)
+          /*  Positioned(
                 bottom: 5,
                 right: 10,
                 child: FloatingActionButton(
@@ -260,7 +262,7 @@ class StateNoti extends State<NotificationList> with TickerProviderStateMixin {
                       ],
                     ),
                   ),
-                )),
+                )),*/
           ],
         ));
   }

@@ -130,7 +130,7 @@ class StateOrder extends State<OrderDetail> with TickerProviderStateMixin {
         ),
       ),
       iconTheme: new IconThemeData(color: colors.primary),
-      backgroundColor: Color(0xFF200738),
+      backgroundColor: colors.darkColor,
       //colors.white,
       // elevation: 5,
       leading: Builder(builder: (BuildContext context) {

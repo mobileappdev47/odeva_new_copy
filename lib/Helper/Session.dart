@@ -82,7 +82,7 @@ back() {
 shadow() {
   return BoxDecoration(
     boxShadow: [
-      BoxShadow(color: Color(0x1a0400ff), offset: Offset(0, 0), blurRadius: 30)
+      BoxShadow(color: colors.darkColor, offset: Offset(0, 0), blurRadius: 30)
     ],
   );
 }
@@ -254,7 +254,7 @@ String validateMob1(String value, String msg1, String msg2) {
   if (value.isEmpty) {
     return msg1;
   }
-  if (value.length < 11) {
+  if (value.length <= 9) {
     return msg2;
   }
   return null;

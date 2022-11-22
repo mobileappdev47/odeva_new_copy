@@ -126,6 +126,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
   TextEditingController paymentController = TextEditingController();
   bool isLoading = false;
   List delayProductList = [];
+  List<String> grams = [];
 
   //List<PaymentItem> _gpaytItems = [];
   //Pay _gpayClient;
@@ -258,7 +259,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           resizeToAvoidBottomInset: true,
           appBar: AppBar(
             titleSpacing: 0,
-            backgroundColor: Color(0XFF170B35),
+            backgroundColor: colors.darkColor,
             leading: Builder(builder: (BuildContext context) {
               return Container(
                 margin: EdgeInsets.all(10),
@@ -305,7 +306,9 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                             ],
                           )
                         : noInternet(context),
-                    Positioned(
+
+                    ///todo : chat button 5
+                    /*      Positioned(
                         bottom: 60,
                         right: 10,
                         child: FloatingActionButton(
@@ -371,7 +374,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                               color: Colors.white,
                             ),
                           ),
-                        )),
+                        )),*/
                   ],
                 )),
     );
@@ -397,6 +400,19 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     // Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
   }
 
+  String priceUpdate({String grams2, String price2}) {
+    double price = double.parse(price2.toString());
+    int gram = int.parse(grams2.toString());
+    var gramPrice;
+    if (gram == 0) {
+      gramPrice = price;
+    } else {
+      gramPrice = (price * gram) / 1000;
+    }
+
+    return gramPrice.toString();
+  }
+
   Widget listItem(int index) {
     int selectedPos = 0;
     for (int i = 0;
@@ -413,8 +429,16 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           cartList[index].productList[0].prVarientList[selectedPos].price);
 
     cartList[index].perItemPrice = price.toString();
+
+    ///per Item
+
+    double gm = double.parse(grams[index].toString());
+    double p = (gm == 0 ? price : ((gm * price) / 1000));
+
     cartList[index].perItemTotal =
-        (price * double.parse(cartList[index].qty)).toString();
+        (/*price*/ p * double.parse(cartList[index].qty)).toString();
+
+    print("PER ITEM TOTAL ${cartList[index].perItemTotal}");
 
     if (_controller.length < index + 1)
       _controller.add(new TextEditingController());
@@ -434,6 +458,40 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           .varient_value
           .split(',');
     }
+
+    ///todo : set gram order wise
+    //   String dropdownValue = cartList[index].productList[0].defaultOrder;
+    String dropdownValue = grams[index];
+
+    var items = [
+      '50',
+      '100',
+      '250',
+      '500',
+      '1000',
+    ];
+    if (int.parse(cartList[index].productList[0].minimumOrderQuantity) == 100) {
+      items.remove("50");
+    } else if (int.parse(cartList[index].productList[0].minimumOrderQuantity) ==
+        250) {
+      items.remove("50");
+      items.remove("100");
+    } else if (int.parse(cartList[index].productList[0].minimumOrderQuantity) ==
+        500) {
+      items.remove("50");
+      items.remove("100");
+      items.remove("250");
+    } else if (int.parse(cartList[index].productList[0].minimumOrderQuantity) ==
+        1000) {
+      items.remove("50");
+      items.remove("100");
+      items.remove("250");
+      items.remove("500");
+    }
+    if (!items.contains(cartList[index].productList[0].defaultOrder)) {
+      items.add(cartList[index].productList[0].defaultOrder);
+    }
+
     return Card(
       elevation: 0.1,
       child: Padding(
@@ -487,7 +545,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                           ),
                           onTap: () {
                             if (_isProgress == false)
-                              removeFromCart(index, true, cartList, false);
+                              removeFromCart(
+                                  index, true, cartList, false, grams[index]);
                           },
                         )
                       ],
@@ -556,12 +615,60 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                               letterSpacing: 0.7),
                         ),
                         Text(
-                          " " + CUR_CURRENCY + " " + price.toString(),
+                          " " +
+                              CUR_CURRENCY +
+                              " " +
+                              priceUpdate(
+                                  price2: price.toString(),
+                                  grams2: dropdownValue
+                                      .toString()) /*price.toString()*/,
                           style: TextStyle(
                               color: colors.fontColor,
                               fontWeight: FontWeight.bold),
                         ),
                       ],
+                    ),
+                    Container(
+                      width: Get.width,
+                      height: 30,
+                      decoration: BoxDecoration(
+                          border:
+                              Border.all(color: colors.black.withOpacity(0.6)),
+                          borderRadius: BorderRadius.all(Radius.circular(5))),
+                      padding: EdgeInsets.only(left: 10),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          value: dropdownValue,
+                          icon: const Icon(Icons.keyboard_arrow_down),
+                          items: items.map((String items) {
+                            return DropdownMenuItem(
+                              enabled: true,
+                              value: items,
+                              child: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                        bottom:
+                                            BorderSide(color: Colors.grey))),
+                                margin: EdgeInsets.only(bottom: 5),
+                                child: Text(
+                                  "$items gm",
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (val) {
+                            setState(() {
+                              dropdownValue = val;
+                              grams.removeAt(index);
+                              grams.insert(index, val);
+                            });
+                            print("SELECTED DROPDOWN VAL : $dropdownValue");
+                            // updateHomePage();
+                          },
+                        ),
+                      ),
                     ),
                     cartList[index].productList[0].availability == "1" ||
                             cartList[index].productList[0].stockType == "null"
@@ -586,8 +693,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                     ),
                                     onTap: () {
                                       if (_isProgress == false)
-                                        removeFromCart(
-                                            index, false, cartList, false);
+                                        removeFromCart(index, false, cartList,
+                                            false, grams[index]);
                                     },
                                   ),
                                   Container(
@@ -620,7 +727,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                             ),
                                           ),
                                         ),
-                                        PopupMenuButton<String>(
+                                        /* PopupMenuButton<String>(
                                           tooltip: '',
                                           icon: const Icon(
                                             Icons.arrow_drop_down,
@@ -641,7 +748,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                                   value: value);
                                             }).toList();
                                           },
-                                        ),
+                                        ),*/
                                       ],
                                     ),
                                   ), // ),
@@ -668,7 +775,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                                     int.parse(cartList[index]
                                                         .productList[0]
                                                         .qtyStepSize))
-                                                .toString());
+                                                .toString(),
+                                            dropdownValue);
                                       }
                                     },
                                   )
@@ -703,7 +811,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                               cartList[index].qty,
                                               double.parse(
                                                   cartList[index].perItemTotal),
-                                              cartList[index]);
+                                              cartList[index],
+                                              grams[index]);
                                         }
                                       : null,
                                 ),
@@ -737,8 +846,13 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           cartList[index].productList[0].prVarientList[selectedPos].price);
 
     cartList[index].perItemPrice = price.toString();
+
+    ///per item
+    double gm = double.parse(grams[index].toString());
+    double p = (gm == 0 ? price : ((gm * price) / 1000));
     cartList[index].perItemTotal =
-        (price * double.parse(cartList[index].qty)).toString();
+        (/*price*/ p * double.parse(cartList[index].qty)).toString();
+    print("PER ITEM TOTAL ${cartList[index].perItemTotal}");
 
     _controller[index].text = cartList[index].qty;
 
@@ -759,6 +873,39 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
 
     String id, varId;
     bool avail = false;
+
+    ///todo : set gram order wise
+    //   String dropdownValue = cartList[index].productList[0].defaultOrder;
+    String dropdownValue = grams[index];
+
+    var items = [
+      '50',
+      '100',
+      '250',
+      '500',
+      '1000',
+    ];
+    if (int.parse(cartList[index].productList[0].minimumOrderQuantity) == 100) {
+      items.remove("50");
+    } else if (int.parse(cartList[index].productList[0].minimumOrderQuantity) ==
+        250) {
+      items.remove("50");
+      items.remove("100");
+    } else if (int.parse(cartList[index].productList[0].minimumOrderQuantity) ==
+        500) {
+      items.remove("50");
+      items.remove("100");
+      items.remove("250");
+    } else if (int.parse(cartList[index].productList[0].minimumOrderQuantity) ==
+        1000) {
+      items.remove("50");
+      items.remove("100");
+      items.remove("250");
+      items.remove("500");
+    }
+    if (!items.contains(cartList[index].productList[0].defaultOrder)) {
+      items.add(cartList[index].productList[0].defaultOrder);
+    }
 
     return Card(
       elevation: 0.5,
@@ -820,7 +967,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                               ),
                               onTap: () {
                                 if (_isProgress == false)
-                                  removeFromCartCheckout(index, true);
+                                  removeFromCartCheckout(
+                                      index, true, grams[index]);
                               },
                             )
                           ],
@@ -906,8 +1054,12 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                   Text(
                                     " " +
                                         CUR_CURRENCY +
-                                        " " +
-                                        price.toStringAsFixed(2),
+                                        " " + //price
+                                        priceUpdate(
+                                            price2: price
+                                                .toStringAsFixed(2)
+                                                .toString(),
+                                            grams2: grams[index]),
                                     style: TextStyle(
                                         color: colors.fontColor,
                                         fontWeight: FontWeight.bold),
@@ -945,7 +1097,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                             onTap: () {
                                               if (_isProgress == false)
                                                 removeFromCartCheckout(
-                                                    index, false);
+                                                    index, false, grams[index]);
                                             },
                                           ),
 
@@ -987,32 +1139,32 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                                     ),
                                                   ),
                                                 ),
-                                                PopupMenuButton<String>(
-                                                  tooltip: '',
-                                                  icon: const Icon(
-                                                    Icons.arrow_drop_down,
-                                                    size: 1,
-                                                  ),
-                                                  onSelected: (String value) {
-                                                    addToCartCheckout(
-                                                        index, value);
-                                                  },
-                                                  itemBuilder:
-                                                      (BuildContext context) {
-                                                    return cartList[index]
-                                                        .productList[0]
-                                                        .itemsCounter
-                                                        .map<
-                                                                PopupMenuItem<
-                                                                    String>>(
-                                                            (String value) {
-                                                      return new PopupMenuItem(
-                                                          child:
-                                                              new Text(value),
-                                                          value: value);
-                                                    }).toList();
-                                                  },
-                                                ),
+                                                // PopupMenuButton<String>(
+                                                //   tooltip: '',
+                                                //   icon: const Icon(
+                                                //     Icons.arrow_drop_down,
+                                                //     size: 1,
+                                                //   ),
+                                                //   onSelected: (String value) {
+                                                //     addToCartCheckout(
+                                                //         index, value);
+                                                //   },
+                                                //   itemBuilder:
+                                                //       (BuildContext context) {
+                                                //     return cartList[index]
+                                                //         .productList[0]
+                                                //         .itemsCounter
+                                                //         .map<
+                                                //                 PopupMenuItem<
+                                                //                     String>>(
+                                                //             (String value) {
+                                                //       return new PopupMenuItem(
+                                                //           child:
+                                                //               new Text(value),
+                                                //           value: value);
+                                                //     }).toList();
+                                                //   },
+                                                // ),
                                               ],
                                             ),
                                           ), // ),
@@ -1041,7 +1193,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                                                   index]
                                                               .productList[0]
                                                               .qtyStepSize))
-                                                      .toString());
+                                                      .toString(),
+                                                  grams[index]);
                                             },
                                           )
                                         ],
@@ -1050,6 +1203,61 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                   )
                                 : Container(),
                           ],
+                        ),
+                        Container(
+                          width: Get.width,
+                          height: 30,
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: colors.black.withOpacity(0.6)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5))),
+                          padding: EdgeInsets.only(left: 10),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                              value: dropdownValue,
+                              icon: const Icon(Icons.keyboard_arrow_down),
+                              items: items.map((String items) {
+                                return DropdownMenuItem(
+                                  enabled: true,
+                                  value: items,
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                        border: Border(
+                                            bottom: BorderSide(
+                                                color: Colors.grey))),
+                                    margin: EdgeInsets.only(bottom: 5),
+                                    child: Text(
+                                      "$items gm",
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (val) {
+                                setState(() {
+                                  dropdownValue = val;
+                                  grams.removeAt(index);
+                                  grams.insert(index, val);
+                                });
+                                addToCartCheckout(
+                                    index,
+                                    (int.parse(cartList[index]
+                                            .qty) /* +
+                                        int.parse(cartList[
+                                        index]
+                                            .productList[0]
+                                            .qtyStepSize)*/
+                                        )
+                                        .toString(),
+                                    grams[index]);
+                                print(
+                                    "SELECTED DROPDOWN VAL qqqw : $dropdownValue");
+                                // updateHomePage();
+                              },
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -1214,7 +1422,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                           ),
                           onTap: () {
                             if (_isProgress == false)
-                              removeFromCart(index, true, saveLaterList, true);
+                              removeFromCart(index, true, saveLaterList, true,
+                                  grams[index]);
                           },
                         )
                       ],
@@ -1274,7 +1483,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                             saveLaterList[index].qty,
                                             double.parse(saveLaterList[index]
                                                 .perItemTotal),
-                                            saveLaterList[index]);
+                                            saveLaterList[index],
+                                            grams[index]);
                                       }
                                     : null,
                               ),
@@ -1309,7 +1519,6 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
         String msg = getdata["message"];
         if (!error) {
           var data = getdata["data"];
-
           oriPrice = double.parse(getdata[SUB_TOTAL]);
 
           taxPer = double.parse(getdata[TAX_PER]);
@@ -1319,8 +1528,12 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
               .map((data) => new SectionModel.fromCart(data))
               .toList();
 
-          for (int i = 0; i < cartList.length; i++)
+          for (int i = 0; i < cartList.length; i++) {
             _controller.add(new TextEditingController());
+            String gms = json.decode(response.body)["data"][i]["gram"];
+            print("${json.decode(response.body)["data"][i]["gram"]} \n $gms");
+            grams.add(gms);
+          }
         } else {
           if (msg != 'Cart Is Empty !') setSnackbar(msg, _scaffoldKey);
         }
@@ -1380,7 +1593,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     return null;
   }
 
-  Future<void> addToCart(int index, String qty) async {
+  Future<void> addToCart(int index, String qty, String gram) async {
     _isNetworkAvail = await isNetworkAvailable();
 
     //if (int.parse(qty) >= cartList[index].productList[0].minOrderQuntity) {
@@ -1391,7 +1604,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
             _isProgress = true;
           });
 
-        if (int.parse(qty) < cartList[index].productList[0].minOrderQuntity) {
+        if (int.parse(qty) <
+            1 /*cartList[index].productList[0].minOrderQuntity*/) {
           qty = cartList[index].productList[0].minOrderQuntity.toString();
           setSnackbar('Minimum order quantity is $qty', _checkscaffoldKey);
         }
@@ -1400,6 +1614,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           PRODUCT_VARIENT_ID: cartList[index].varientId,
           USER_ID: CUR_USERID,
           QTY: qty,
+          "gram": gram
         };
         http.Response response = await http
             .post(manageCartApi, body: parameter, headers: headers)
@@ -1488,7 +1703,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     //     _scaffoldKey);
   }
 
-  Future<void> addToCartCheckout(int index, String qty) async {
+  Future<void> addToCartCheckout(int index, String qty, String gram) async {
     _isNetworkAvail = await isNetworkAvailable();
     if (_isNetworkAvail) {
       try {
@@ -1498,15 +1713,16 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           });
         setState(() {});
 
-        if (int.parse(qty) < cartList[index].productList[0].minOrderQuntity) {
-          qty = cartList[index].productList[0].minOrderQuntity.toString();
-          setSnackbar('Minimum order quantity is $qty', _checkscaffoldKey);
-        }
+        // if (int.parse(qty) < cartList[index].productList[0].minOrderQuntity) {
+        //   qty = cartList[index].productList[0].minOrderQuntity.toString();
+        //   setSnackbar('Minimum order quantity is $qty', _checkscaffoldKey);
+        // }
 
         var parameter = {
           PRODUCT_VARIENT_ID: cartList[index].varientId,
           USER_ID: CUR_USERID,
           QTY: qty,
+          "gram": gram
         };
 
         http.Response response = await http
@@ -1596,7 +1812,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
   }
 
   saveForLater(String id, String save, String qty, double price,
-      SectionModel curItem) async {
+      SectionModel curItem, String gram) async {
     _isNetworkAvail = await isNetworkAvailable();
     if (_isNetworkAvail) {
       try {
@@ -1609,7 +1825,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           PRODUCT_VARIENT_ID: id,
           USER_ID: CUR_USERID,
           QTY: qty,
-          SAVE_LATER: save
+          SAVE_LATER: save,
+          "gram": gram
         };
 
         http.Response response = await http
@@ -1694,15 +1911,16 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     }
   }
 
-  removeFromCartCheckout(int index, bool remove) async {
+  removeFromCartCheckout(int index, bool remove, String gram) async {
     _isNetworkAvail = await isNetworkAvailable();
 
-    if (!remove &&
+    /*  if (!remove &&
         int.parse(cartList[index].qty) ==
             cartList[index].productList[0].minOrderQuntity) {
       setSnackbar('Minimum order quantity is ${cartList[index].qty}',
           _checkscaffoldKey);
-    } else {
+    } else*/
+    {
       if (_isNetworkAvail) {
         try {
           if (mounted)
@@ -1718,16 +1936,17 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
             qty = (int.parse(cartList[index].qty) -
                 int.parse(cartList[index].productList[0].qtyStepSize));
 
-            if (qty < cartList[index].productList[0].minOrderQuntity) {
-              qty = cartList[index].productList[0].minOrderQuntity;
-              setSnackbar('Minimum order quantity is $qty', _checkscaffoldKey);
-            }
+            // if (qty < cartList[index].productList[0].minOrderQuntity) {
+            //   qty = cartList[index].productList[0].minOrderQuntity;
+            //   setSnackbar('Minimum order quantity is $qty', _checkscaffoldKey);
+            // }
           }
 
           var parameter = {
             PRODUCT_VARIENT_ID: cartList[index].varientId,
             USER_ID: CUR_USERID,
-            QTY: qty.toString()
+            QTY: qty.toString(),
+            "gram": gram
           };
 
           http.Response response = await http
@@ -1825,15 +2044,16 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     }
   }
 
-  removeFromCart(
-      int index, bool remove, List<SectionModel> cartList, bool move) async {
+  removeFromCart(int index, bool remove, List<SectionModel> cartList, bool move,
+      String gram) async {
     _isNetworkAvail = await isNetworkAvailable();
-    if (!remove &&
-        int.parse(cartList[index].qty) ==
-            cartList[index].productList[0].minOrderQuntity) {
-      setSnackbar(
-          'Minimum order quantity is ${cartList[index].qty}', _scaffoldKey);
-    } else {
+    // if (!remove &&
+    //     int.parse(cartList[index].qty) ==
+    //         cartList[index].productList[0].minOrderQuntity) {
+    //   setSnackbar(
+    //       'Minimum order quantity is ${cartList[index].qty}', _scaffoldKey);
+    // } else
+    {
       if (_isNetworkAvail) {
         try {
           if (mounted)
@@ -1842,22 +2062,24 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
             });
 
           int qty;
-          if (remove)
+          if (remove) {
             qty = 0;
-          else {
+          } else {
             qty = (int.parse(cartList[index].qty) -
                 int.parse(cartList[index].productList[0].qtyStepSize));
 
-            if (qty < cartList[index].productList[0].minOrderQuntity) {
-              qty = cartList[index].productList[0].minOrderQuntity;
-              setSnackbar('Minimum order quantity is $qty', _checkscaffoldKey);
-            }
+            ///minimun qty
+            // if (qty < cartList[index].productList[0].minOrderQuntity) {
+            //   qty = cartList[index].productList[0].minOrderQuntity;
+            //   setSnackbar('Minimum order quantity is $qty', _checkscaffoldKey);
+            // }
           }
 
           var parameter = {
             PRODUCT_VARIENT_ID: cartList[index].varientId,
             USER_ID: CUR_USERID,
-            QTY: qty.toString()
+            QTY: qty.toString(),
+            "gram": gram
           };
 
           http.Response response = await http
@@ -1990,8 +2212,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                           colors: [
                             // Color(0xFF280F43),
                             // Color(0xffE5CCFF),
-                            Color(0xFF200738),
-                            Color(0xFF3B147A),
+                            colors.darkColor,
+                            colors.darkColor.withOpacity(0.8),
                             Color(0xFFF8F8FF),
                           ]),
                     ),
@@ -2310,9 +2532,11 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                                       MainAxisSize.min,
                                                   children: [
                                                     address(),
-                                                    payment(),
-                                                    showWallet(),
+                                                    // payment(),
+                                                    // showWallet(),
                                                     cartItems(),
+
+                                                    ///todo dropdown 3
                                                     moredeliveryamt(),
                                                     //promo(),
                                                     deliveryTextInformation(),
@@ -2339,14 +2563,18 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Text(
-                                                  "Amount payable by card " +
-                                                      CUR_CURRENCY +
-                                                      " ${totalPrice.toStringAsFixed(2)}",
-                                                  style: TextStyle(
-                                                      color: colors.fontColor,
-                                                      fontWeight:
-                                                          FontWeight.bold),
+                                                Container(
+                                                  // decoration: BoxDecoration(border: Border.all()),
+                                                  width: Get.width / 1.5 - 30,
+                                                  child: Text(
+                                                    "Amount payable " +
+                                                        CUR_CURRENCY +
+                                                        " ${totalPrice.toStringAsFixed(2)}",
+                                                    style: TextStyle(
+                                                        color: colors.fontColor,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
                                                 ),
                                                 Text(CUR_CART_COUNT + " Items"),
                                               ],
@@ -2382,13 +2610,13 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                                       checkoutState(() {
                                                         _placeOrder = true;
                                                       });
-                                                    } else if (payMethod ==
-                                                            null ||
+                                                    }
+
+                                                    /// todo : payment screen
+                                                    // else
+                                                    if (payMethod == null ||
                                                         payMethod.isEmpty) {
                                                       print("call2");
-                                                      /*  msg = getTranslated(
-                                                          context,
-                                                          'payWarning');*/
                                                       Navigator.push(
                                                           context,
                                                           MaterialPageRoute(
@@ -2402,7 +2630,10 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                                       checkoutState(() {
                                                         _placeOrder = true;
                                                       });
-                                                    } else if ((isTimeSlot ==
+                                                    }
+
+                                                 /*
+                                                    else if ((isTimeSlot ==
                                                             null) ||
                                                         (isTimeSlot &&
                                                             int.parse(
@@ -2434,9 +2665,9 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                                         (selTime == null ||
                                                             selTime.isEmpty)) {
                                                       print("call4");
-                                                      /*  msg = getTranslated(
+                                                      *//*  msg = getTranslated(
                                                           context,
-                                                          'timeWarning');*/
+                                                          'timeWarning');*//*
                                                       Navigator.push(
                                                           context,
                                                           MaterialPageRoute(
@@ -2451,7 +2682,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                                         _placeOrder = true;
                                                       });
                                                     }
-                                                    /*else if (totalPrice -
+                                                    *//*else if (totalPrice -
                                                             delCharge <
                                                         double.parse(
                                                             MIN_CART_AMT)) {
@@ -2467,7 +2698,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                                       checkoutState(() {
                                                         _placeOrder = true;
                                                       });
-                                                    }*/
+                                                    }*//*
                                                     else if (payMethod ==
                                                         getTranslated(context,
                                                             'PAYPAL_LBL')) {
@@ -2521,7 +2752,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                                     } else if (payMethod ==
                                                         getTranslated(context,
                                                             'PAYTM_LBL'))
-                                                      paytmPayment();
+                                                      paytmPayment();*/
                                                     else
                                                       placeOrder('');
                                                   }
@@ -3923,7 +4154,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                 /*             Column(
+                              /*             Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
@@ -4591,7 +4822,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
       );
     }
   }
-  setDelayDeliver(){
+
+  setDelayDeliver() {
     delayProductList = [];
     setState(() {});
 
@@ -4606,6 +4838,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
       //checkout();
       print(cartList.length);
 
+      ///OPEN CLOSE STORE POPUP
+/*
       for (int i = 0; i < cartList.length; i++) {
         for (int j = 0;
         j < cartList[i].productList.length;
@@ -4632,12 +4866,10 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                   cartList[i].productList[j].closeStoreTime.split(":").last));
           if (now.isBefore(openStoreTime) ||
               now.isAfter(closeStoreTime)) {
-            // if (now.isAfter(openStoreTime) && // now:2022-10-21 14:22:44.405300   open store time : 2022-10-21 00:00:00.000 //openStoreTime.isBefore(now) && closeStoreTime.isBefore(now)
-            //     now.isAfter(    closeStoreTime)) {//now: 2022-10-21 14:22:44.405300   //close : 2022-10-21 12:06:00.000
+           // // if (now.isAfter(openStoreTime) && // now:2022-10-21 14:22:44.405300   open store time : 2022-10-21 00:00:00.000 //openStoreTime.isBefore(now) && closeStoreTime.isBefore(now)
+           // //     now.isAfter(    closeStoreTime)) {//now: 2022-10-21 14:22:44.405300   //close : 2022-10-21 12:06:00.000
             delayProductList.add(cartList[i].productList[j].name);
           } else {
-            ///remove it
-            // delayProductList.add(cartList[i].productList[j].name);
           }
         }
       }
@@ -4758,13 +4990,11 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
             });
       } else {
         checkout();
-      }
-
+      }*/
+      checkout();
       if (mounted) setState(() {});
     } else
-      setSnackbar(
-          getTranslated(context, 'ADD_ITEM'),
-          _scaffoldKey);
+      setSnackbar(getTranslated(context, 'ADD_ITEM'), _scaffoldKey);
   }
 
   stripePaymentWallet(String price) async {

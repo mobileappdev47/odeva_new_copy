@@ -1,188 +1,42 @@
 {
   "project_info": {
-    "project_number": "118961537",
-    "project_id": "odeva-8713d",
-    "storage_bucket": "odeva-8713d.appspot.com"
+    "project_number": "1041062081588",
+    "project_id": "shreeramandi",
+    "storage_bucket": "shreeramandi.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:118961537:android:44c97572a5a563f0592480",
+        "mobilesdk_app_id": "1:1041062081588:android:e11acf9ece0fe3ba8a4661",
         "android_client_info": {
-          "package_name": "odeva.click"
+          "package_name": "com.ramanandi.fruits"
         }
       },
       "oauth_client": [
         {
-          "client_id": "118961537-5t0p6qf6kjskuhkg2ngnc8mv2tnli3j7.apps.googleusercontent.com",
+          "client_id": "1041062081588-vqhusj4qb37545f10215445g775bdnqi.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "odeva.click",
-            "certificate_hash": "1e0cb8215bcfabb8072505909e9a75c3de22d0f8"
+            "package_name": "com.ramanandi.fruits",
+            "certificate_hash": "f197e3d3ff58fb925310246f4387329907cc64e1"
           }
         },
         {
-          "client_id": "118961537-m6m7ucl3m3q9gl583mpo9ovibiccu362.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "odeva.click",
-            "certificate_hash": "28e8bdb4a6600562e99947bd74409bfd601d81cf"
-          }
-        },
-        {
-          "client_id": "118961537-v680u0g4q15okcc3e08b5ae935b72bkk.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "odeva.click",
-            "certificate_hash": "39d11f9371b47ed64548da1044cdd79fa431c3cf"
-          }
-        },
-        {
-          "client_id": "118961537-j7fp3ea4fcvppsqgtf0dhm4egrb6h420.apps.googleusercontent.com",
+          "client_id": "1041062081588-p5sntj7alaccmladpd11acl72qa82ff5.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDqWueRkssKST8UKw1Ggee8P1OXztQnok4"
+          "current_key": "AIzaSyD4GjKJAo0g5T5tI8NB-FYXHCpmfXdvMEM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "118961537-j7fp3ea4fcvppsqgtf0dhm4egrb6h420.apps.googleusercontent.com",
+              "client_id": "1041062081588-p5sntj7alaccmladpd11acl72qa82ff5.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "118961537-63uq4ivsqmij9kijic0ige2rc8mqpmpm.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "odeva.click",
-                "app_store_id": "1590157545"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:118961537:android:38c69cf5a76f9580592480",
-        "android_client_info": {
-          "package_name": "odeva.click.delivery"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "118961537-1v74874r3s1b0ruc9797nd88mco6vhhp.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "odeva.click.delivery",
-            "certificate_hash": "1e0cb8215bcfabb8072505909e9a75c3de22d0f8"
-          }
-        },
-        {
-          "client_id": "118961537-j7fp3ea4fcvppsqgtf0dhm4egrb6h420.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDqWueRkssKST8UKw1Ggee8P1OXztQnok4"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "118961537-j7fp3ea4fcvppsqgtf0dhm4egrb6h420.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "118961537-63uq4ivsqmij9kijic0ige2rc8mqpmpm.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "odeva.click",
-                "app_store_id": "1590157545"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:118961537:android:8e5fe4cee5c5f9ac592480",
-        "android_client_info": {
-          "package_name": "odeva.clickk"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "118961537-3856op8873s8jccttibmshloip4ppg7m.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "odeva.clickk",
-            "certificate_hash": "1e0cb8215bcfabb8072505909e9a75c3de22d0f8"
-          }
-        },
-        {
-          "client_id": "118961537-4de760krprkq3md3ssnp752db9cv6hiv.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "odeva.clickk",
-            "certificate_hash": "28e8bdb4a6600562e99947bd74409bfd601d81cf"
-          }
-        },
-        {
-          "client_id": "118961537-5i265019mb65ql07jnn1gr5v7n4h3h0p.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "odeva.clickk",
-            "certificate_hash": "95a8eae676f814e85f34e93ec455e735ac4f3798"
-          }
-        },
-        {
-          "client_id": "118961537-815r1dummu0t4msvf7pq9p8c8932j3es.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "odeva.clickk",
-            "certificate_hash": "96fee2392bb6b7471463fa7b1ac72e9475739208"
-          }
-        },
-        {
-          "client_id": "118961537-vbqmlkf3ddda3d31fclieok5kpi7sior.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "odeva.clickk",
-            "certificate_hash": "656c273f9efbde19355629c02d73f9ffe64eb4ee"
-          }
-        },
-        {
-          "client_id": "118961537-j7fp3ea4fcvppsqgtf0dhm4egrb6h420.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDqWueRkssKST8UKw1Ggee8P1OXztQnok4"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "118961537-j7fp3ea4fcvppsqgtf0dhm4egrb6h420.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "118961537-63uq4ivsqmij9kijic0ige2rc8mqpmpm.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "odeva.click",
-                "app_store_id": "1590157545"
-              }
             }
           ]
         }

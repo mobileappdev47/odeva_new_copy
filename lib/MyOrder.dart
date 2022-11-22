@@ -169,10 +169,10 @@ class StateMyOrder extends State<MyOrder> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: Color(0xff200738),
+      backgroundColor: colors.darkColor,
       appBar: AppBar(
         titleSpacing: 0,
-        backgroundColor: Color(0xff200738),
+        backgroundColor:colors.darkColor,
         leading: Builder(builder: (BuildContext context) {
           return Container(
             margin: EdgeInsets.all(10),
@@ -213,8 +213,8 @@ class StateMyOrder extends State<MyOrder> with TickerProviderStateMixin {
                         colors: [
                           // Color(0xFF280F43),
                           // Color(0xffE5CCFF),
-                          Color(0xFF200738),
-                          Color(0xFF3B147A),
+                          colors.darkColor,
+                          colors.darkColor.withOpacity(0.8),
                           Color(0xFFF8F8FF),
                         ]),
                   ),

@@ -1622,7 +1622,8 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
                   ),
           ],
         ),
-        Positioned(
+        ///todo : chat button 5
+       /* Positioned(
             bottom: 60,
             right: 10,
             child: FloatingActionButton(
@@ -1678,7 +1679,7 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
                   color: Colors.white,
                 ),
               ),
-            ))
+            ))*/
       ],
     );
   }

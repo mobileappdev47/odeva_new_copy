@@ -40,8 +40,11 @@ class colors {
   static Color get lightWhite =>
       ISDARK == "true" ? darkColor : const Color(0xffEEF2F9);
 
-  static const Color darkColor = Color(0xff202844);
-  static const Color darkColor2 = Color(0xff273152);
+  // static const Color darkColor = Color(0xff202844);
+  static const Color darkColor = Color(0xff315835);
+  // static const Color darkColor2 = Color(0xff273152);
+  static const Color darkColor2 = Color(0xff315835);
+  static const Color maroon = Color(0xff772928);
 
   static Color get white => ISDARK == "true" ? darkColor2 : const Color(0xffFFFFFF);
   static const Color whiteTemp = Color(0xffFFFFFF);

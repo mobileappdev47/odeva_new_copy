@@ -208,7 +208,7 @@ class _StateSearch extends State<Search> with TickerProviderStateMixin {
             ),
           ),
           //leadingWidth: 20,
-          backgroundColor: Color(0xFF200738),
+          backgroundColor: colors.darkColor,
           title: TextField(
             controller: _controller,
             autofocus: true,
@@ -313,88 +313,89 @@ class _StateSearch extends State<Search> with TickerProviderStateMixin {
                     ],
                   )
                 : noInternet(context),
-            Positioned(
-                bottom: 5,
-                right: 10,
-                child: FloatingActionButton(
-                  backgroundColor: Color(0xff341069),
-                  onPressed: () async {
-                    // Future.delayed(Duration(milliseconds: 100), () {
-                    //   isShow = true;
-                    // });
-                    // Future.delayed(Duration(seconds: 5), () {
-                    //   isShow1 = true;
-                    // });
-                    CUR_USERID = await getPrefrence(ID);
-                    if (CUR_USERID != null) {
-                      setState(() {});
-                      String isManager;
-                      isManager = await getPrefrence("isManager");
-
-                      if (isManager == "true") {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => ChatManager()));
-                      } else {
-                        showModalBottomSheet(
-                            isScrollControlled: true,
-                            context: context,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10),
-                            )),
-                            builder: (builder) {
-                              return StatefulBuilder(
-                                builder: (BuildContext context,
-                                    StateSetter setState) {
-                                  setState = setState;
-                                  return Container(
-                                    height: MediaQuery.of(context).size.height /
-                                        1.1,
-                                    child: ChatFireScreen(
-                                      isManager: false,
-                                      roomId: null,
-                                    ),
-                                  );
-                                },
-                              );
-                            }).then((value) {
-                          getMessageCount();
-                          setState(() {});
-                        });
-                        //Navigator.push(context,MaterialPageRoute(builder: (_)=>ChatFireScreen(isManager: false,roomId: null,)));
-                      }
-                    } else {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Login(),
-                          ));
-                    }
-                  },
-                  child: Center(
-                    child: Stack(
-                      children: [
-                        Icon(
-                          Icons.chat,
-                          color: Colors.white,
-                        ),
-                        totalmessageCount >= 1
-                            ? Positioned(
-                                right: 0,
-                                child: Container(
-                                  height: 8,
-                                  width: 8,
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.red),
-                                ),
-                              )
-                            : SizedBox()
-                      ],
-                    ),
-                  ),
-                )),
+            ///todo : chat button 2 (Search)
+            // Positioned(
+            //     bottom: 5,
+            //     right: 10,
+            //     child: FloatingActionButton(
+            //       backgroundColor: Color(0xff341069),
+            //       onPressed: () async {
+            //         // Future.delayed(Duration(milliseconds: 100), () {
+            //         //   isShow = true;
+            //         // });
+            //         // Future.delayed(Duration(seconds: 5), () {
+            //         //   isShow1 = true;
+            //         // });
+            //         CUR_USERID = await getPrefrence(ID);
+            //         if (CUR_USERID != null) {
+            //           setState(() {});
+            //           String isManager;
+            //           isManager = await getPrefrence("isManager");
+            //
+            //           if (isManager == "true") {
+            //             Navigator.push(context,
+            //                 MaterialPageRoute(builder: (_) => ChatManager()));
+            //           } else {
+            //             showModalBottomSheet(
+            //                 isScrollControlled: true,
+            //                 context: context,
+            //                 shape: RoundedRectangleBorder(
+            //                     borderRadius: BorderRadius.only(
+            //                   topLeft: Radius.circular(10),
+            //                   topRight: Radius.circular(10),
+            //                 )),
+            //                 builder: (builder) {
+            //                   return StatefulBuilder(
+            //                     builder: (BuildContext context,
+            //                         StateSetter setState) {
+            //                       setState = setState;
+            //                       return Container(
+            //                         height: MediaQuery.of(context).size.height /
+            //                             1.1,
+            //                         child: ChatFireScreen(
+            //                           isManager: false,
+            //                           roomId: null,
+            //                         ),
+            //                       );
+            //                     },
+            //                   );
+            //                 }).then((value) {
+            //               getMessageCount();
+            //               setState(() {});
+            //             });
+            //             //Navigator.push(context,MaterialPageRoute(builder: (_)=>ChatFireScreen(isManager: false,roomId: null,)));
+            //           }
+            //         } else {
+            //           Navigator.pushReplacement(
+            //               context,
+            //               MaterialPageRoute(
+            //                 builder: (context) => Login(),
+            //               ));
+            //         }
+            //       },
+            //       child: Center(
+            //         child: Stack(
+            //           children: [
+            //             Icon(
+            //               Icons.chat,
+            //               color: Colors.white,
+            //             ),
+            //             totalmessageCount >= 1
+            //                 ? Positioned(
+            //                     right: 0,
+            //                     child: Container(
+            //                       height: 8,
+            //                       width: 8,
+            //                       decoration: BoxDecoration(
+            //                           shape: BoxShape.circle,
+            //                           color: Colors.red),
+            //                     ),
+            //                   )
+            //                 : SizedBox()
+            //           ],
+            //         ),
+            //       ),
+            //     )),
           ],
         ));
   }
@@ -1004,8 +1005,8 @@ class _StateSearch extends State<Search> with TickerProviderStateMixin {
                     colors: [
                       // Color(0xFF280F43),
                       // Color(0xffE5CCFF),
-                      Color(0xFF200738),
-                      Color(0xFF3B147A),
+                      colors.darkColor,
+                      colors.darkColor.withOpacity(0.8),
                       Color(0xFFF8F8FF),
                     ]),
               ),
@@ -1024,8 +1025,8 @@ class _StateSearch extends State<Search> with TickerProviderStateMixin {
                       colors: [
                         // Color(0xFF280F43),
                         // Color(0xffE5CCFF),
-                        Color(0xFF200738),
-                        Color(0xFF3B147A),
+                        colors.darkColor,
+                        colors.darkColor.withOpacity(0.8),
                         Color(0xFFF8F8FF),
                       ]),
                 ),

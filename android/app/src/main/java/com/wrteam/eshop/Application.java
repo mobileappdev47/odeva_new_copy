@@ -1,4 +1,4 @@
-package odeva.clickk;
+package com.ramanandi.fruits;
 
 import io.flutter.app.FlutterApplication;
 import io.flutter.plugin.common.PluginRegistry;
