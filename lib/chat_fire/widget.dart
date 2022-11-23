@@ -1,3 +1,4 @@
+import 'package:eshop/Helper/Color.dart';
 import 'package:eshop/Model/message_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -39,7 +40,7 @@ class InputBottomBar extends StatelessWidget {
                         padding: EdgeInsets.only(left: 5),
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: Color(0xFF200738),
+                          color:  colors.darkColor,
                           borderRadius: BorderRadius.circular(25),
                         ),
                         child: Row(

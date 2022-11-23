@@ -631,8 +631,8 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
                       gradient: LinearGradient(begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [
-                            Color(0xFF200738),
-                            Color(0xFF3B147A),
+                            colors.darkColor,
+                            colors.darkColor.withOpacity(0.8),
                             Color(0xFFF8F8FF),
                           ]),
                     ),

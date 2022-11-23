@@ -452,8 +452,8 @@ class _MobileOTPState extends State<VerifyOtp> with TickerProviderStateMixin {
                 colors: [
                   // Color(0xFF280F43),
                   // Color(0xffE5CCFF),
-                  Color(0xFF200738),
-                  Color(0xFF3B147A),
+                  colors.darkColor,
+                  colors.darkColor.withOpacity(0.8),
                   Color(0xFFF8F8FF),
                 ]),
           ),

@@ -1268,8 +1268,8 @@ class StateProfile extends State<Profile> with TickerProviderStateMixin {
       colors: [
       // Color(0xFF280F43),
       // Color(0xffE5CCFF),
-      Color(0xFF200738),
-      Color(0xFF3B147A),
+        colors.darkColor,
+        colors.darkColor.withOpacity(0.8),
       Color(0xFFF8F8FF),
       ]),
       ),
@@ -1317,7 +1317,7 @@ class StateProfile extends State<Profile> with TickerProviderStateMixin {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Color(0xFF200738),
+        backgroundColor:  colors.darkColor,
         titleSpacing: 0,
         leading: Builder(builder: (BuildContext context) {
           return Container(

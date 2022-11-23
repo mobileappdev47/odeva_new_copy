@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eshop/Helper/Color.dart';
 import 'package:eshop/Helper/Session.dart';
 import 'package:eshop/Helper/String.dart';
 import 'package:eshop/Home3.dart';
@@ -46,7 +47,7 @@ class _ChatManagerState extends State<ChatManager> {
           },
           child: Icon(Icons.arrow_back,color: Colors.white,),
         ),
-        backgroundColor: Color(0xFF200738),
+        backgroundColor: colors.darkColor,
         title: Text(
           "Chat List",
           style: TextStyle(color: Colors.white),

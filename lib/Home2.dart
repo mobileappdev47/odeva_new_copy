@@ -755,7 +755,7 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
           backgroundColor: Colors.transparent,//Color(0xff1c1d23),
           appBar: AppBar(
             toolbarHeight: 180,//deviceHeight*0.207,
-            backgroundColor: curSelected == 0 ? Color(0xFF200738) : colors.white,
+            backgroundColor: curSelected == 0 ?  colors.darkColor : colors.white,
             elevation: 0,
             //centerTitle: true,
             flexibleSpace: SafeArea(
@@ -989,8 +989,8 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
                   colors: [
                     // Color(0xFF280F43),
                     // Color(0xffE5CCFF),
-                    Color(0xFF200738),
-                    Color(0xFF3B147A),
+                    colors.darkColor,
+                    colors.darkColor.withOpacity(0.8),
                     Color(0xFFF8F8FF),
                   ]),
             ),
