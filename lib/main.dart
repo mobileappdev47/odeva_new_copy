@@ -17,7 +17,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
+// import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:in_app_review/in_app_review.dart';
@@ -44,11 +44,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   loadSVG();
-  Stripe.publishableKey =
-      "pk_test_51J3jqhC1MwKHfh2WkSH8jz6UQHRNEqZvNk7vRrJP7FsL2W6PFqP11wKjbc6aGW7r5l3Z6H1KTt4UqGIyzDYfHCqm00aNGqj647";
-  Stripe.merchantIdentifier = 'merchant.flutter.stripe.test';
-  Stripe.urlScheme = 'flutterstripe';
-  await Stripe.instance.applySettings();
+  // Stripe.publishableKey =
+  //     "pk_test_51J3jqhC1MwKHfh2WkSH8jz6UQHRNEqZvNk7vRrJP7FsL2W6PFqP11wKjbc6aGW7r5l3Z6H1KTt4UqGIyzDYfHCqm00aNGqj647";
+  // Stripe.merchantIdentifier = 'merchant.flutter.stripe.test';
+  // Stripe.urlScheme = 'flutterstripe';
+  // await Stripe.instance.applySettings();
   await firebaseMessaging();
 
   FirebaseMessaging.onBackgroundMessage(myForgroundMessageHandler);

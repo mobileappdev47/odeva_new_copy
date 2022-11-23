@@ -7,20 +7,17 @@ import 'dart:ui';
 import 'package:eshop/Helper/Constant.dart';
 import 'package:eshop/Helper/Session.dart';
 import 'package:eshop/Home3.dart' as hm;
-import 'package:eshop/Login.dart';
-import 'package:eshop/chat_fire/chat_fire_screen.dart';
-import 'package:eshop/chat_manager/chat_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_paystack/flutter_paystack.dart';
-import 'package:flutter_stripe/flutter_stripe.dart' as stripe;
+// import 'package:flutter_paystack/flutter_paystack.dart';
+// import 'package:flutter_stripe/flutter_stripe.dart' as stripe;
 
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import 'package:http/http.dart' as http;
 
-import 'package:razorpay_flutter/razorpay_flutter.dart';
+// import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 import 'Add_Address.dart';
 import 'Helper/AppBtn.dart';
@@ -36,10 +33,10 @@ import 'Model/User.dart';
 import 'Order_Success.dart';
 import 'Payment.dart';
 import 'PaypalWebviewActivity.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 
 String stripePayId = "";
-bool isTimeSlot;
+// bool isTimeSlot;
 int cnt = 0;
 bool callStripePayment = false;
 
@@ -102,7 +99,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
   Animation buttonSqueezeanimation;
   AnimationController buttonController;
   bool _isNetworkAvail = true;
-  stripe.CardFieldInputDetails _card;
+  // stripe.CardFieldInputDetails _card;
 
   List<TextEditingController> _controller = [];
   TextEditingController amtC = TextEditingController();
@@ -113,11 +110,11 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
   List<SectionModel> saveLaterList = [];
   String msg;
   bool _isLoading = true;
-  Razorpay _razorpay;
+  // Razorpay _razorpay;
   TextEditingController promoC = new TextEditingController();
   TextEditingController deliveryC = new TextEditingController();
   StateSetter checkoutState;
-  final paystackPlugin = PaystackPlugin();
+  // final paystackPlugin = PaystackPlugin();
   ScrollController _scrollController = new ScrollController();
   bool deliverable = false;
   bool isShow = false;
@@ -201,7 +198,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     buttonController.dispose();
     for (int i = 0; i < _controller.length; i++) _controller[i].dispose();
 
-    if (_razorpay != null) _razorpay.clear();
+    // if (_razorpay != null) _razorpay.clear();
     super.dispose();
   }
 
@@ -248,10 +245,10 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     deviceHeight = MediaQuery.of(context).size.height;
     deviceWidth = MediaQuery.of(context).size.width;
-    selectedMethod = 6;
+    // selectedMethod = 6;
 
     // payMethod = getTranslated(context, 'STRIPE_LBL');
-    payIcon = 'assets/images/stripe.svg';
+    // payIcon = 'assets/images/stripe.svg';
 
     return WillPopScope(
       onWillPop: onWillPop,
@@ -2485,10 +2482,10 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     selectedTime = null;
     selDate = null;
     selTime = null;
-    _razorpay = Razorpay();
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    // _razorpay = Razorpay();
+    // _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    // _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    // _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
 
     deviceHeight = MediaQuery.of(context).size.height;
     deviceWidth = MediaQuery.of(context).size.width;
@@ -2613,147 +2610,6 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                                     }
 
                                                     /// todo : payment screen
-                                                    // else
-                                                    if (payMethod == null ||
-                                                        payMethod.isEmpty) {
-                                                      print("call2");
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (BuildContext
-                                                                      context) =>
-                                                                  Payment(
-                                                                      updateCheckout,
-                                                                      msg,
-                                                                      payment,
-                                                                      checkoutState)));
-                                                      checkoutState(() {
-                                                        _placeOrder = true;
-                                                      });
-                                                    }
-
-                                                 /*
-                                                    else if ((isTimeSlot ==
-                                                            null) ||
-                                                        (isTimeSlot &&
-                                                            int.parse(
-                                                                    allowDay) >
-                                                                0 &&
-                                                            (selDate == null ||
-                                                                selDate
-                                                                    .isEmpty))) {
-                                                      print("call3");
-                                                      msg = getTranslated(
-                                                          context,
-                                                          'dateWarning');
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (BuildContext
-                                                                      context) =>
-                                                                  Payment(
-                                                                      updateCheckout,
-                                                                      msg,
-                                                                      payment,
-                                                                      checkoutState)));
-                                                      checkoutState(() {
-                                                        _placeOrder = true;
-                                                      });
-                                                    } else if (isTimeSlot &&
-                                                        timeSlotList.length >
-                                                            0 &&
-                                                        (selTime == null ||
-                                                            selTime.isEmpty)) {
-                                                      print("call4");
-                                                      *//*  msg = getTranslated(
-                                                          context,
-                                                          'timeWarning');*//*
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (BuildContext
-                                                                      context) =>
-                                                                  Payment(
-                                                                      updateCheckout,
-                                                                      msg,
-                                                                      payment,
-                                                                      checkoutState)));
-                                                      checkoutState(() {
-                                                        _placeOrder = true;
-                                                      });
-                                                    }
-                                                    *//*else if (totalPrice -
-                                                            delCharge <
-                                                        double.parse(
-                                                            MIN_CART_AMT)) {
-                                                      print("call5");
-                                                      setSnackbar(
-                                                          "Minimum order requirement is " +
-                                                              CUR_CURRENCY +
-                                                              " " +
-                                                              double.parse(
-                                                                      MIN_CART_AMT)
-                                                                  .toString(),
-                                                          _checkscaffoldKey);
-                                                      checkoutState(() {
-                                                        _placeOrder = true;
-                                                      });
-                                                    }*//*
-                                                    else if (payMethod ==
-                                                        getTranslated(context,
-                                                            'PAYPAL_LBL')) {
-                                                      placeOrder('');
-                                                    } else if (payMethod ==
-                                                        getTranslated(context,
-                                                            'RAZORPAY_LBL'))
-                                                      razorpayPayment();
-                                                    else if (payMethod ==
-                                                        getTranslated(context,
-                                                            'PAYSTACK_LBL'))
-                                                      paystackPayment(context);
-                                                    else if (payMethod ==
-                                                        getTranslated(context,
-                                                            'FLUTTERWAVE_LBL'))
-                                                      flutterwavePayment();
-                                                    else if (payMethod ==
-                                                        getTranslated(context,
-                                                            'STRIPE_LBL')) {
-                                                      //isLoading = true;
-                                                      setState(() {});
-                                                      print("before call");
-                                                      print(cnt);
-
-                                                      checkoutState(() {
-                                                        cnt = cnt + 1;
-                                                      });
-                                                      print("After Call");
-                                                      if (cnt == 1) {
-                                                        if (callStripePayment ==
-                                                            false) {
-                                                          callStripePayment =
-                                                              true;
-                                                          print(
-                                                              "\n\n =========> CALL FIRST STRIP PAYMENT \n\n");
-                                                          stripePayment();
-                                                          Future.delayed(
-                                                              Duration(
-                                                                  seconds: 10),
-                                                              () {
-                                                            print(
-                                                                "\n\n =========> ABLE TO CALL STRIP PAYMENT \n\n");
-                                                            callStripePayment =
-                                                                false;
-                                                            cnt = 0;
-                                                          });
-                                                        }
-                                                      }
-
-                                                      //isLoading = false;
-                                                    } else if (payMethod ==
-                                                        getTranslated(context,
-                                                            'PAYTM_LBL'))
-                                                      paytmPayment();*/
-                                                    else
                                                       placeOrder('');
                                                   }
                                                 : chec)
@@ -2992,23 +2848,23 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     }
   }
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    placeOrder(response.paymentId);
-  }
-
-  void _handlePaymentError(PaymentFailureResponse response) {
-    if (mounted)
-      checkoutState(() {
-        _isProgress = false;
-        _placeOrder = true;
-      });
-    setState(() {});
-    setSnackbar(response.message, _checkscaffoldKey);
-  }
-
-  void _handleExternalWallet(ExternalWalletResponse response) {
-    print("EXTERNAL_WALLET: " + response.walletName);
-  }
+  // void _handlePaymentSuccess(PaymentSuccessResponse response) {
+  //   placeOrder(response.paymentId);
+  // }
+  //
+  // void _handlePaymentError(PaymentFailureResponse response) {
+  //   if (mounted)
+  //     checkoutState(() {
+  //       _isProgress = false;
+  //       _placeOrder = true;
+  //     });
+  //   setState(() {});
+  //   setSnackbar(response.message, _checkscaffoldKey);
+  // }
+  //
+  // void _handleExternalWallet(ExternalWalletResponse response) {
+  //   print("EXTERNAL_WALLET: " + response.walletName);
+  // }
 
   updateCheckout() {
     if (mounted) checkoutState(() {});
@@ -3034,7 +2890,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
       };
 
       try {
-        _razorpay.open(options);
+        // _razorpay.open(options);
       } catch (e) {
         debugPrint(e);
       }
@@ -3144,27 +3000,27 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
             varientId != null ? varientId + "," + sec.varientId : sec.varientId;
         quantity = quantity != null ? quantity + "," + sec.qty : sec.qty;
       }
-      String payVia;
-      if (payMethod == getTranslated(context, 'COD_LBL'))
-        payVia = "COD";
-      else if (payMethod == getTranslated(context, 'PAYPAL_LBL'))
-        payVia = "PayPal";
-      else if (payMethod == getTranslated(context, 'PAYUMONEY_LBL'))
-        payVia = "PayUMoney";
-      else if (payMethod == getTranslated(context, 'RAZORPAY_LBL'))
-        payVia = "RazorPay";
-      else if (payMethod == getTranslated(context, 'PAYSTACK_LBL'))
-        payVia = "Paystack";
-      else if (payMethod == getTranslated(context, 'FLUTTERWAVE_LBL'))
-        payVia = "Flutterwave";
-      else if (payMethod == getTranslated(context, 'STRIPE_LBL'))
-        payVia = "Stripe";
-      else if (payMethod == getTranslated(context, 'PAYTM_LBL'))
-        payVia = "Paytm";
-      else if (payMethod == "Wallet")
-        payVia = "Wallet";
-      else if (payMethod == getTranslated(context, 'BANKTRAN'))
-        payVia = "bank_transfer";
+      String payVia ="COD";
+      // if (payMethod == getTranslated(context, 'COD_LBL'))
+      //   payVia = "COD";
+      // else if (payMethod == getTranslated(context, 'PAYPAL_LBL'))
+      //   payVia = "PayPal";
+      // else if (payMethod == getTranslated(context, 'PAYUMONEY_LBL'))
+      //   payVia = "PayUMoney";
+      // else if (payMethod == getTranslated(context, 'RAZORPAY_LBL'))
+      //   payVia = "RazorPay";
+      // else if (payMethod == getTranslated(context, 'PAYSTACK_LBL'))
+      //   payVia = "Paystack";
+      // else if (payMethod == getTranslated(context, 'FLUTTERWAVE_LBL'))
+      //   payVia = "Flutterwave";
+      // else if (payMethod == getTranslated(context, 'STRIPE_LBL'))
+      //   payVia = "Stripe";
+      // else if (payMethod == getTranslated(context, 'PAYTM_LBL'))
+      //   payVia = "Paytm";
+      // else if (payMethod == "Wallet")
+      //   payVia = "Wallet";
+      // else if (payMethod == getTranslated(context, 'BANKTRAN'))
+      //   payVia = "bank_transfer";
       try {
         var parameter = {
           USER_ID: CUR_USERID,
@@ -3183,11 +3039,11 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           WALLET_BAL_USED: double.parse(usedBal.toString()).toStringAsFixed(2),
         };
         print("STRIPE PAYMENT PARAMETER : ${parameter.toString()}");
-
-        if (isTimeSlot) {
-          parameter[DELIVERY_TIME] = selTime ?? 'Anytime';
-          parameter[DELIVERY_DATE] = selDate ?? '';
-        }
+        parameter[DELIVERY_TIME] = selTime ?? 'Anytime';
+        // if (isTimeSlot) {
+        //   parameter[DELIVERY_TIME] = selTime ?? 'Anytime';
+        //   parameter[DELIVERY_DATE] = selDate ?? '';
+        // }
         if (isPromoValid) {
           parameter[PROMOCODE] = promocode;
           parameter[PROMO_DIS] = promoAmt.toString();
@@ -3371,41 +3227,41 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     }
   }
 
-  paystackPayment(BuildContext context) async {
-    if (mounted)
-      setState(() {
-        _isProgress = true;
-      });
-    checkoutState(() {});
-    String email = await getPrefrence(EMAIL);
-
-    Charge charge = Charge()
-      ..amount = totalPrice.toInt()
-      ..reference = _getReference()
-      ..email = email;
-
-    try {
-      CheckoutResponse response = await paystackPlugin.checkout(
-        context,
-        method: CheckoutMethod.card,
-        charge: charge,
-      );
-      if (response.status) {
-        placeOrder(response.reference);
-      } else {
-        setSnackbar(response.message, _checkscaffoldKey);
-        if (mounted)
-          setState(() {
-            _isProgress = false;
-            _placeOrder = true;
-          });
-        checkoutState(() {});
-      }
-    } catch (e) {
-      if (mounted) setState(() => _isProgress = false);
-      rethrow;
-    }
-  }
+  // paystackPayment(BuildContext context) async {
+  //   if (mounted)
+  //     setState(() {
+  //       _isProgress = true;
+  //     });
+  //   checkoutState(() {});
+  //   String email = await getPrefrence(EMAIL);
+  //
+  //   Charge charge = Charge()
+  //     ..amount = totalPrice.toInt()
+  //     ..reference = _getReference()
+  //     ..email = email;
+  //
+  //   try {
+  //     CheckoutResponse response = await paystackPlugin.checkout(
+  //       context,
+  //       method: CheckoutMethod.card,
+  //       charge: charge,
+  //     );
+  //     if (response.status) {
+  //       placeOrder(response.reference);
+  //     } else {
+  //       setSnackbar(response.message, _checkscaffoldKey);
+  //       if (mounted)
+  //         setState(() {
+  //           _isProgress = false;
+  //           _placeOrder = true;
+  //         });
+  //       checkoutState(() {});
+  //     }
+  //   } catch (e) {
+  //     if (mounted) setState(() => _isProgress = false);
+  //     rethrow;
+  //   }
+  // }
 
   String _getReference() {
     String platform;
@@ -4593,7 +4449,6 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                       paymentController.text.split(" ").last);
                                   payMethod =
                                       getTranslated(context, 'STRIPE_LBL');
-                                  // paymentController.text = CUR_CURRENCY +" "+ remWalBal.toString();
                                   checkoutState(() {});
                                   isPayLayShow = false;
                                 } else {
@@ -4605,12 +4460,6 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                   paymentController.text = usedBal.toString();
                                   setState(() {});
 
-                                  Fluttertoast.showToast(
-                                    msg:
-                                        "You Can't spend balance more than your wallet balance",
-                                    toastLength: Toast.LENGTH_LONG,
-                                    fontSize: 18.0,
-                                  );
                                   checkoutState(() {});
                                 }
                                 setState(() {});

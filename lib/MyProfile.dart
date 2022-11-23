@@ -791,11 +791,11 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
                 builder: (context) => TransactionHistory(),
               ));
         } else if (title == getTranslated(context, 'MYWALLET')) {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MyWallet(),
-              ));
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => MyWallet(),
+          //     ));
         } else if (title == getTranslated(context, 'SETTING')) {
           CUR_USERID == null
               ? Navigator.push(

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_paystack/flutter_paystack.dart';
+// import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 
@@ -57,19 +57,19 @@ class StatePayment extends State<Payment> with TickerProviderStateMixin {
   List<String> paymentMethodList = [];
   List<String> paymentIconList = [
     'assets/images/cod.svg',
-    'assets/images/paypal.svg',
-    'assets/images/payu.svg',
-    'assets/images/rozerpay.svg',
-    'assets/images/paystack.svg',
-    'assets/images/flutterwave.svg',
-    'assets/images/stripe.svg',
-    'assets/images/paytm.svg',
+    // 'assets/images/paypal.svg',
+    // 'assets/images/payu.svg',
+    // 'assets/images/rozerpay.svg',
+    // 'assets/images/paystack.svg',
+    // 'assets/images/flutterwave.svg',
+    // 'assets/images/stripe.svg',
+    // 'assets/images/paytm.svg',
   ];
 
   Animation buttonSqueezeanimation;
   AnimationController buttonController;
   bool _isNetworkAvail = true;
-  final plugin = PaystackPlugin();
+  // final plugin = PaystackPlugin();
 
   @override
   void initState() {
@@ -307,7 +307,7 @@ class StatePayment extends State<Payment> with TickerProviderStateMixin {
 
 
 
-                                isTimeSlot
+                                /*isTimeSlot*/true
                                     ? Card(
                                         elevation: 0,
                                         child: Column(
@@ -561,7 +561,7 @@ class StatePayment extends State<Payment> with TickerProviderStateMixin {
             allowDay = time_slot["allowed_days"];
            /* isTimeSlot =
                 time_slot["is_time_slots_enabled"] == "1" ? true : false;*/
-            isTimeSlot = false;
+            // isTimeSlot = false;
             startingDate = time_slot["starting_date"];
 
 
@@ -621,36 +621,36 @@ class StatePayment extends State<Payment> with TickerProviderStateMixin {
 
             /*cod = codAllowed?payment["cod_method"] == "1" ? true : false:false;*/
             cod = true;
-            paypal = payment["paypal_payment_method"] == "1" ? true : false;
-            paumoney =
-                payment["payumoney_payment_method"] == "1" ? true : false;
-            flutterwave =
-                payment["flutterwave_payment_method"] == "1" ? true : false;
-            razorpay = payment["razorpay_payment_method"] == "1" ? true : false;
-            paystack = payment["paystack_payment_method"] == "1" ? true : false;
-            stripe = payment["stripe_payment_method"] == "1" ? true : false;
-            paytm = payment["paytm_payment_method"] == "1" ? true : false;
-
-            if (razorpay) razorpayId = payment["razorpay_key_id"];
-            if (paystack) {
-              paystackId = payment["paystack_key_id"];
-
-              plugin.initialize(publicKey: paystackId);
-            }
-            if (stripe) {
-              stripeId = payment['stripe_publishable_key'];
-              stripeSecret = payment['stripe_secret_key'];
-              stripeCurCode = payment['stripe_currency_code'];
-              stripeMode = payment['stripe_mode'] ?? 'test';
-              StripeService.secret = stripeSecret;
-             // StripeService.init(stripeId, stripeMode);
-            }
-            if (paytm) {
-              paytmMerId = payment['paytm_merchant_id'];
-              paytmMerKey = payment['paytm_merchant_key'];
-              payTesting =
-                  payment['paytm_payment_mode'] == 'sandbox' ? true : false;
-            }
+            // paypal = payment["paypal_payment_method"] == "1" ? true : false;
+            // paumoney =
+            //     payment["payumoney_payment_method"] == "1" ? true : false;
+            // flutterwave =
+            //     payment["flutterwave_payment_method"] == "1" ? true : false;
+            // razorpay = payment["razorpay_payment_method"] == "1" ? true : false;
+            // paystack = payment["paystack_payment_method"] == "1" ? true : false;
+            // stripe = payment["stripe_payment_method"] == "1" ? true : false;
+            // paytm = payment["paytm_payment_method"] == "1" ? true : false;
+            //
+            // if (razorpay) razorpayId = payment["razorpay_key_id"];
+            // if (paystack) {
+            //   paystackId = payment["paystack_key_id"];
+            //
+            //   // plugin.initialize(publicKey: paystackId);
+            // }
+            // if (stripe) {
+            //   stripeId = payment['stripe_publishable_key'];
+            //   stripeSecret = payment['stripe_secret_key'];
+            //   stripeCurCode = payment['stripe_currency_code'];
+            //   stripeMode = payment['stripe_mode'] ?? 'test';
+            //   StripeService.secret = stripeSecret;
+            //  // StripeService.init(stripeId, stripeMode);
+            // }
+            // if (paytm) {
+            //   paytmMerId = payment['paytm_merchant_id'];
+            //   paytmMerKey = payment['paytm_merchant_key'];
+            //   payTesting =
+            //       payment['paytm_payment_mode'] == 'sandbox' ? true : false;
+            // }
 
             for (int i = 0; i < paymentMethodList.length; i++) {
               payModel.add(RadioModel(

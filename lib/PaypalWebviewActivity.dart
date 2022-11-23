@@ -346,10 +346,11 @@ class StatePayPalWebview extends State<PaypalWebview> {
         WALLET_BAL_USED: usedBal.toString(),
       };
 
-      if (isTimeSlot) {
-        parameter[DELIVERY_TIME] = selTime ?? 'Anytime';
-        parameter[DELIVERY_DATE] = selDate ?? '';
-      }
+      parameter[DELIVERY_TIME] = selTime ?? 'Anytime';
+      // if (isTimeSlot) {
+      //   parameter[DELIVERY_TIME] = selTime ?? 'Anytime';
+      //   parameter[DELIVERY_DATE] = selDate ?? '';
+      // }
       if (isPromoValid) {
         parameter[PROMOCODE] = promocode;
         parameter[PROMO_DIS] = promoAmt.toString();

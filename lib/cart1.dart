@@ -8,12 +8,12 @@ import 'package:eshop/Helper/Session.dart';
 import 'package:eshop/MyOrder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_paystack/flutter_paystack.dart';
-import 'package:flutter_stripe/flutter_stripe.dart'as stripe;
+// import 'package:flutter_paystack/flutter_paystack.dart';
+// import 'package:flutter_stripe/flutter_stripe.dart'as stripe;
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart';
 //import 'package:paytm/paytm.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
+// import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 import 'Add_Address.dart';
 import 'Helper/AppBtn.dart';
@@ -89,11 +89,11 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
   String msg;
   String note;
   bool _isLoading = true;
-  Razorpay _razorpay;
+  // Razorpay _razorpay;
   TextEditingController promoC = new TextEditingController();
   TextEditingController deliveryC = new TextEditingController();
   StateSetter checkoutState;
-  final paystackPlugin = PaystackPlugin();
+  // final paystackPlugin = PaystackPlugin();
   ScrollController _scrollController = new ScrollController();
 
   @override
@@ -2065,10 +2065,10 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
   }
 
   checkout() {
-    _razorpay = Razorpay();
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    // _razorpay = Razorpay();
+    // _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    // _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    // _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
 
     deviceHeight = MediaQuery.of(context).size.height;
     deviceWidth = MediaQuery.of(context).size.width;
@@ -2305,10 +2305,10 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                         getTranslated(context,
                                             'RAZORPAY_LBL'))
                                       razorpayPayment();
-                                    else if (payMethod ==
-                                        getTranslated(context,
-                                            'PAYSTACK_LBL'))
-                                      paystackPayment(context);
+                                    // else if (payMethod ==
+                                    //     getTranslated(context,
+                                    //         'PAYSTACK_LBL'))
+                                    //   paystackPayment(context);
                                     else if (payMethod ==
                                         getTranslated(context,
                                             'FLUTTERWAVE_LBL'))
@@ -2443,23 +2443,23 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     }
   }
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    placeOrder(response.paymentId);
-  }
+  // void _handlePaymentSuccess(PaymentSuccessResponse response) {
+  //   placeOrder(response.paymentId);
+  // }
+  //
+  // void _handlePaymentError(PaymentFailureResponse response) {
+  //   if (mounted)
+  //     checkoutState(() {
+  //       _isProgress = false;
+  //       _placeOrder = true;
+  //     });
+  //   setState(() {});
+  //   setSnackbar(response.message, _checkscaffoldKey);
+  // }
 
-  void _handlePaymentError(PaymentFailureResponse response) {
-    if (mounted)
-      checkoutState(() {
-        _isProgress = false;
-        _placeOrder = true;
-      });
-    setState(() {});
-    setSnackbar(response.message, _checkscaffoldKey);
-  }
-
-  void _handleExternalWallet(ExternalWalletResponse response) {
-    print("EXTERNAL_WALLET: " + response.walletName);
-  }
+  // void _handleExternalWallet(ExternalWalletResponse response) {
+  //   print("EXTERNAL_WALLET: " + response.walletName);
+  // }
 
   updateCheckout() {
     if (mounted) checkoutState(() {});
@@ -2485,7 +2485,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
       };
 
       try {
-        _razorpay.open(options);
+        // _razorpay.open(options);
       } catch (e) {
         debugPrint(e);
       }
@@ -2799,41 +2799,41 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     }
   }
 
-  paystackPayment(BuildContext context) async {
-    if (mounted)
-      setState(() {
-        _isProgress = true;
-      });
-    checkoutState(() {});
-    String email = await getPrefrence(EMAIL);
-
-    Charge charge = Charge()
-      ..amount = totalPrice.toInt()
-      ..reference = _getReference()
-      ..email = email;
-
-    try {
-      CheckoutResponse response = await paystackPlugin.checkout(
-        context,
-        method: CheckoutMethod.card,
-        charge: charge,
-      );
-      if (response.status) {
-        placeOrder(response.reference);
-      } else {
-        setSnackbar(response.message, _checkscaffoldKey);
-        if (mounted)
-          setState(() {
-            _isProgress = false;
-            _placeOrder = true;
-          });
-        checkoutState(() {});
-      }
-    } catch (e) {
-      if (mounted) setState(() => _isProgress = false);
-      rethrow;
-    }
-  }
+  // paystackPayment(BuildContext context) async {
+  //   if (mounted)
+  //     setState(() {
+  //       _isProgress = true;
+  //     });
+  //   checkoutState(() {});
+  //   String email = await getPrefrence(EMAIL);
+  //
+  //   Charge charge = Charge()
+  //     ..amount = totalPrice.toInt()
+  //     ..reference = _getReference()
+  //     ..email = email;
+  //
+  //   try {
+  //     CheckoutResponse response = await paystackPlugin.checkout(
+  //       context,
+  //       method: CheckoutMethod.card,
+  //       charge: charge,
+  //     );
+  //     if (response.status) {
+  //       placeOrder(response.reference);
+  //     } else {
+  //       setSnackbar(response.message, _checkscaffoldKey);
+  //       if (mounted)
+  //         setState(() {
+  //           _isProgress = false;
+  //           _placeOrder = true;
+  //         });
+  //       checkoutState(() {});
+  //     }
+  //   } catch (e) {
+  //     if (mounted) setState(() => _isProgress = false);
+  //     rethrow;
+  //   }
+  // }
 
   String _getReference() {
     String platform;
@@ -2852,7 +2852,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
         _isProgress = false;
       });
     checkoutState(() {});
-   stripe.CardField();
+   // stripe.CardField();
 
 /*    var response = await StripeService.payWithNewCard(
         amount: (totalPrice.toInt() * 100).toString(),

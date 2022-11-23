@@ -82,8 +82,8 @@ class PushNotificationService {
           Navigator.push(context,
               (MaterialPageRoute(builder: (context) => AllCategory())));
         } else if (type == "wallet") {
-          Navigator.push(
-              context, (MaterialPageRoute(builder: (context) => MyWallet())));
+          // Navigator.push(
+          //     context, (MaterialPageRoute(builder: (context) => MyWallet())));
         } else if (type == 'order') {
           Navigator.push(
               context, (MaterialPageRoute(builder: (context) => MyOrder(isback: false,))));

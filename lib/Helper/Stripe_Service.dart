@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'dart:math';
-
 import 'package:eshop/Cart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart' as http;
 
 
@@ -33,9 +31,9 @@ class StripeService {
 
 
   static init(String stripeId, String stripeMode) async {
-    Stripe.publishableKey = stripeId ?? '';
-    Stripe.merchantIdentifier = "App Identifier";
-    await Stripe.instance.applySettings();
+    // Stripe.publishableKey = stripeId ?? '';
+    // Stripe.merchantIdentifier = "App Identifier";
+    // await Stripe.instance.applySettings();
   }
   static Future<StripeTransactionResponse> payWithNewCard(
       {String amount, String currency, String from,BuildContext context}) async {
@@ -53,16 +51,16 @@ class StripeService {
         clientSecret: paymentIntent['client_secret'],
         paymentMethodId: paymentMethod.id,
       ));*/
-
-      await Stripe.instance.initPaymentSheet(
-          paymentSheetParameters: SetupPaymentSheetParameters(
-              paymentIntentClientSecret: paymentIntent['client_secret'],
-        /*      applePay: true,
-              googlePay: true,
-              merchantCountryCode: 'IN',*/
-              style: ThemeMode.light,
-              merchantDisplayName: 'Test'));
-      await Stripe.instance.presentPaymentSheet();
+      //
+      // await Stripe.instance.initPaymentSheet(
+      //     paymentSheetParameters: SetupPaymentSheetParameters(
+      //         paymentIntentClientSecret: paymentIntent['client_secret'],
+      //   /*      applePay: true,
+      //         googlePay: true,
+      //         merchantCountryCode: 'IN',*/
+      //         style: ThemeMode.light,
+      //         merchantDisplayName: 'Test'));
+      // await Stripe.instance.presentPaymentSheet();
       stripePayId = paymentIntent['id'];
       var response = await http.post(
           Uri.parse('${StripeService.paymentApiUrl}/$stripePayId'),
@@ -121,23 +119,23 @@ class StripeService {
     //  StateCart().setState(() {});
       //setting up Payment Sheet
 
-      await Stripe.instance.initPaymentSheet(
-          paymentSheetParameters: SetupPaymentSheetParameters(
-              paymentIntentClientSecret: paymentIntent['client_secret'],
-
-             /* merchantCountryCode: 'IN',*/
-              style: ThemeMode.light,
-              merchantDisplayName: 'Test'));
-
-      //open payment sheet
-      try{
-        await Stripe.instance.presentPaymentSheet();
-      }catch(e){
-        print(e.toString());
-
-      }
-      //store paymentID of customer
-      stripePayId = paymentIntent['id'];
+      // await Stripe.instance.initPaymentSheet(
+      //     paymentSheetParameters: SetupPaymentSheetParameters(
+      //         paymentIntentClientSecret: paymentIntent['client_secret'],
+      //
+      //        /* merchantCountryCode: 'IN',*/
+      //         style: ThemeMode.light,
+      //         merchantDisplayName: 'Test'));
+      //
+      // //open payment sheet
+      // try{
+      //   await Stripe.instance.presentPaymentSheet();
+      // }catch(e){
+      //   print(e.toString());
+      //
+      // }
+      // //store paymentID of customer
+      // stripePayId = paymentIntent['id'];
 
 
       //confirm payment
