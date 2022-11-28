@@ -1,13 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:eshop/Model/Section_Model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart';
-
 import 'Cart.dart';
 import 'Helper/AppBtn.dart';
 import 'Helper/Color.dart';
@@ -20,6 +16,7 @@ import 'ProductList.dart';
 import 'Product_Detail.dart';
 import 'Search.dart';
 
+// ignore: must_be_immutable
 class SubCat extends StatefulWidget {
   String title;
   List<Product> subList = [];

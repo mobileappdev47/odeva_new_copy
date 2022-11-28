@@ -3,12 +3,9 @@ import 'dart:io';
 import 'package:eshop/Helper/Constant.dart';
 import 'package:eshop/SignInUpAcc.dart';
 import 'package:eshop/utils/color_res.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:in_app_review/in_app_review.dart';
-import 'package:lottie/lottie.dart';
-import 'package:rating_dialog/rating_dialog.dart';
 import 'Helper/Color.dart';
 import 'Helper/Session.dart';
 import 'Helper/String.dart';
@@ -21,16 +18,11 @@ class Splash extends StatefulWidget {
 
 class _SplashScreen extends State<Splash> with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
     startTime();
-    _controller = AnimationController(
-      duration: Duration(seconds: (5)),
-      vsync: this,
-    );
     // startTime();
   }
 
@@ -43,7 +35,7 @@ class _SplashScreen extends State<Splash> with TickerProviderStateMixin {
     deviceHeight = MediaQuery.of(context).size.height;
     deviceWidth = MediaQuery.of(context).size.width;
 
-    SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     return Scaffold(
         key: _scaffoldKey,
         body: Container(
@@ -135,6 +127,7 @@ class _SplashScreen extends State<Splash> with TickerProviderStateMixin {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // ignore: deprecated_member_use
                     FlatButton(
                       color: colors.darkColor,
                       child: Text(
@@ -161,6 +154,7 @@ class _SplashScreen extends State<Splash> with TickerProviderStateMixin {
                       },
                     ),
                     SizedBox(width: 10),
+                    // ignore: deprecated_member_use
                     FlatButton(
                       color: colors.darkColor,
                       child: Text(
@@ -183,7 +177,7 @@ class _SplashScreen extends State<Splash> with TickerProviderStateMixin {
   }
 
   Future<void> navigationPage() async {
-    bool isFirstTime = await getPrefrenceBool(ISFIRSTTIME);
+    // bool isFirstTime = await getPrefrenceBool(ISFIRSTTIME);
     CUR_USERID = await getPrefrence(ID);
     if (CUR_USERID != null) {
       //if (isFirstTime) {
@@ -218,7 +212,7 @@ class _SplashScreen extends State<Splash> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
     super.dispose();
   }
 }

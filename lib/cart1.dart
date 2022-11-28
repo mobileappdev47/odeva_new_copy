@@ -1,31 +1,21 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
-import 'dart:ui';
-
 import 'package:eshop/Helper/Constant.dart';
 import 'package:eshop/Helper/Session.dart';
 import 'package:eshop/MyOrder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_paystack/flutter_paystack.dart';
-// import 'package:flutter_stripe/flutter_stripe.dart'as stripe;
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart';
-//import 'package:paytm/paytm.dart';
-// import 'package:razorpay_flutter/razorpay_flutter.dart';
-
-import 'Add_Address.dart';
+import 'add_address.dart';
 import 'Helper/AppBtn.dart';
 import 'Helper/Color.dart';
 import 'Helper/SimBtn.dart';
 import 'Helper/String.dart';
-import 'Helper/Stripe_Service.dart';
 import 'Home.dart';
 import 'Manage_Address.dart';
 import 'Model/Section_Model.dart';
 import 'Model/User.dart';
-import 'Order_Success.dart';
 import 'Payment.dart';
 import 'PaypalWebviewActivity.dart';
 
@@ -70,10 +60,10 @@ bool selected = false;
 
 class StateCart extends State<Cart> with TickerProviderStateMixin {
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
-  new GlobalKey<ScaffoldMessengerState>();
+      new GlobalKey<ScaffoldMessengerState>();
   bool _isProgress = false;
   final GlobalKey<ScaffoldMessengerState> _checkscaffoldKey =
-  new GlobalKey<ScaffoldMessengerState>();
+      new GlobalKey<ScaffoldMessengerState>();
 
   bool _isCartLoad = true, _placeOrder = true;
   HomePage home;
@@ -84,15 +74,17 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
   List<TextEditingController> _controller = [];
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-  new GlobalKey<RefreshIndicatorState>();
+      new GlobalKey<RefreshIndicatorState>();
   List<SectionModel> saveLaterList = [];
   String msg;
   String note;
   bool _isLoading = true;
+
   // Razorpay _razorpay;
   TextEditingController promoC = new TextEditingController();
   TextEditingController deliveryC = new TextEditingController();
   StateSetter checkoutState;
+
   // final paystackPlugin = PaystackPlugin();
   ScrollController _scrollController = new ScrollController();
 
@@ -118,7 +110,6 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
         0.150,
       ),
     ));
-
   }
 
   Future<Null> _refresh() {
@@ -167,7 +158,6 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
   Widget noInternet(BuildContext context) {
     return Center(
       child: SingleChildScrollView(
-
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           noIntImage(),
           noIntText(context),
@@ -203,9 +193,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     deviceHeight = MediaQuery.of(context).size.height;
     deviceWidth = MediaQuery.of(context).size.width;
     selectedMethod = 6;
-    payMethod =
-        getTranslated(context,
-            'STRIPE_LBL');
+    payMethod = getTranslated(context, 'STRIPE_LBL');
     payIcon = 'assets/images/stripe.svg';
     //isTimeSlot = false;
 
@@ -241,19 +229,19 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
         ),
         body: _isNetworkAvail
             ? Stack(
-          children: <Widget>[
-            _showContent(),
-            showCircularProgress(_isProgress, colors.primary),
-          ],
-        )
+                children: <Widget>[
+                  _showContent(),
+                  showCircularProgress(_isProgress, colors.primary),
+                ],
+              )
             : noInternet(context));
   }
 
   Widget listItem(int index) {
     int selectedPos = 0;
     for (int i = 0;
-    i < cartList[index].productList[0].prVarientList.length;
-    i++) {
+        i < cartList[index].productList[0].prVarientList.length;
+        i++) {
       if (cartList[index].varientId ==
           cartList[index].productList[0].prVarientList[i].id) selectedPos = i;
     }
@@ -286,9 +274,9 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           .varient_value
           .split(',');
     }
-    if(int.parse(getQty(cartList[index].productList[0])) < 1){
+    if (int.parse(getQty(cartList[index].productList[0])) < 1) {
       return Container();
-    }else
+    } else
       return Card(
         elevation: 0.1,
         child: Padding(
@@ -300,7 +288,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(7.0),
                       child: FadeInImage(
-                        image: NetworkImage(cartList[index].productList[0].image),
+                        image:
+                            NetworkImage(cartList[index].productList[0].image),
                         height: 80.0,
                         width: 80.0,
                         fit: BoxFit.cover,
@@ -316,7 +305,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                         children: [
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsetsDirectional.only(top: 5.0),
+                              padding:
+                                  const EdgeInsetsDirectional.only(top: 5.0),
                               child: Text(
                                 cartList[index].productList[0].name,
                                 style: Theme.of(context)
@@ -346,67 +336,70 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                         ],
                       ),
                       cartList[index]
-                          .productList[0]
-                          .prVarientList[selectedPos]
-                          .attr_name !=
-                          null &&
-                          cartList[index]
-                              .productList[0]
-                              .prVarientList[selectedPos]
-                              .attr_name
-                              .isNotEmpty
+                                      .productList[0]
+                                      .prVarientList[selectedPos]
+                                      .attr_name !=
+                                  null &&
+                              cartList[index]
+                                  .productList[0]
+                                  .prVarientList[selectedPos]
+                                  .attr_name
+                                  .isNotEmpty
                           ? ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: att.length,
-                          itemBuilder: (context, index) {
-                            return Row(children: [
-                              Flexible(
-                                child: Text(
-                                  att[index].trim() + ":",
-                                  overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle2
-                                      .copyWith(
-                                    color: colors.lightBlack,
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: att.length,
+                              itemBuilder: (context, index) {
+                                return Row(children: [
+                                  Flexible(
+                                    child: Text(
+                                      att[index].trim() + ":",
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle2
+                                          .copyWith(
+                                            color: colors.lightBlack,
+                                          ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                EdgeInsetsDirectional.only(start: 5.0),
-                                child: Text(
-                                  val[index],
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle2
-                                      .copyWith(
-                                      color: colors.lightBlack,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              )
-                            ]);
-                          })
+                                  Padding(
+                                    padding:
+                                        EdgeInsetsDirectional.only(start: 5.0),
+                                    child: Text(
+                                      val[index],
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle2
+                                          .copyWith(
+                                              color: colors.lightBlack,
+                                              fontWeight: FontWeight.bold),
+                                    ),
+                                  )
+                                ]);
+                              })
                           : Container(),
                       Row(
                         children: <Widget>[
                           Text(
                             double.parse(cartList[index]
-                                .productList[0]
-                                .prVarientList[selectedPos]
-                                .disPrice) !=
-                                0
+                                        .productList[0]
+                                        .prVarientList[selectedPos]
+                                        .disPrice) !=
+                                    0
                                 ? CUR_CURRENCY +
-                                "" +
-                                cartList[index]
-                                    .productList[0]
-                                    .prVarientList[selectedPos]
-                                    .price
+                                    "" +
+                                    cartList[index]
+                                        .productList[0]
+                                        .prVarientList[selectedPos]
+                                        .price
                                 : "",
-                            style: Theme.of(context).textTheme.overline.copyWith(
-                                decoration: TextDecoration.lineThrough,
-                                letterSpacing: 0.7),
+                            style: Theme.of(context)
+                                .textTheme
+                                .overline
+                                .copyWith(
+                                    decoration: TextDecoration.lineThrough,
+                                    letterSpacing: 0.7),
                           ),
                           Text(
                             " " + CUR_CURRENCY + " " + price.toString(),
@@ -417,149 +410,151 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                         ],
                       ),
                       cartList[index].productList[0].availability == "1" ||
-                          cartList[index].productList[0].stockType == "null"
+                              cartList[index].productList[0].stockType == "null"
                           ? Row(
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              GestureDetector(
-                                child: Container(
-                                  padding: EdgeInsets.all(2),
-                                  margin: EdgeInsetsDirectional.only(
-                                      end: 8, top: 8, bottom: 8),
-                                  child: Icon(
-                                    Icons.remove,
-                                    size: 14,
-                                    color: colors.fontColor,
-                                  ),
-                                  decoration: BoxDecoration(
-                                      color: colors.lightWhite,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(3))),
-                                ),
-                                onTap: () {
-                                  if (_isProgress == false)
-                                    removeFromCart(
-                                        index, false, cartList, false);
-                                },
-                              ),
-                              Container(
-                                width: 40,
-                                height: 20,
-                                child: Stack(
-                                  children: [
-                                    TextField(
-                                      textAlign: TextAlign.center,
-                                      readOnly: true,
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                      ),
-                                      controller: _controller[index],
-                                      decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.all(5.0),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: colors.fontColor,
-                                              width: 0.5),
-                                          borderRadius:
-                                          BorderRadius.circular(5.0),
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    GestureDetector(
+                                      child: Container(
+                                        padding: EdgeInsets.all(2),
+                                        margin: EdgeInsetsDirectional.only(
+                                            end: 8, top: 8, bottom: 8),
+                                        child: Icon(
+                                          Icons.remove,
+                                          size: 14,
+                                          color: colors.fontColor,
                                         ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: colors.fontColor,
-                                              width: 0.5),
-                                          borderRadius:
-                                          BorderRadius.circular(5.0),
-                                        ),
+                                        decoration: BoxDecoration(
+                                            color: colors.lightWhite,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(3))),
                                       ),
-                                    ),
-                                    PopupMenuButton<String>(
-                                      tooltip: '',
-                                      icon: const Icon(
-                                        Icons.arrow_drop_down,
-                                        size: 1,
-                                      ),
-                                      onSelected: (String value) {
+                                      onTap: () {
                                         if (_isProgress == false)
-                                          addToCart(index, value);
-                                      },
-                                      itemBuilder: (BuildContext context) {
-                                        return cartList[index]
-                                            .productList[0]
-                                            .itemsCounter
-                                            .map<PopupMenuItem<String>>(
-                                                (String value) {
-                                              return new PopupMenuItem(
-                                                  child: new Text(value),
-                                                  value: value);
-                                            }).toList();
+                                          removeFromCart(
+                                              index, false, cartList, false);
                                       },
                                     ),
+                                    Container(
+                                      width: 40,
+                                      height: 20,
+                                      child: Stack(
+                                        children: [
+                                          TextField(
+                                            textAlign: TextAlign.center,
+                                            readOnly: true,
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                            ),
+                                            controller: _controller[index],
+                                            decoration: InputDecoration(
+                                              contentPadding:
+                                                  EdgeInsets.all(5.0),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: colors.fontColor,
+                                                    width: 0.5),
+                                                borderRadius:
+                                                    BorderRadius.circular(5.0),
+                                              ),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: colors.fontColor,
+                                                    width: 0.5),
+                                                borderRadius:
+                                                    BorderRadius.circular(5.0),
+                                              ),
+                                            ),
+                                          ),
+                                          PopupMenuButton<String>(
+                                            tooltip: '',
+                                            icon: const Icon(
+                                              Icons.arrow_drop_down,
+                                              size: 1,
+                                            ),
+                                            onSelected: (String value) {
+                                              if (_isProgress == false)
+                                                addToCart(index, value);
+                                            },
+                                            itemBuilder:
+                                                (BuildContext context) {
+                                              return cartList[index]
+                                                  .productList[0]
+                                                  .itemsCounter
+                                                  .map<PopupMenuItem<String>>(
+                                                      (String value) {
+                                                return new PopupMenuItem(
+                                                    child: new Text(value),
+                                                    value: value);
+                                              }).toList();
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ), // ),
+
+                                    GestureDetector(
+                                      child: Container(
+                                        padding: EdgeInsets.all(2),
+                                        margin: EdgeInsets.all(8),
+                                        child: Icon(
+                                          Icons.add,
+                                          size: 14,
+                                          color: colors.fontColor,
+                                        ),
+                                        decoration: BoxDecoration(
+                                            color: colors.lightWhite,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(3))),
+                                      ),
+                                      onTap: () {
+                                        if (_isProgress == false)
+                                          addToCart(
+                                              index,
+                                              (int.parse(cartList[index].qty) +
+                                                      int.parse(cartList[index]
+                                                          .productList[0]
+                                                          .qtyStepSize))
+                                                  .toString());
+                                      },
+                                    )
                                   ],
                                 ),
-                              ), // ),
-
-                              GestureDetector(
-                                child: Container(
-                                  padding: EdgeInsets.all(2),
-                                  margin: EdgeInsets.all(8),
-                                  child: Icon(
-                                    Icons.add,
-                                    size: 14,
-                                    color: colors.fontColor,
+                                Flexible(
+                                  child: GestureDetector(
+                                    child: Container(
+                                      margin:
+                                          EdgeInsetsDirectional.only(start: 8),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 2),
+                                      decoration: BoxDecoration(
+                                          color: colors.lightWhite,
+                                          borderRadius: new BorderRadius.all(
+                                              const Radius.circular(4.0))),
+                                      child: Text(
+                                        getTranslated(
+                                            context, 'SAVEFORLATER_BTN'),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: colors.fontColor,
+                                            fontSize: 11),
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      saveForLater(
+                                          cartList[index].varientId,
+                                          "1",
+                                          cartList[index].qty,
+                                          double.parse(
+                                              cartList[index].perItemTotal),
+                                          cartList[index]);
+                                    },
                                   ),
-                                  decoration: BoxDecoration(
-                                      color: colors.lightWhite,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(3))),
                                 ),
-                                onTap: () {
-                                  if (_isProgress == false)
-                                    addToCart(
-                                        index,
-                                        (int.parse(cartList[index].qty) +
-                                            int.parse(cartList[index]
-                                                .productList[0]
-                                                .qtyStepSize))
-                                            .toString());
-                                },
-                              )
-                            ],
-                          ),
-                          Flexible(
-                            child: GestureDetector(
-                              child: Container(
-                                margin:
-                                EdgeInsetsDirectional.only(start: 8),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 2),
-                                decoration: BoxDecoration(
-                                    color: colors.lightWhite,
-                                    borderRadius: new BorderRadius.all(
-                                        const Radius.circular(4.0))),
-                                child: Text(
-                                  getTranslated(
-                                      context, 'SAVEFORLATER_BTN'),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                      color: colors.fontColor,
-                                      fontSize: 11),
-                                ),
-                              ),
-                              onTap: () {
-                                saveForLater(
-                                    cartList[index].varientId,
-                                    "1",
-                                    cartList[index].qty,
-                                    double.parse(
-                                        cartList[index].perItemTotal),
-                                    cartList[index]);
-                              },
-                            ),
-                          ),
-                        ],
-                      )
+                              ],
+                            )
                           : Container(),
                     ],
                   ),
@@ -574,8 +569,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
   Widget cartItem(int index) {
     int selectedPos = 0;
     for (int i = 0;
-    i < cartList[index].productList[0].prVarientList.length;
-    i++) {
+        i < cartList[index].productList[0].prVarientList.length;
+        i++) {
       if (cartList[index].varientId ==
           cartList[index].productList[0].prVarientList[i].id) selectedPos = i;
     }
@@ -606,9 +601,9 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           .varient_value
           .split(',');
     }
-    if(int.parse(getQty(cartList[index].productList[0])) < 1){
+    if (int.parse(getQty(cartList[index].productList[0])) < 1) {
       return Container();
-    }else
+    } else
       return Card(
         elevation: 0.1,
         child: Padding(
@@ -640,8 +635,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                             children: [
                               Expanded(
                                 child: Padding(
-                                  padding:
-                                  const EdgeInsetsDirectional.only(top: 5.0),
+                                  padding: const EdgeInsetsDirectional.only(
+                                      top: 5.0),
                                   child: Text(
                                     cartList[index].productList[0].name,
                                     style: Theme.of(context)
@@ -671,48 +666,48 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                             ],
                           ),
                           cartList[index]
-                              .productList[0]
-                              .prVarientList[selectedPos]
-                              .attr_name !=
-                              null &&
-                              cartList[index]
-                                  .productList[0]
-                                  .prVarientList[selectedPos]
-                                  .attr_name
-                                  .isNotEmpty
+                                          .productList[0]
+                                          .prVarientList[selectedPos]
+                                          .attr_name !=
+                                      null &&
+                                  cartList[index]
+                                      .productList[0]
+                                      .prVarientList[selectedPos]
+                                      .attr_name
+                                      .isNotEmpty
                               ? ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: att.length,
-                              itemBuilder: (context, index) {
-                                return Row(children: [
-                                  Flexible(
-                                    child: Text(
-                                      att[index].trim() + ":",
-                                      overflow: TextOverflow.ellipsis,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2
-                                          .copyWith(
-                                        color: colors.lightBlack,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: att.length,
+                                  itemBuilder: (context, index) {
+                                    return Row(children: [
+                                      Flexible(
+                                        child: Text(
+                                          att[index].trim() + ":",
+                                          overflow: TextOverflow.ellipsis,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subtitle2
+                                              .copyWith(
+                                                color: colors.lightBlack,
+                                              ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.only(
-                                        start: 5.0),
-                                    child: Text(
-                                      val[index],
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2
-                                          .copyWith(
-                                          color: colors.lightBlack,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  )
-                                ]);
-                              })
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.only(
+                                            start: 5.0),
+                                        child: Text(
+                                          val[index],
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subtitle2
+                                              .copyWith(
+                                                  color: colors.lightBlack,
+                                                  fontWeight: FontWeight.bold),
+                                        ),
+                                      )
+                                    ]);
+                                  })
                               : Container(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -724,31 +719,33 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                     Flexible(
                                       child: Text(
                                         double.parse(cartList[index]
-                                            .productList[0]
-                                            .prVarientList[selectedPos]
-                                            .disPrice) !=
-                                            0
+                                                    .productList[0]
+                                                    .prVarientList[selectedPos]
+                                                    .disPrice) !=
+                                                0
                                             ? CUR_CURRENCY +
-                                            "" +
-                                            cartList[index]
-                                                .productList[0]
-                                                .prVarientList[selectedPos]
-                                                .price
+                                                "" +
+                                                cartList[index]
+                                                    .productList[0]
+                                                    .prVarientList[selectedPos]
+                                                    .price
                                             : "",
-
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: Theme.of(context)
                                             .textTheme
                                             .overline
                                             .copyWith(
-                                            decoration:
-                                            TextDecoration.lineThrough,
-                                            letterSpacing: 0.7),
+                                                decoration:
+                                                    TextDecoration.lineThrough,
+                                                letterSpacing: 0.7),
                                       ),
                                     ),
                                     Text(
-                                      " " + CUR_CURRENCY + " " + price.toString(),
+                                      " " +
+                                          CUR_CURRENCY +
+                                          " " +
+                                          price.toString(),
                                       style: TextStyle(
                                           color: colors.fontColor,
                                           fontWeight: FontWeight.bold),
@@ -757,138 +754,142 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                 ),
                               ),
                               cartList[index].productList[0].availability ==
-                                  "1" ||
-                                  cartList[index].productList[0].stockType ==
-                                      "null"
+                                          "1" ||
+                                      cartList[index]
+                                              .productList[0]
+                                              .stockType ==
+                                          "null"
                                   ? Row(
-                                children: <Widget>[
-                                  Row(
-                                    children: <Widget>[
-                                      GestureDetector(
-                                        child: Container(
-                                          padding: EdgeInsets.all(2),
-                                          margin:
-                                          EdgeInsetsDirectional.only(
-                                              end: 8,
-                                              top: 8,
-                                              bottom: 8),
-                                          child: Icon(
-                                            Icons.remove,
-                                            size: 12,
-                                            color: colors.fontColor,
-                                          ),
-                                          decoration: BoxDecoration(
-                                              color: colors.lightWhite,
-                                              borderRadius:
-                                              BorderRadius.all(
-                                                  Radius.circular(3))),
-                                        ),
-                                        onTap: () {
-                                          if (_isProgress == false)
-                                            removeFromCartCheckout(
-                                                index, false);
-                                        },
-                                      ),
+                                      children: <Widget>[
+                                        Row(
+                                          children: <Widget>[
+                                            GestureDetector(
+                                              child: Container(
+                                                padding: EdgeInsets.all(2),
+                                                margin:
+                                                    EdgeInsetsDirectional.only(
+                                                        end: 8,
+                                                        top: 8,
+                                                        bottom: 8),
+                                                child: Icon(
+                                                  Icons.remove,
+                                                  size: 12,
+                                                  color: colors.fontColor,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                    color: colors.lightWhite,
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                3))),
+                                              ),
+                                              onTap: () {
+                                                if (_isProgress == false)
+                                                  removeFromCartCheckout(
+                                                      index, false);
+                                              },
+                                            ),
 
-                                      Container(
-                                        width: 40,
-                                        height: 20,
-                                        child: Stack(
-                                          children: [
-                                            TextField(
-                                              textAlign: TextAlign.center,
-                                              readOnly: true,
-                                              style: TextStyle(
-                                                fontSize: 10,
+                                            Container(
+                                              width: 40,
+                                              height: 20,
+                                              child: Stack(
+                                                children: [
+                                                  TextField(
+                                                    textAlign: TextAlign.center,
+                                                    readOnly: true,
+                                                    style: TextStyle(
+                                                      fontSize: 10,
+                                                    ),
+                                                    controller:
+                                                        _controller[index],
+                                                    decoration: InputDecoration(
+                                                      contentPadding:
+                                                          EdgeInsets.all(5.0),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color: colors
+                                                                .fontColor,
+                                                            width: 0.5),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5.0),
+                                                      ),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color: colors
+                                                                .fontColor,
+                                                            width: 0.5),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5.0),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  PopupMenuButton<String>(
+                                                    tooltip: '',
+                                                    icon: const Icon(
+                                                      Icons.arrow_drop_down,
+                                                      size: 1,
+                                                    ),
+                                                    onSelected: (String value) {
+                                                      addToCartCheckout(
+                                                          index, value);
+                                                    },
+                                                    itemBuilder:
+                                                        (BuildContext context) {
+                                                      return cartList[index]
+                                                          .productList[0]
+                                                          .itemsCounter
+                                                          .map<
+                                                                  PopupMenuItem<
+                                                                      String>>(
+                                                              (String value) {
+                                                        return new PopupMenuItem(
+                                                            child:
+                                                                new Text(value),
+                                                            value: value);
+                                                      }).toList();
+                                                    },
+                                                  ),
+                                                ],
                                               ),
-                                              controller:
-                                              _controller[index],
-                                              decoration: InputDecoration(
-                                                contentPadding:
-                                                EdgeInsets.all(5.0),
-                                                focusedBorder:
-                                                OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color:
-                                                      colors.fontColor,
-                                                      width: 0.5),
-                                                  borderRadius:
-                                                  BorderRadius.circular(
-                                                      5.0),
+                                            ), // ),
+
+                                            GestureDetector(
+                                              child: Container(
+                                                padding: EdgeInsets.all(2),
+                                                margin: EdgeInsets.all(8),
+                                                child: Icon(
+                                                  Icons.add,
+                                                  size: 12,
+                                                  color: colors.fontColor,
                                                 ),
-                                                enabledBorder:
-                                                OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color:
-                                                      colors.fontColor,
-                                                      width: 0.5),
-                                                  borderRadius:
-                                                  BorderRadius.circular(
-                                                      5.0),
-                                                ),
+                                                decoration: BoxDecoration(
+                                                    color: colors.lightWhite,
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                3))),
                                               ),
-                                            ),
-                                            PopupMenuButton<String>(
-                                              tooltip: '',
-                                              icon: const Icon(
-                                                Icons.arrow_drop_down,
-                                                size: 1,
-                                              ),
-                                              onSelected: (String value) {
+                                              onTap: () {
                                                 addToCartCheckout(
-                                                    index, value);
+                                                    index,
+                                                    (int.parse(cartList[index]
+                                                                .qty) +
+                                                            int.parse(cartList[
+                                                                    index]
+                                                                .productList[0]
+                                                                .qtyStepSize))
+                                                        .toString());
                                               },
-                                              itemBuilder:
-                                                  (BuildContext context) {
-                                                return cartList[index]
-                                                    .productList[0]
-                                                    .itemsCounter
-                                                    .map<
-                                                    PopupMenuItem<
-                                                        String>>(
-                                                        (String value) {
-                                                      return new PopupMenuItem(
-                                                          child:
-                                                          new Text(value),
-                                                          value: value);
-                                                    }).toList();
-                                              },
-                                            ),
+                                            )
                                           ],
                                         ),
-                                      ), // ),
-
-                                      GestureDetector(
-                                        child: Container(
-                                          padding: EdgeInsets.all(2),
-                                          margin: EdgeInsets.all(8),
-                                          child: Icon(
-                                            Icons.add,
-                                            size: 12,
-                                            color: colors.fontColor,
-                                          ),
-                                          decoration: BoxDecoration(
-                                              color: colors.lightWhite,
-                                              borderRadius:
-                                              BorderRadius.all(
-                                                  Radius.circular(3))),
-                                        ),
-                                        onTap: () {
-                                          addToCartCheckout(
-                                              index,
-                                              (int.parse(cartList[index]
-                                                  .qty) +
-                                                  int.parse(cartList[
-                                                  index]
-                                                      .productList[0]
-                                                      .qtyStepSize))
-                                                  .toString());
-                                        },
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              )
+                                      ],
+                                    )
                                   : Container(),
                             ],
                           ),
@@ -917,7 +918,10 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                         .copyWith(color: colors.lightBlack2),
                   ),
                   Text(
-                    CUR_CURRENCY + " " + double.parse(cartList[index].perItemTotal).toStringAsFixed(2),
+                    CUR_CURRENCY +
+                        " " +
+                        double.parse(cartList[index].perItemTotal)
+                            .toStringAsFixed(2),
                     style: Theme.of(context)
                         .textTheme
                         .caption
@@ -929,7 +933,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    getTranslated(context, 'TAXPER')+" (Vat Included)",
+                    getTranslated(context, 'TAXPER') + " (Vat Included)",
                     style: Theme.of(context)
                         .textTheme
                         .caption
@@ -973,8 +977,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
   Widget saveLaterItem(int index) {
     int selectedPos = 0;
     for (int i = 0;
-    i < saveLaterList[index].productList[0].prVarientList.length;
-    i++) {
+        i < saveLaterList[index].productList[0].prVarientList.length;
+        i++) {
       if (saveLaterList[index].varientId ==
           saveLaterList[index].productList[0].prVarientList[i].id)
         selectedPos = i;
@@ -1053,16 +1057,16 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                       children: <Widget>[
                         Text(
                           double.parse(saveLaterList[index]
-                              .productList[0]
-                              .prVarientList[selectedPos]
-                              .disPrice) !=
-                              0
+                                      .productList[0]
+                                      .prVarientList[selectedPos]
+                                      .disPrice) !=
+                                  0
                               ? CUR_CURRENCY +
-                              "" +
-                              saveLaterList[index]
-                                  .productList[0]
-                                  .prVarientList[selectedPos]
-                                  .price
+                                  "" +
+                                  saveLaterList[index]
+                                      .productList[0]
+                                      .prVarientList[selectedPos]
+                                      .price
                               : "",
                           style: Theme.of(context).textTheme.overline.copyWith(
                               decoration: TextDecoration.lineThrough,
@@ -1077,37 +1081,37 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                       ],
                     ),
                     saveLaterList[index].productList[0].availability == "1" ||
-                        saveLaterList[index].productList[0].stockType ==
-                            "null"
+                            saveLaterList[index].productList[0].stockType ==
+                                "null"
                         ? Row(
-                      children: <Widget>[
-                        GestureDetector(
-                          child: Container(
-                            margin: EdgeInsets.symmetric(vertical: 8),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 2),
-                            decoration: BoxDecoration(
-                                color: colors.lightWhite,
-                                borderRadius: new BorderRadius.all(
-                                    const Radius.circular(4.0))),
-                            child: Text(
-                              getTranslated(context, 'MOVE_TO_CART'),
-                              style: TextStyle(
-                                  color: colors.fontColor, fontSize: 11),
-                            ),
-                          ),
-                          onTap: () {
-                            saveForLater(
-                                saveLaterList[index].varientId,
-                                "0",
-                                saveLaterList[index].qty,
-                                double.parse(
-                                    saveLaterList[index].perItemTotal),
-                                saveLaterList[index]);
-                          },
-                        ),
-                      ],
-                    )
+                            children: <Widget>[
+                              GestureDetector(
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(vertical: 8),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 2),
+                                  decoration: BoxDecoration(
+                                      color: colors.lightWhite,
+                                      borderRadius: new BorderRadius.all(
+                                          const Radius.circular(4.0))),
+                                  child: Text(
+                                    getTranslated(context, 'MOVE_TO_CART'),
+                                    style: TextStyle(
+                                        color: colors.fontColor, fontSize: 11),
+                                  ),
+                                ),
+                                onTap: () {
+                                  saveForLater(
+                                      saveLaterList[index].varientId,
+                                      "0",
+                                      saveLaterList[index].qty,
+                                      double.parse(
+                                          saveLaterList[index].perItemTotal),
+                                      saveLaterList[index]);
+                                },
+                              ),
+                            ],
+                          )
                         : Container(),
                   ],
                 ),
@@ -1129,8 +1133,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
       try {
         var parameter = {USER_ID: CUR_USERID, SAVE_LATER: save};
         Response response =
-        await post(getCartApi, body: parameter, headers: headers)
-            .timeout(Duration(seconds: timeOut));
+            await post(getCartApi, body: parameter, headers: headers)
+                .timeout(Duration(seconds: timeOut));
 
         var getdata = json.decode(response.body);
         bool error = getdata["error"];
@@ -1176,8 +1180,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
       try {
         var parameter = {USER_ID: CUR_USERID, SAVE_LATER: save};
         Response response =
-        await post(getCartApi, body: parameter, headers: headers)
-            .timeout(Duration(seconds: timeOut));
+            await post(getCartApi, body: parameter, headers: headers)
+                .timeout(Duration(seconds: timeOut));
 
         var getdata = json.decode(response.body);
         bool error = getdata["error"];
@@ -1230,8 +1234,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           QTY: qty,
         };
         Response response =
-        await post(manageCartApi, body: parameter, headers: headers)
-            .timeout(Duration(seconds: timeOut));
+            await post(manageCartApi, body: parameter, headers: headers)
+                .timeout(Duration(seconds: timeOut));
 
         var getdata = json.decode(response.body);
 
@@ -1243,7 +1247,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           String qty = data['total_quantity'];
 
           //cartList[index].qty = qty;
-          setQty(cartList[index], qty:qty);
+          setQty(cartList[index], qty: qty);
           oriPrice = double.parse(data['sub_total']);
           CUR_CART_COUNT = getTotalQty();
 
@@ -1263,12 +1267,13 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
               delCharge = 0;
           }
 
-          print("FREEAMT: " + double.parse(addressList[selectedAddress].freeAmt).toString());
+          print("FREEAMT: " +
+              double.parse(addressList[selectedAddress].freeAmt).toString());
           if ((oriPrice) < double.parse(addressList[selectedAddress].freeAmt)) {
             freeDeliveryAMt =
-            (double.parse(addressList[selectedAddress].freeAmt) - oriPrice);
+                (double.parse(addressList[selectedAddress].freeAmt) - oriPrice);
           }
-          print("Aurkitnepaisee: "+freeDeliveryAMt.toString());
+          print("Aurkitnepaisee: " + freeDeliveryAMt.toString());
           totalPrice = delCharge + oriPrice;
 
           if (isPromoValid) {
@@ -1339,8 +1344,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
         };
 
         Response response =
-        await post(manageCartApi, body: parameter, headers: headers)
-            .timeout(Duration(seconds: timeOut));
+            await post(manageCartApi, body: parameter, headers: headers)
+                .timeout(Duration(seconds: timeOut));
         if (response.statusCode == 200) {
           var getdata = json.decode(response.body);
 
@@ -1352,9 +1357,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
             String qty = data['total_quantity'];
             //CUR_CART_COUNT = data['cart_count'];
 
-
             //cartList[index].qty = qty;
-            setQty(cartList[index], qty:qty);
+            setQty(cartList[index], qty: qty);
             CUR_CART_COUNT = getTotalQty();
             oriPrice = double.parse(data['sub_total']);
             _controller[index].text = qty;
@@ -1373,13 +1377,18 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
               else
                 delCharge = 0;
             }
+
             ///
-            print("FREEAMT: " + double.parse(addressList[selectedAddress].freeAmt).toString());
-            if ((oriPrice) < double.parse(addressList[selectedAddress].freeAmt)) {
+            print("FREEAMT: " +
+                double.parse(addressList[selectedAddress].freeAmt).toString());
+            if ((oriPrice) <
+                double.parse(addressList[selectedAddress].freeAmt)) {
               freeDeliveryAMt =
-              (double.parse(addressList[selectedAddress].freeAmt) - oriPrice);
+                  (double.parse(addressList[selectedAddress].freeAmt) -
+                      oriPrice);
             }
-            print("Aurkitnepaisee: "+freeDeliveryAMt.toString());
+            print("Aurkitnepaisee: " + freeDeliveryAMt.toString());
+
             ///
             totalPrice = delCharge + oriPrice;
 
@@ -1449,8 +1458,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
         };
 
         Response response =
-        await post(manageCartApi, body: parameter, headers: headers)
-            .timeout(Duration(seconds: timeOut));
+            await post(manageCartApi, body: parameter, headers: headers)
+                .timeout(Duration(seconds: timeOut));
 
         var getdata = json.decode(response.body);
 
@@ -1458,7 +1467,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
         String msg = getdata["message"];
         if (!error) {
           var data = getdata["data"];
-
+          debugPrint(data);
           //CUR_CART_COUNT = data['cart_count'];
           CUR_CART_COUNT = getTotalQty();
 
@@ -1567,8 +1576,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           };
 
           Response response =
-          await post(manageCartApi, body: parameter, headers: headers)
-              .timeout(Duration(seconds: timeOut));
+              await post(manageCartApi, body: parameter, headers: headers)
+                  .timeout(Duration(seconds: timeOut));
 
           if (response.statusCode == 200) {
             var getdata = json.decode(response.body);
@@ -1589,7 +1598,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                 setQty(cartList[index]);
               } else {
                 //cartList[index].qty = qty.toString();
-                setQty(cartList[index], qty:qty);
+                setQty(cartList[index], qty: qty);
               }
               CUR_CART_COUNT = getTotalQty();
 
@@ -1699,8 +1708,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           };
 
           Response response =
-          await post(manageCartApi, body: parameter, headers: headers)
-              .timeout(Duration(seconds: timeOut));
+              await post(manageCartApi, body: parameter, headers: headers)
+                  .timeout(Duration(seconds: timeOut));
 
           var getdata = json.decode(response.body);
 
@@ -1721,7 +1730,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                 //     (item) => item.varientId == cartList[index].varientId);
               } else {
                 // cartList[index].qty = qty.toString();
-                setQty(cartList[index], qty:qty);
+                setQty(cartList[index], qty: qty);
               }
               CUR_CART_COUNT = getTotalQty();
 
@@ -1810,191 +1819,195 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
 
   List<SectionModel> t = [];
 
-
-
   _showContent() {
     // t.clear();
-    if(t.isEmpty)
-      if(cartList.isNotEmpty){
-        cartList.forEach((element) {
-          if(int.parse(element.qty) > 0){
-            t.add(element);
-          }
-        });
-      }
+    if (t.isEmpty) if (cartList.isNotEmpty) {
+      cartList.forEach((element) {
+        if (int.parse(element.qty) > 0) {
+          t.add(element);
+        }
+      });
+    }
 
     return _isCartLoad
         ? shimmer()
         : t.length == 0 && saveLaterList.length == 0
-        ? cartEmpty()
-        : Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              // Color(0xFF280F43),
-              // Color(0xffE5CCFF),
-              colors.darkColor,
-              colors.darkColor.withOpacity(0.8),
-              Color(0xFFF8F8FF),
-            ]),
-      ),
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: RefreshIndicator(
-                    key: _refreshIndicatorKey,
-                    onRefresh: _refresh,
-                    child: SingleChildScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: t.length,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return listItem(index);
-                            },
-                          ),
-                          saveLaterList.length > 0
-                              ? Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              getTranslated(
-                                  context, 'SAVEFORLATER_BTN'),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1,
-                            ),
-                          )
-                              : Container(),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: saveLaterList.length,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return saveLaterItem(index);
-                            },
-                          ),
-                        ],
-                      ),
-                    ))),
-          ),
-          Container(
-            height: 55,
-            color: colors.white,
-            child: Card(
-              child: Row(children: <Widget>[
-                Padding(
-                    padding: EdgeInsetsDirectional.only(start: 15.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          CUR_CURRENCY + " $oriPrice",
-                          style: TextStyle(
-                              color: colors.fontColor,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(CUR_CART_COUNT + " Items"),
-                      ],
-                    )),
-                // Spacer(),
-                // SimBtn(
-                //     size: 0.4,
-                //     title: getTranslated(context, 'PROCEED_CHECKOUT'),
-                //     onBtnSelected: () async {
-                //       if (oriPrice > 0) {
-                //         /* await Navigator.push(
-                //           context,
-                //           MaterialPageRoute(
-                //             builder: (context) =>
-                //                 CheckOut(widget.updateHome),
-                //           ),
-                //         );*/
-                //         checkout();
-                //         if (mounted) setState(() {});
-                //       } else
-                //         setSnackbar(getTranslated(context, 'ADD_ITEM'),
-                //             _scaffoldKey);
-                //     }),
-              ]),
-            ),
-          ),
-          Row(
-            children: [
-              Container(
-                height: 55,
-                decoration: BoxDecoration(
-                  color: colors.white,
-                  boxShadow: [
-                    BoxShadow(color: colors.black26, blurRadius: 10)
-                  ],
-                ),
-                width: deviceWidth * 0.5,
-                child: InkWell(
-                  onTap: () {
-
-                    Navigator.of(context)
-                        .pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
-                    //addToCart(false);
-                  },
-                  child: Center(
-                      child: Text(
-                        getTranslated(context, 'CONTINUE_SHOPPING'),
-                        style: Theme.of(context).textTheme.button.copyWith(
-                            fontWeight: FontWeight.bold, color: colors.primary),
-                      )),
-                ),
-              ),
-              Container(
-                height: 55,
+            ? cartEmpty()
+            : Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [colors.grad1Color, colors.grad2Color],
-                      stops: [0, 1]),
-                  boxShadow: [
-                    BoxShadow(color: colors.black26, blurRadius: 10)
-                  ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        // Color(0xFF280F43),
+                        // Color(0xffE5CCFF),
+                        colors.darkColor,
+                        colors.darkColor.withOpacity(0.8),
+                        Color(0xFFF8F8FF),
+                      ]),
                 ),
-                width: deviceWidth * 0.5,
-                child: InkWell(
-                  onTap: () async {
-                    if (oriPrice > 0) {
-                      /* await Navigator.push(
+                child: Column(
+                  children: <Widget>[
+                    Expanded(
+                      child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: RefreshIndicator(
+                              key: _refreshIndicatorKey,
+                              onRefresh: _refresh,
+                              child: SingleChildScrollView(
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: t.length,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemBuilder: (context, index) {
+                                        return listItem(index);
+                                      },
+                                    ),
+                                    saveLaterList.length > 0
+                                        ? Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              getTranslated(
+                                                  context, 'SAVEFORLATER_BTN'),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .subtitle1,
+                                            ),
+                                          )
+                                        : Container(),
+                                    ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: saveLaterList.length,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemBuilder: (context, index) {
+                                        return saveLaterItem(index);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ))),
+                    ),
+                    Container(
+                      height: 55,
+                      color: colors.white,
+                      child: Card(
+                        child: Row(children: <Widget>[
+                          Padding(
+                              padding: EdgeInsetsDirectional.only(start: 15.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    CUR_CURRENCY + " $oriPrice",
+                                    style: TextStyle(
+                                        color: colors.fontColor,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(CUR_CART_COUNT + " Items"),
+                                ],
+                              )),
+                          // Spacer(),
+                          // SimBtn(
+                          //     size: 0.4,
+                          //     title: getTranslated(context, 'PROCEED_CHECKOUT'),
+                          //     onBtnSelected: () async {
+                          //       if (oriPrice > 0) {
+                          //         /* await Navigator.push(
+                          //           context,
+                          //           MaterialPageRoute(
+                          //             builder: (context) =>
+                          //                 CheckOut(widget.updateHome),
+                          //           ),
+                          //         );*/
+                          //         checkout();
+                          //         if (mounted) setState(() {});
+                          //       } else
+                          //         setSnackbar(getTranslated(context, 'ADD_ITEM'),
+                          //             _scaffoldKey);
+                          //     }),
+                        ]),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          height: 55,
+                          decoration: BoxDecoration(
+                            color: colors.white,
+                            boxShadow: [
+                              BoxShadow(color: colors.black26, blurRadius: 10)
+                            ],
+                          ),
+                          width: deviceWidth * 0.5,
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  '/home', (Route<dynamic> route) => false);
+                              //addToCart(false);
+                            },
+                            child: Center(
+                                child: Text(
+                              getTranslated(context, 'CONTINUE_SHOPPING'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .button
+                                  .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: colors.primary),
+                            )),
+                          ),
+                        ),
+                        Container(
+                          height: 55,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [colors.grad1Color, colors.grad2Color],
+                                stops: [0, 1]),
+                            boxShadow: [
+                              BoxShadow(color: colors.black26, blurRadius: 10)
+                            ],
+                          ),
+                          width: deviceWidth * 0.5,
+                          child: InkWell(
+                            onTap: () async {
+                              if (oriPrice > 0) {
+                                /* await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
                               CheckOut(widget.updateHome),
                         ),
                       );*/
-                      checkout();
-                      if (mounted) setState(() {});
-                    } else
-                      setSnackbar(getTranslated(context, 'ADD_ITEM'),
-                          _scaffoldKey);
-                  },
-                  child: Center(
-                      child: Text(
-                        getTranslated(context, 'PROCEED_CHECKOUT'),
-                        style: Theme.of(context).textTheme.button.copyWith(
-                            fontWeight: FontWeight.bold, color: colors.white),
-                      )),
+                                checkout();
+                                if (mounted) setState(() {});
+                              } else
+                                setSnackbar(getTranslated(context, 'ADD_ITEM'),
+                                    _scaffoldKey);
+                            },
+                            child: Center(
+                                child: Text(
+                              getTranslated(context, 'PROCEED_CHECKOUT'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .button
+                                  .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: colors.white),
+                            )),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
-
-        ],
-      ),
-    );
+              );
   }
 
   cartEmpty() {
@@ -2030,9 +2043,9 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
       child: Text(getTranslated(context, 'CART_DESC'),
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headline6.copyWith(
-            color: colors.lightBlack2,
-            fontWeight: FontWeight.normal,
-          )),
+                color: colors.lightBlack2,
+                fontWeight: FontWeight.normal,
+              )),
     );
   }
 
@@ -2081,276 +2094,289 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
         builder: (builder) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
-                checkoutState = setState;
-                return Container(
-                    constraints: BoxConstraints(
-                        maxHeight: MediaQuery.of(context).size.height * 0.8),
-                    child: Scaffold(
-                      resizeToAvoidBottomInset: false,
-                      key: _checkscaffoldKey,
-                      body: _isNetworkAvail
-                          ? cartList.length == 0
+            checkoutState = setState;
+            return Container(
+                constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height * 0.8),
+                child: Scaffold(
+                  resizeToAvoidBottomInset: false,
+                  key: _checkscaffoldKey,
+                  body: _isNetworkAvail
+                      ? cartList.length == 0
                           ? cartEmpty()
                           : _isLoading
-                          ? shimmer()
-                          : Column(
-                        children: [
-                          Expanded(
-                            child: Stack(
-                              children: <Widget>[
-                                SingleChildScrollView(
-                                  controller: _scrollController,
-                                  child: Padding(
-                                    padding:
-                                    const EdgeInsets.all(10.0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        address(),
-                                        payment(),
-                                        cartItems(),
-                                        moredeliveryamt(),
-                                        promo(),
-                                        deliveryTextInformation(),
-                                        orderSummary(),
-                                        opencontainer(),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                showCircularProgress(
-                                    _isProgress, colors.primary),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            color: colors.white,
-                            child: Row(children: <Widget>[
-                              Padding(
-                                  padding: EdgeInsetsDirectional.only(
-                                      start: 15.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        CUR_CURRENCY +
-                                            " ${totalPrice.toStringAsFixed(2)}",
-                                        style: TextStyle(
-                                            color: colors.fontColor,
-                                            fontWeight:
-                                            FontWeight.bold),
+                              ? shimmer()
+                              : Column(
+                                  children: [
+                                    Expanded(
+                                      child: Stack(
+                                        children: <Widget>[
+                                          SingleChildScrollView(
+                                            controller: _scrollController,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(10.0),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  address(),
+                                                  payment(),
+                                                  cartItems(),
+                                                  moredeliveryamt(),
+                                                  promo(),
+                                                  deliveryTextInformation(),
+                                                  orderSummary(),
+                                                  opencontainer(),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          showCircularProgress(
+                                              _isProgress, colors.primary),
+                                        ],
                                       ),
-                                      Text(
-                                          CUR_CART_COUNT +
-                                              " Items"),
-                                    ],
-                                  )),
-                              Spacer(),
-
-                              SimBtn(
-                                  size: 0.4,
-                                  title: getTranslated(
-                                      context, 'PLACE_ORDER'),
-                                  onBtnSelected: _placeOrder
-                                      ? () {
-                                    checkoutState(() {
-                                      _placeOrder = false;
-                                    });
-
-                                    if (selAddress == null ||
-                                        selAddress.isEmpty) {
-                                      msg = getTranslated(
-                                          context,
-                                          'addressWarning');
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (BuildContext
-                                            context) =>
-                                                ManageAddress(
-                                                  home: false,
+                                    ),
+                                    Container(
+                                      color: colors.white,
+                                      child: Row(children: <Widget>[
+                                        Padding(
+                                            padding: EdgeInsetsDirectional.only(
+                                                start: 15.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  CUR_CURRENCY +
+                                                      " ${totalPrice.toStringAsFixed(2)}",
+                                                  style: TextStyle(
+                                                      color: colors.fontColor,
+                                                      fontWeight:
+                                                          FontWeight.bold),
                                                 ),
-                                          ));
-                                      checkoutState(() {
-                                        _placeOrder = true;
-                                      });
-                                    } else if (payMethod ==
-                                        null ||
-                                        payMethod.isEmpty) {
-                                      msg = getTranslated(
-                                          context,
-                                          'payWarning');
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (BuildContext
-                                              context) =>
-                                                  Payment(
-                                                      updateCheckout,
-                                                      msg,payment,checkoutState)));
-                                      checkoutState(() {
-                                        _placeOrder = true;
-                                      });
-                                    } else if ((isTimeSlot == null) || (isTimeSlot &&
-                                        int.parse(allowDay) >
-                                            0 &&
-                                        (selDate == null ||
-                                            selDate.isEmpty))) {
-                                      msg = getTranslated(
-                                          context,
-                                          'dateWarning');
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (BuildContext
-                                              context) =>
-                                                  Payment(
-                                                      updateCheckout,
-                                                      msg,payment,checkoutState)));
-                                      checkoutState(() {
-                                        _placeOrder = true;
-                                      });
-                                    } else if (isTimeSlot &&
-                                        timeSlotList.length >
-                                            0 &&
-                                        (selTime == null ||
-                                            selTime.isEmpty)) {
-                                      msg = getTranslated(
-                                          context,
-                                          'timeWarning');
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (BuildContext
-                                              context) =>
-                                                  Payment(
-                                                      updateCheckout,
-                                                      msg,payment,checkoutState)));
-                                      checkoutState(() {
-                                        _placeOrder = true;
-                                      });
-                                    }
+                                                Text(CUR_CART_COUNT + " Items"),
+                                              ],
+                                            )),
+                                        Spacer(),
 
-                                    // else if(totalPrice < double.parse(MIN_AMT)) {
-                                    //    if (!ISFLAT_DEL &&
-                                    //        selectedAddress > 0) {
-                                    //      if ((oriPrice) <
-                                    //          double.parse(
-                                    //              addressList[selectedAddress]
-                                    //                  .freeAmt)) {
-                                    //        delCharge =
-                                    //            double.parse(
-                                    //                addressList[selectedAddress]
-                                    //                    .deliveryCharge);
-                                    //        MIN_AMT = delCharge
-                                    //            .toStringAsFixed(
-                                    //            2);
-                                    //      }
-                                    //      else {
-                                    //        delCharge = 0;
-                                    //      }
-                                    //    } else {
-                                    //      if ((oriPrice) <
-                                    //          double.parse(
-                                    //              MIN_AMT)) {
-                                    //        delCharge =
-                                    //            double.parse(
-                                    //                CUR_DEL_CHR);
-                                    //        MIN_AMT = delCharge
-                                    //            .toStringAsFixed(
-                                    //            2);
-                                    //        setSnackbar(
-                                    //            "Order amount should be greater than " +
-                                    //                CUR_CURRENCY +
-                                    //                " " +
-                                    //                double.parse(
-                                    //                    MIN_AMT)
-                                    //                    .toString(),
-                                    //            _checkscaffoldKey);
-                                    //        checkoutState(() {
-                                    //          _placeOrder = true;
-                                    //        });
-                                    //      }
-                                    //      else
-                                    //        delCharge = 0;
-                                    //    }
-                                    //    setSnackbar(
-                                    //        "Order amount should be greater than " +
-                                    //            CUR_CURRENCY +
-                                    //            " " +
-                                    //            double.parse(
-                                    //                MIN_AMT)
-                                    //                .toString(),
-                                    //        _checkscaffoldKey);
-                                    //    checkoutState(() {
-                                    //      _placeOrder = true;
-                                    //    });
-                                    //  }
+                                        SimBtn(
+                                            size: 0.4,
+                                            title: getTranslated(
+                                                context, 'PLACE_ORDER'),
+                                            onBtnSelected: _placeOrder
+                                                ? () {
+                                                    checkoutState(() {
+                                                      _placeOrder = false;
+                                                    });
 
+                                                    if (selAddress == null ||
+                                                        selAddress.isEmpty) {
+                                                      msg = getTranslated(
+                                                          context,
+                                                          'addressWarning');
+                                                      Navigator.pushReplacement(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (BuildContext
+                                                                    context) =>
+                                                                ManageAddress(
+                                                              home: false,
+                                                            ),
+                                                          ));
+                                                      checkoutState(() {
+                                                        _placeOrder = true;
+                                                      });
+                                                    } else if (payMethod ==
+                                                            null ||
+                                                        payMethod.isEmpty) {
+                                                      msg = getTranslated(
+                                                          context,
+                                                          'payWarning');
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (BuildContext
+                                                                      context) =>
+                                                                  Payment(
+                                                                      updateCheckout,
+                                                                      msg,
+                                                                      payment,
+                                                                      checkoutState)));
+                                                      checkoutState(() {
+                                                        _placeOrder = true;
+                                                      });
+                                                    } else if ((isTimeSlot ==
+                                                            null) ||
+                                                        (isTimeSlot &&
+                                                            int.parse(
+                                                                    allowDay) >
+                                                                0 &&
+                                                            (selDate == null ||
+                                                                selDate
+                                                                    .isEmpty))) {
+                                                      msg = getTranslated(
+                                                          context,
+                                                          'dateWarning');
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (BuildContext
+                                                                      context) =>
+                                                                  Payment(
+                                                                      updateCheckout,
+                                                                      msg,
+                                                                      payment,
+                                                                      checkoutState)));
+                                                      checkoutState(() {
+                                                        _placeOrder = true;
+                                                      });
+                                                    } else if (isTimeSlot &&
+                                                        timeSlotList.length >
+                                                            0 &&
+                                                        (selTime == null ||
+                                                            selTime.isEmpty)) {
+                                                      msg = getTranslated(
+                                                          context,
+                                                          'timeWarning');
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (BuildContext
+                                                                      context) =>
+                                                                  Payment(
+                                                                      updateCheckout,
+                                                                      msg,
+                                                                      payment,
+                                                                      checkoutState)));
+                                                      checkoutState(() {
+                                                        _placeOrder = true;
+                                                      });
+                                                    }
 
+                                                    // else if(totalPrice < double.parse(MIN_AMT)) {
+                                                    //    if (!ISFLAT_DEL &&
+                                                    //        selectedAddress > 0) {
+                                                    //      if ((oriPrice) <
+                                                    //          double.parse(
+                                                    //              addressList[selectedAddress]
+                                                    //                  .freeAmt)) {
+                                                    //        delCharge =
+                                                    //            double.parse(
+                                                    //                addressList[selectedAddress]
+                                                    //                    .deliveryCharge);
+                                                    //        MIN_AMT = delCharge
+                                                    //            .toStringAsFixed(
+                                                    //            2);
+                                                    //      }
+                                                    //      else {
+                                                    //        delCharge = 0;
+                                                    //      }
+                                                    //    } else {
+                                                    //      if ((oriPrice) <
+                                                    //          double.parse(
+                                                    //              MIN_AMT)) {
+                                                    //        delCharge =
+                                                    //            double.parse(
+                                                    //                CUR_DEL_CHR);
+                                                    //        MIN_AMT = delCharge
+                                                    //            .toStringAsFixed(
+                                                    //            2);
+                                                    //        setSnackbar(
+                                                    //            "Order amount should be greater than " +
+                                                    //                CUR_CURRENCY +
+                                                    //                " " +
+                                                    //                double.parse(
+                                                    //                    MIN_AMT)
+                                                    //                    .toString(),
+                                                    //            _checkscaffoldKey);
+                                                    //        checkoutState(() {
+                                                    //          _placeOrder = true;
+                                                    //        });
+                                                    //      }
+                                                    //      else
+                                                    //        delCharge = 0;
+                                                    //    }
+                                                    //    setSnackbar(
+                                                    //        "Order amount should be greater than " +
+                                                    //            CUR_CURRENCY +
+                                                    //            " " +
+                                                    //            double.parse(
+                                                    //                MIN_AMT)
+                                                    //                .toString(),
+                                                    //        _checkscaffoldKey);
+                                                    //    checkoutState(() {
+                                                    //      _placeOrder = true;
+                                                    //    });
+                                                    //  }
 
-                                    else if(totalPrice < double.parse(MIN_CART_AMT)){
-                                      setSnackbar("Order amount should be greater than " + CUR_CURRENCY + " " +
-                                          double.parse(MIN_CART_AMT).toString(), _checkscaffoldKey);
-                                      checkoutState(() {
-                                        _placeOrder = true;
-                                      });
-                                    }
-                                    else if (payMethod ==
-                                        getTranslated(context,
-                                            'PAYPAL_LBL')) {
-                                      placeOrder('');
-                                    } else if (payMethod ==
-                                        getTranslated(context,
-                                            'RAZORPAY_LBL'))
-                                      razorpayPayment();
-                                    // else if (payMethod ==
-                                    //     getTranslated(context,
-                                    //         'PAYSTACK_LBL'))
-                                    //   paystackPayment(context);
-                                    else if (payMethod ==
-                                        getTranslated(context,
-                                            'FLUTTERWAVE_LBL'))
-                                      flutterwavePayment();
-                                    else if (payMethod == getTranslated(context, 'STRIPE_LBL'))
-                                      stripePayment();
-                                    else if (payMethod ==
-                                        getTranslated(context,
-                                            'PAYTM_LBL'))
-                                      paytmPayment();
-                                    else
-                                      placeOrder('');
-                                  }
-                                      : null)
-                              //}),
-                            ]),
-                          ),
-                        ],
-                      )
-                          : noInternet(context),
-                    ));
-              });
+                                                    else if (totalPrice <
+                                                        double.parse(
+                                                            MIN_CART_AMT)) {
+                                                      setSnackbar(
+                                                          "Order amount should be greater than " +
+                                                              CUR_CURRENCY +
+                                                              " " +
+                                                              double.parse(
+                                                                      MIN_CART_AMT)
+                                                                  .toString(),
+                                                          _checkscaffoldKey);
+                                                      checkoutState(() {
+                                                        _placeOrder = true;
+                                                      });
+                                                    } else if (payMethod ==
+                                                        getTranslated(context,
+                                                            'PAYPAL_LBL')) {
+                                                      placeOrder('');
+                                                    } else if (payMethod ==
+                                                        getTranslated(context,
+                                                            'RAZORPAY_LBL'))
+                                                      razorpayPayment();
+                                                    // else if (payMethod ==
+                                                    //     getTranslated(context,
+                                                    //         'PAYSTACK_LBL'))
+                                                    //   paystackPayment(context);
+                                                    else if (payMethod ==
+                                                        getTranslated(context,
+                                                            'FLUTTERWAVE_LBL'))
+                                                      flutterwavePayment();
+                                                    else if (payMethod ==
+                                                        getTranslated(context,
+                                                            'STRIPE_LBL'))
+                                                      stripePayment();
+                                                    else if (payMethod ==
+                                                        getTranslated(context,
+                                                            'PAYTM_LBL'))
+                                                      paytmPayment();
+                                                    else
+                                                      placeOrder('');
+                                                  }
+                                                : null)
+                                        //}),
+                                      ]),
+                                    ),
+                                  ],
+                                )
+                      : noInternet(context),
+                ));
+          });
         });
   }
 
-
-  minimumOrderAmt(){
-    if(!ISFLAT_DEL && selectedAddress > 0) {
+  minimumOrderAmt() {
+    if (!ISFLAT_DEL && selectedAddress > 0) {
       if ((oriPrice) < double.parse(addressList[selectedAddress].freeAmt)) {
         delCharge = double.parse(addressList[selectedAddress].deliveryCharge);
         MIN_AMT = delCharge.toStringAsFixed(2);
-        MIN_AMT = double.parse(addressList[selectedAddress].freeAmt.toString()).toStringAsFixed(2);
-      }
-      else {
+        MIN_AMT = double.parse(addressList[selectedAddress].freeAmt.toString())
+            .toStringAsFixed(2);
+      } else {
         delCharge = 0;
       }
     } else {
       if ((oriPrice) < double.parse(MIN_AMT)) {
         delCharge = double.parse(CUR_DEL_CHR);
         // MIN_AMT = delCharge.toStringAsFixed(2);
-      }
-      else
+      } else
         delCharge = 0;
     }
     return double.parse(MIN_AMT);
@@ -2364,8 +2390,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           USER_ID: CUR_USERID,
         };
         Response response =
-        await post(getAddressApi, body: parameter, headers: headers)
-            .timeout(Duration(seconds: timeOut));
+            await post(getAddressApi, body: parameter, headers: headers)
+                .timeout(Duration(seconds: timeOut));
 
         if (response.statusCode == 200) {
           var getdata = json.decode(response.body);
@@ -2471,18 +2497,14 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
 
     double amt = totalPrice * 100;
 
+    print(amt);
+
     if (contact != '' && email != '') {
       if (mounted)
         setState(() {
           _isProgress = true;
         });
       checkoutState(() {});
-      var options = {
-        KEY: razorpayId,
-        AMOUNT: amt.toString(),
-        NAME: CUR_USERNAME,
-        'prefill': {CONTACT: contact, EMAIL: email},
-      };
 
       try {
         // _razorpay.open(options);
@@ -2506,10 +2528,12 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     String orderId = DateTime.now().millisecondsSinceEpoch.toString();
 
     String callBackUrl = (payTesting
-        ? 'https://securegw-stage.paytm.in'
-        : 'https://securegw.paytm.in') +
+            ? 'https://securegw-stage.paytm.in'
+            : 'https://securegw.paytm.in') +
         '/theia/paytmCallback?ORDER_ID=' +
         orderId;
+
+    print(callBackUrl);
 
     var parameter = {
       AMOUNT: totalPrice.toString(),
@@ -2534,39 +2558,6 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
         setState(() {
           paymentResponse = txnToken;
         });
-        // orderId, mId, txnToken, txnAmount, callback
-/*        var paytmResponse = Paytm.payWithPaytm(paytmMerId, orderId, txnToken,
-            totalPrice.toString(), callBackUrl, payTesting);
-
-        paytmResponse.then((value) {
-          _isProgress = false;
-          _placeOrder = true;
-          setState(() {});
-          checkoutState(() {
-            if (value['error']) {
-              paymentResponse = value['errorMessage'];
-
-              if (value['response'] != null)
-                addTransaction(value['response']['TXNID'], orderId,
-                    value['response']['STATUS'] ?? '', paymentResponse, false);
-            } else {
-              if (value['response'] != null) {
-                paymentResponse = value['response']['STATUS'];
-                if (paymentResponse == "TXN_SUCCESS")
-                  placeOrder(value['response']['TXNID']);
-                else
-                  addTransaction(
-                      value['response']['TXNID'],
-                      orderId,
-                      value['response']['STATUS'],
-                      value['errorMessage'] ?? '',
-                      false);
-              }
-            }
-
-            setSnackbar(paymentResponse, _checkscaffoldKey);
-          });
-        });*/
       } else {
         checkoutState(() {
           _isProgress = false;
@@ -2592,13 +2583,16 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
       String varientId, quantity;
       for (SectionModel sec in cartList) {
         varientId =
-        varientId != null ? varientId + "," + sec.varientId : sec.varientId;
+            varientId != null ? varientId + "," + sec.varientId : sec.varientId;
         quantity = quantity != null ? quantity + "," + sec.qty : sec.qty;
       }
-      if(oriPrice < double.parse(MIN_AMT)) {
+      if (oriPrice < double.parse(MIN_AMT)) {
         setSnackbar(
-            "Order amount should be greater than " + CUR_CURRENCY + " " +
-                double.parse(MIN_AMT).toString(), _checkscaffoldKey);
+            "Order amount should be greater than " +
+                CUR_CURRENCY +
+                " " +
+                double.parse(MIN_AMT).toString(),
+            _checkscaffoldKey);
       }
 
       String payVia;
@@ -2614,10 +2608,10 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
         payVia = "Paystack";
       else if (payMethod == getTranslated(context, 'FLUTTERWAVE_LBL'))
         payVia = "Flutterwave";
-      else if (payMethod == getTranslated(context, 'STRIPE_LBL') && oriPrice > double.parse(MIN_AMT)){
+      else if (payMethod == getTranslated(context, 'STRIPE_LBL') &&
+          oriPrice > double.parse(MIN_AMT)) {
         payVia = "Stripe";
-      }
-      else if (payMethod == getTranslated(context, 'PAYTM_LBL'))
+      } else if (payMethod == getTranslated(context, 'PAYTM_LBL'))
         payVia = "Paytm";
       else if (payMethod == "Wallet") payVia = "Wallet";
       try {
@@ -2638,7 +2632,6 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           NOTE: deliveryC.text.toString()
         };
 
-
         if (isTimeSlot) {
           parameter[DELIVERY_TIME] = selTime ?? 'Anytime';
           parameter[DELIVERY_DATE] = selDate ?? '';
@@ -2656,16 +2649,10 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           else
             parameter[ACTIVE_STATUS] = WAITING;
         }
-        // if(totalPrice < double.parse(MIN_AMT)) {
-        //   setSnackbar(
-        //       "Order amount should be greater than " + CUR_CURRENCY + " " +
-        //           double.parse(MIN_AMT).toString(), _checkscaffoldKey);
-        // }
 
         Response response =
-        await post(placeOrderApi, body: parameter, headers: headers)
-            .timeout(Duration(seconds: timeOut));
-
+            await post(placeOrderApi, body: parameter, headers: headers)
+                .timeout(Duration(seconds: timeOut));
 
         _placeOrder = true;
         if (response.statusCode == 200) {
@@ -2673,7 +2660,6 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           bool error = getdata["error"];
           String msg = getdata["message"];
           if (!error) {
-
             String orderId = getdata["order_id"].toString();
             if (payMethod == getTranslated(context, 'RAZORPAY_LBL')) {
               addTransaction(tranId, orderId, SUCCESS, msg, true);
@@ -2694,7 +2680,9 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                      builder: (BuildContext context) => MyOrder(isback: false,)),
+                      builder: (BuildContext context) => MyOrder(
+                            isback: false,
+                          )),
                   ModalRoute.withName('/home'));
             }
           } else {
@@ -2720,8 +2708,6 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     }
   }
 
-
-
   Future<void> paypalPayment(String orderId) async {
     try {
       var parameter = {
@@ -2730,8 +2716,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
         AMOUNT: totalPrice.toString()
       };
       Response response =
-      await post(paypalTransactionApi, body: parameter, headers: headers)
-          .timeout(Duration(seconds: timeOut));
+          await post(paypalTransactionApi, body: parameter, headers: headers)
+              .timeout(Duration(seconds: timeOut));
 
       var getdata = json.decode(response.body);
 
@@ -2743,10 +2729,10 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
             context,
             MaterialPageRoute(
                 builder: (BuildContext context) => PaypalWebview(
-                  url: data,
-                  from: "order",
-                  orderId: orderId,
-                )));
+                      url: data,
+                      from: "order",
+                      orderId: orderId,
+                    )));
         checkoutState(() {
           _isProgress = false;
         });
@@ -2774,8 +2760,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
         MSG: msg
       };
       Response response =
-      await post(addTransactionApi, body: parameter, headers: headers)
-          .timeout(Duration(seconds: timeOut));
+          await post(addTransactionApi, body: parameter, headers: headers)
+              .timeout(Duration(seconds: timeOut));
 
       var getdata = json.decode(response.body);
 
@@ -2788,7 +2774,9 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                  builder: (BuildContext context) => MyOrder(isback: false,)),
+                  builder: (BuildContext context) => MyOrder(
+                        isback: false,
+                      )),
               ModalRoute.withName('/home'));
         }
       } else {
@@ -2799,79 +2787,12 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     }
   }
 
-  // paystackPayment(BuildContext context) async {
-  //   if (mounted)
-  //     setState(() {
-  //       _isProgress = true;
-  //     });
-  //   checkoutState(() {});
-  //   String email = await getPrefrence(EMAIL);
-  //
-  //   Charge charge = Charge()
-  //     ..amount = totalPrice.toInt()
-  //     ..reference = _getReference()
-  //     ..email = email;
-  //
-  //   try {
-  //     CheckoutResponse response = await paystackPlugin.checkout(
-  //       context,
-  //       method: CheckoutMethod.card,
-  //       charge: charge,
-  //     );
-  //     if (response.status) {
-  //       placeOrder(response.reference);
-  //     } else {
-  //       setSnackbar(response.message, _checkscaffoldKey);
-  //       if (mounted)
-  //         setState(() {
-  //           _isProgress = false;
-  //           _placeOrder = true;
-  //         });
-  //       checkoutState(() {});
-  //     }
-  //   } catch (e) {
-  //     if (mounted) setState(() => _isProgress = false);
-  //     rethrow;
-  //   }
-  // }
-
-  String _getReference() {
-    String platform;
-    if (Platform.isIOS) {
-      platform = 'iOS';
-    } else {
-      platform = 'Android';
-    }
-
-    return 'ChargedFrom${platform}_${DateTime.now().millisecondsSinceEpoch}';
-  }
-
   stripePayment() async {
     if (mounted)
       setState(() {
         _isProgress = false;
       });
     checkoutState(() {});
-   // stripe.CardField();
-
-/*    var response = await StripeService.payWithNewCard(
-        amount: (totalPrice.toInt() * 100).toString(),
-        currency: stripeCurCode,
-        from: "order");
-
-    if (response.message == "Transaction successful") {
-      placeOrder(response.status);
-    } else if (response.status == 'pending' || response.status == "captured") {
-      placeOrder(response.status);
-    } else {
-      if (mounted)
-        setState(() {
-          _isProgress = false;
-          _placeOrder = true;
-        });
-      checkoutState(() {});
-    }
-    setSnackbar(response.message, _checkscaffoldKey);*/
   }
 
   address() {
@@ -2885,104 +2806,104 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
             Icon(Icons.location_on),
             addressList.length > 0
                 ? Expanded(
-              child: Padding(
-                padding: const EdgeInsetsDirectional.only(start: 8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding:
-                      const EdgeInsetsDirectional.only(bottom: 5.0),
-                      child: Text(addressList[selectedAddress].name),
-                    ),
-                    Text(
-                      addressList[selectedAddress].address +
-                          ", " +
-                          addressList[selectedAddress].area +
-                          ", " +
-                          addressList[selectedAddress].city +
-                          ", " +
-                          addressList[selectedAddress].state +
-                          ", " +
-                          addressList[selectedAddress].country +
-                          ", " +
-                          addressList[selectedAddress].pincode,
-                      style: Theme.of(context)
-                          .textTheme
-                          .caption
-                          .copyWith(color: colors.lightBlack),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5.0),
-                      child: Row(
+                    child: Padding(
+                      padding: const EdgeInsetsDirectional.only(start: 8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Padding(
+                            padding:
+                                const EdgeInsetsDirectional.only(bottom: 5.0),
+                            child: Text(addressList[selectedAddress].name),
+                          ),
                           Text(
-                            addressList[selectedAddress].mobile,
+                            addressList[selectedAddress].address +
+                                ", " +
+                                addressList[selectedAddress].area +
+                                ", " +
+                                addressList[selectedAddress].city +
+                                ", " +
+                                addressList[selectedAddress].state +
+                                ", " +
+                                addressList[selectedAddress].country +
+                                ", " +
+                                addressList[selectedAddress].pincode,
                             style: Theme.of(context)
                                 .textTheme
                                 .caption
                                 .copyWith(color: colors.lightBlack),
                           ),
-                          Spacer(),
-                          InkWell(
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 2),
-                              decoration: BoxDecoration(
-                                  color: colors.lightWhite,
-                                  borderRadius: new BorderRadius.all(
-                                      const Radius.circular(4.0))),
-                              child: Text(
-                                getTranslated(context, 'CHANGE'),
-                                style: TextStyle(
-                                    color: colors.fontColor,
-                                    fontSize: 10),
-                              ),
-                            ),
-                            onTap: () async {
-                              await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          ManageAddress(
-                                            home: false,
-                                          )));
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 5.0),
+                            child: Row(
+                              children: [
+                                Text(
+                                  addressList[selectedAddress].mobile,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .caption
+                                      .copyWith(color: colors.lightBlack),
+                                ),
+                                Spacer(),
+                                InkWell(
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 2),
+                                    decoration: BoxDecoration(
+                                        color: colors.lightWhite,
+                                        borderRadius: new BorderRadius.all(
+                                            const Radius.circular(4.0))),
+                                    child: Text(
+                                      getTranslated(context, 'CHANGE'),
+                                      style: TextStyle(
+                                          color: colors.fontColor,
+                                          fontSize: 10),
+                                    ),
+                                  ),
+                                  onTap: () async {
+                                    await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                ManageAddress(
+                                                  home: false,
+                                                )));
 
-                              checkoutState(() {});
-                            },
-                          ),
+                                    checkoutState(() {});
+                                  },
+                                ),
+                              ],
+                            ),
+                          )
                         ],
                       ),
-                    )
-                  ],
-                ),
-              ),
-            )
+                    ),
+                  )
                 : Expanded(
-              child: Padding(
-                padding: const EdgeInsetsDirectional.only(start: 8.0),
-                child: GestureDetector(
-                  child: Text(
-                    getTranslated(context, 'ADDADDRESS'),
-                    style: TextStyle(
-                        color: colors.fontColor,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  onTap: () async {
-                    ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AddAddress(
-                            update: false,
-                            index: addressList.length,
-                          )),
-                    );
-                    if (mounted) setState(() {});
-                  },
-                ),
-              ),
-            )
+                    child: Padding(
+                      padding: const EdgeInsetsDirectional.only(start: 8.0),
+                      child: GestureDetector(
+                        child: Text(
+                          getTranslated(context, 'ADDADDRESS'),
+                          style: TextStyle(
+                              color: colors.fontColor,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        onTap: () async {
+                          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AddAddress(
+                                      update: false,
+                                      index: addressList.length,
+                                    )),
+                          );
+                          if (mounted) setState(() {});
+                        },
+                      ),
+                    ),
+                  )
           ],
         ),
       ),
@@ -2991,83 +2912,81 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
 
   payment() {
     String selectedDateTime = "";
-    if(selDate != null && selDate != "" && selTime != null && selTime != ""){
+    if (selDate != null && selDate != "" && selTime != null && selTime != "") {
       selectedDateTime = selDate + " " + selTime;
     }
-    return Column(
-        children:[
-          Card(
-            elevation: 0,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(4),
-              onTap: () async {
-                ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                msg = '';
-                await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            Payment(updateCheckout, msg,payment,checkoutState)));
-                if (mounted) checkoutState(() {});
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Icon(Icons.calendar_today),
-                    Padding(
-                      padding: const EdgeInsetsDirectional.only(start: 8.0),
-                      child: Text(
-                        //SELECT_PAYMENT,
-                        selectedDateTime != null && selectedDateTime != ''
-                            ? selectedDateTime
-                            : getTranslated(context, 'PREFER_DATE_TIME'),
-                        style: TextStyle(
-                            color: colors.fontColor, fontWeight: FontWeight.bold),
-                      ),
-                    )
-                  ],
-                ),
-              ),
+    return Column(children: [
+      Card(
+        elevation: 0,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(4),
+          onTap: () async {
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
+            msg = '';
+            await Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        Payment(updateCheckout, msg, payment, checkoutState)));
+            if (mounted) checkoutState(() {});
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Icon(Icons.calendar_today),
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 8.0),
+                  child: Text(
+                    //SELECT_PAYMENT,
+                    selectedDateTime != null && selectedDateTime != ''
+                        ? selectedDateTime
+                        : getTranslated(context, 'PREFER_DATE_TIME'),
+                    style: TextStyle(
+                        color: colors.fontColor, fontWeight: FontWeight.bold),
+                  ),
+                )
+              ],
             ),
           ),
-          Card(
-            elevation: 0,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(4),
-              onTap: () async {
-                ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                msg = '';
-                await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            Payment(updateCheckout, msg,payment,checkoutState)));
-                if (mounted) checkoutState(() {});
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Icon(Icons.payment),
-                    Padding(
-                      padding: const EdgeInsetsDirectional.only(start: 8.0),
-                      child: Text(
-                        //SELECT_PAYMENT,
-                        payMethod != null && payMethod != ''
-                            ? payMethod
-                            : getTranslated(context, 'SELECT_PAYMENT'),
-                        style: TextStyle(
-                            color: colors.fontColor, fontWeight: FontWeight.bold),
-                      ),
-                    )
-                  ],
-                ),
-              ),
+        ),
+      ),
+      Card(
+        elevation: 0,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(4),
+          onTap: () async {
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
+            msg = '';
+            await Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        Payment(updateCheckout, msg, payment, checkoutState)));
+            if (mounted) checkoutState(() {});
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Icon(Icons.payment),
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 8.0),
+                  child: Text(
+                    //SELECT_PAYMENT,
+                    payMethod != null && payMethod != ''
+                        ? payMethod
+                        : getTranslated(context, 'SELECT_PAYMENT'),
+                    style: TextStyle(
+                        color: colors.fontColor, fontWeight: FontWeight.bold),
+                  ),
+                )
+              ],
             ),
           ),
-        ]
-    );
+        ),
+      ),
+    ]);
   }
 
   cartItems() {
@@ -3081,38 +3000,40 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     );
   }
 
-  moredeliveryamt(){
-    if( selectedAddress!=null && !ISFLAT_DEL) {
+  moredeliveryamt() {
+    if (selectedAddress != null && !ISFLAT_DEL) {
       if ((oriPrice) < double.parse(addressList[selectedAddress].freeAmt)) {
         freeDeliveryAMt =
-        (double.parse(addressList[selectedAddress].freeAmt) - oriPrice);
+            (double.parse(addressList[selectedAddress].freeAmt) - oriPrice);
         return Container(
           width: double.infinity,
           child: Card(
             elevation: 0,
-            child: Row(mainAxisAlignment: MainAxisAlignment.start,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Center(child: Padding(
+                Center(
+                    child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Text("Spend " + CUR_CURRENCY + " " +
-                      freeDeliveryAMt.toStringAsFixed(2) +
-                      " more to get free delivery.", style: TextStyle(
-                      fontWeight: FontWeight.w500, fontSize: 15
-                  ),),
+                  child: Text(
+                    "Spend " +
+                        CUR_CURRENCY +
+                        " " +
+                        freeDeliveryAMt.toStringAsFixed(2) +
+                        " more to get free delivery.",
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
+                  ),
                 )),
               ],
             ),
           ),
         );
-      }
-      else{
+      } else {
         return Container();
       }
-    }
-    else{
+    } else {
       return Container();
     }
-
   }
 
   orderSummary() {
@@ -3172,46 +3093,46 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
               ),
               isPromoValid
                   ? Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    getTranslated(context, 'PROMO_CODE_DIS_LBL'),
-                    style: Theme.of(context)
-                        .textTheme
-                        .caption
-                        .copyWith(color: colors.lightBlack2),
-                  ),
-                  Text(
-                    CUR_CURRENCY + " " + promoAmt.toString(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .caption
-                        .copyWith(color: colors.lightBlack2),
-                  )
-                ],
-              )
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          getTranslated(context, 'PROMO_CODE_DIS_LBL'),
+                          style: Theme.of(context)
+                              .textTheme
+                              .caption
+                              .copyWith(color: colors.lightBlack2),
+                        ),
+                        Text(
+                          CUR_CURRENCY + " " + promoAmt.toString(),
+                          style: Theme.of(context)
+                              .textTheme
+                              .caption
+                              .copyWith(color: colors.lightBlack2),
+                        )
+                      ],
+                    )
                   : Container(),
               isUseWallet
                   ? Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    getTranslated(context, 'WALLET_BAL'),
-                    style: Theme.of(context).textTheme.caption,
-                  ),
-                  Text(
-                    CUR_CURRENCY + " " + usedBal.toString(),
-                    style: Theme.of(context).textTheme.caption,
-                  )
-                ],
-              )
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          getTranslated(context, 'WALLET_BAL'),
+                          style: Theme.of(context).textTheme.caption,
+                        ),
+                        Text(
+                          CUR_CURRENCY + " " + usedBal.toString(),
+                          style: Theme.of(context).textTheme.caption,
+                        )
+                      ],
+                    )
                   : Container(),
             ],
           ),
         ));
   }
 
-  deliveryTextInformation(){
+  deliveryTextInformation() {
     return Card(
       elevation: 0,
       child: Column(
@@ -3231,41 +3152,46 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
               ),
             ],
           ),
-          Row(children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8.0,right: 8.0,bottom: 8.0),
-                child: TextField(
-                  onTap: (){
-                    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-                  },
-                  controller: deliveryC,
-                  style: Theme.of(context).textTheme.subtitle2,
-                  decoration: InputDecoration(
-                    isDense: true,
-                    contentPadding: EdgeInsets.all(
-                      5,
-                    ),
-                    hintText: 'Any Message for Delivery Guy..',
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: colors.fontColor),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: colors.fontColor),
+          Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
+                  child: TextField(
+                    onTap: () {
+                      _scrollController
+                          .jumpTo(_scrollController.position.maxScrollExtent);
+                    },
+                    controller: deliveryC,
+                    style: Theme.of(context).textTheme.subtitle2,
+                    decoration: InputDecoration(
+                      isDense: true,
+                      contentPadding: EdgeInsets.all(
+                        5,
+                      ),
+                      hintText: 'Any Message for Delivery Guy..',
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: colors.fontColor),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: colors.fontColor),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],),
+            ],
+          ),
         ],
       ),
     );
   }
 
-  opencontainer(){
-    return SizedBox(height: deviceHeight*0.180);
+  opencontainer() {
+    return SizedBox(height: deviceHeight * 0.180);
   }
+
   promo() {
     return Card(
       elevation: 0,
@@ -3309,8 +3235,9 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                 children: [
                   Expanded(
                     child: TextField(
-                      onTap: (){
-                        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+                      onTap: () {
+                        _scrollController
+                            .jumpTo(_scrollController.position.maxScrollExtent);
                       },
                       controller: promoC,
                       style: Theme.of(context).textTheme.subtitle2,
@@ -3332,7 +3259,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                   CupertinoButton(
                     child: Container(
                         padding:
-                        EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                         alignment: FractionalOffset.center,
                         decoration: BoxDecoration(
                             color: colors.lightWhite,
@@ -3341,8 +3268,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                         child: Text(getTranslated(context, 'APPLY'),
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.button.copyWith(
-                              color: colors.fontColor,
-                            ))),
+                                  color: colors.fontColor,
+                                ))),
                     onPressed: () {
                       if (promoC.text.trim().isEmpty)
                         setSnackbar(getTranslated(context, 'ADD_PROMO'),
@@ -3374,8 +3301,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           FINAL_TOTAL: totalPrice.toString()
         };
         Response response =
-        await post(validatePromoApi, body: parameter, headers: headers)
-            .timeout(Duration(seconds: timeOut));
+            await post(validatePromoApi, body: parameter, headers: headers)
+                .timeout(Duration(seconds: timeOut));
 
         if (response.statusCode == 200) {
           var getdata = json.decode(response.body);
@@ -3441,8 +3368,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           USER_ID: CUR_USERID,
         };
         Response response =
-        await post(flutterwaveApi, body: parameter, headers: headers)
-            .timeout(Duration(seconds: timeOut));
+            await post(flutterwaveApi, body: parameter, headers: headers)
+                .timeout(Duration(seconds: timeOut));
 
         if (response.statusCode == 200) {
           var getdata = json.decode(response.body);
@@ -3455,9 +3382,9 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                 context,
                 MaterialPageRoute(
                     builder: (BuildContext context) => PaypalWebview(
-                      url: data,
-                      from: "order",
-                    )));
+                          url: data,
+                          from: "order",
+                        )));
           } else {
             setSnackbar(msg, _checkscaffoldKey);
           }

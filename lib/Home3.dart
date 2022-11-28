@@ -3,43 +3,28 @@ import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
 import 'dart:math';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:eshop/Helper/SimBtn.dart';
 import 'package:eshop/Helper/Stripe_Service.dart';
-import 'package:eshop/SignInUpAcc.dart';
-import 'package:eshop/chat_fire/chat_fire_screen.dart';
-import 'package:eshop/chat_manager/chat_manager.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
-import 'package:flutter/services.dart';
 import 'package:get/get.dart' as g;
-
 import 'package:marquee/marquee.dart';
-import 'package:eshop/All_Category.dart';
 import 'package:eshop/Favorite.dart';
 import 'package:eshop/Helper/Color.dart';
 import 'package:eshop/MyProfile.dart';
 import 'package:eshop/ProductList.dart';
 import 'package:eshop/Product_Detail.dart';
-import 'package:eshop/SectionList.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:store_redirect/store_redirect.dart';
-
 import 'package:url_launcher/url_launcher.dart';
 import 'package:version/version.dart';
-
 import 'Cart.dart';
 import 'Helper/AppBtn.dart';
 import 'Helper/Constant.dart';
@@ -105,7 +90,7 @@ class StateHome extends State<Home> {
       Search(
         updateHome: updateHome,
       ),
-      Favorite(updateHome),
+      Favourite(updateHome),
       NotificationList(),
       MyProfile(updateHome),
     ];
@@ -263,6 +248,7 @@ class StateHome extends State<Home> {
     String title = curhome3Selected == 2
         ? getTranslated(context, 'FAVORITE')
         : getTranslated(context, 'NOTIFICATION');
+    debugPrint(title.toString());
 
     return AppBar(
       //toolbarHeight: 80,
@@ -769,6 +755,7 @@ class StateHome extends State<Home> {
   }
 }
 
+// ignore: must_be_immutable
 class HomePage extends StatefulWidget {
   Function updateHome;
 
@@ -802,11 +789,11 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
   Animation buttonSqueezeanimation;
   AnimationController buttonController;
   bool menuOpen = false;
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      new GlobalKey<RefreshIndicatorState>();
+
   var isDarkTheme;
   int selIndex;
-  bool _useRtlText = false;
+
+  // bool _useRtlText = false;
 
   Image imageCart;
 
@@ -917,13 +904,6 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
     }
   }
 
-  Widget _wrapWithStuff(Widget child) {
-    return Padding(
-      padding: EdgeInsets.all(16.0),
-      child: Container(height: 50.0, color: Colors.teal, child: child),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     print("Home3");
@@ -974,13 +954,15 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
                         Container(
                           height: deviceWidth * 0.216,
                           width: deviceWidth * 0.586,
+
                           ///todo : home icon
                           // child: Image.asset(
                           //   'assets/images/titleicon.png',
                           //   fit: BoxFit.fill,
                           //   color: colors.white,
                           // ),
-                          child: Image.asset("assets/images/new_title_logo.png"),
+                          child:
+                              Image.asset("assets/images/new_title_logo.png"),
                         ),
                         Padding(
                           padding: const EdgeInsetsDirectional.only(
@@ -1444,19 +1426,6 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
     });
   }
 
-  _esxtraOffer() {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: offerImages.length >= sectionList.length
-          ? offerImages.length - sectionList.length
-          : 0,
-      physics: NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) {
-        return _getOfferImage(sectionList.length + index);
-      },
-    );
-  }
-
   Widget noInternet(BuildContext context) {
     return Center(
       child: SingleChildScrollView(
@@ -1577,74 +1546,6 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
-  Widget _slider() {
-    double height = deviceWidth / 2.2;
-
-    return homeSliderList.isNotEmpty
-        ? Stack(
-            children: [
-              Container(
-                height: height,
-                width: double.infinity,
-                margin: EdgeInsetsDirectional.only(top: 10),
-                child: PageView.builder(
-                  itemCount: homeSliderList.length,
-                  scrollDirection: Axis.horizontal,
-                  controller: _controller,
-                  physics: AlwaysScrollableScrollPhysics(),
-                  onPageChanged: (index) {
-                    if (mounted)
-                      setState(() {
-                        _curSlider = index;
-                      });
-                  },
-                  itemBuilder: (BuildContext context, int index) {
-                    return pages[index];
-                  },
-                ),
-              ),
-              Positioned(
-                bottom: 0,
-                height: 40,
-                left: 0,
-                width: deviceWidth,
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: map<Widget>(
-                    homeSliderList,
-                    (index, url) {
-                      return Container(
-                          width: 8.0,
-                          height: 8.0,
-                          margin: EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 2.0),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: _curSlider == index
-                                ? colors.fontColor
-                                : colors.lightBlack,
-                          ));
-                    },
-                  ),
-                ),
-              ),
-            ],
-          )
-        : Padding(
-            padding: const EdgeInsetsDirectional.only(top: 10.0, bottom: 27),
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-              child: Image.asset(
-                'assets/images/sliderph.png',
-                height: height,
-                width: double.infinity,
-                fit: BoxFit.fill,
-              ),
-            ),
-          );
-  }
-
   List<T> map<T>(List list, Function handler) {
     List<T> result = [];
     for (var i = 0; i < list.length; i++) {
@@ -1671,91 +1572,6 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
               .then((_) => _animateSlider());
       }
     });
-  }
-
-  _getSearchBar() {
-    isDarkTheme = Theme.of(context).brightness == Brightness.dark;
-    return GestureDetector(
-      child: SizedBox(
-        height: 35,
-        child: TextField(
-          enabled: false,
-          textAlign: TextAlign.left,
-          decoration: InputDecoration(
-              contentPadding: EdgeInsets.fromLTRB(15.0, 5.0, 0, 5.0),
-              border: new OutlineInputBorder(
-                borderRadius: const BorderRadius.all(
-                  const Radius.circular(50.0),
-                ),
-                borderSide: BorderSide(
-                  width: 0,
-                  style: BorderStyle.none,
-                ),
-              ),
-              isDense: true,
-              hintText: getTranslated(context, 'searchHint'),
-              hintStyle: Theme.of(context).textTheme.bodyText2.copyWith(
-                    color: colors.fontColor,
-                  ),
-              suffixIcon: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SvgPicture.asset(
-                  'assets/images/search.svg',
-                  color: isDarkTheme ? colors.secondary : colors.primary,
-                ),
-              ),
-              fillColor: colors.white,
-              filled: true),
-        ),
-      ),
-      onTap: () async {
-        await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Search(
-                updateHome: widget.updateHome,
-              ),
-            ));
-        if (mounted) setState(() {});
-      },
-    );
-  }
-
-  _catHeading() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text(
-            getTranslated(context, 'category'),
-            style: Theme.of(context).textTheme.subtitle1,
-          ),
-          InkWell(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                getTranslated(context, 'seeAll'),
-                style: Theme.of(context)
-                    .textTheme
-                    .caption
-                    .copyWith(color: colors.primary),
-              ),
-            ),
-            onTap: () async {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => AllCategory(
-                          updateHome: widget.updateHome,
-                        )),
-              );
-              if (mounted) setState(() {});
-            },
-          ),
-        ],
-      ),
-    );
   }
 
   //TabController _tc;
@@ -2044,6 +1860,7 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
         att = model.prVarientList[model.selVarient].attr_name.split(',');
         val = model.prVarientList[model.selVarient].varient_value.split(',');
       }
+      debugPrint("------------- >> "+att.toString() + val.toString());
       print("New Length : " +
           index.toString() +
           " : " +
@@ -2067,26 +1884,25 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
         '500',
         '1000',
       ];
-      if(int.parse(subItem[index].minimumOrderQuantity) == 100 ){
+
+      if (!items.contains(subItem[index].defaultOrder)) {
+        items.add(subItem[index].defaultOrder);
+      }
+      if (int.parse(subItem[index].minimumOrderQuantity) == 100) {
         items.remove("50");
-      }else if(int.parse(subItem[index].minimumOrderQuantity) == 250){
+      } else if (int.parse(subItem[index].minimumOrderQuantity) == 250) {
         items.remove("50");
         items.remove("100");
-      }else if(int.parse(subItem[index].minimumOrderQuantity) == 500){
+      } else if (int.parse(subItem[index].minimumOrderQuantity) == 500) {
         items.remove("50");
         items.remove("100");
         items.remove("250");
-      }else if(int.parse(subItem[index].minimumOrderQuantity) == 1000){
+      } else if (int.parse(subItem[index].minimumOrderQuantity) == 1000) {
         items.remove("50");
         items.remove("100");
         items.remove("250");
         items.remove("500");
       }
-
-      if(!items.contains(subItem[index].defaultOrder)){
-        items.add(subItem[index].defaultOrder);
-      }
-
 
       return subItem.length >= index
           ? Padding(
@@ -2219,7 +2035,7 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
 
                       ///for name
                       Positioned(
-                        top: deviceWidth * 0.370 - 3, //deviceHeight * 0.182,
+                        top: deviceWidth * 0.370 - 7, //deviceHeight * 0.182,
                         left: deviceWidth * 0.0255,
                         right: deviceWidth * 0.0127,
                         child: Container(
@@ -2238,20 +2054,22 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
 
                       ///DropDown
                       Positioned(
-                        top: deviceWidth * 0.425 - 20, //deviceHeight*0.210,
+                        top: deviceWidth * 0.425 - 12, //deviceHeight*0.210,
                         left: deviceWidth * 0.0210,
                         child: Container(
-                          width: g.Get.width / 3,
-                          // decoration: BoxDecoration(
-                          //     // color: Colors.white38,
-                          //     border: Border.all()),
+                          width: g.Get.width / 2.5,
+                          padding: EdgeInsets.only(left: 10),
+                          decoration: BoxDecoration(
+                              // color: Colors.white38,
+                              border: Border.all(
+                                  color: Colors.grey.withOpacity(0.8))),
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton(
-                              underline: Divider(
-                                color: Colors.teal,
-                              ),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5)),
+                              // underline: Divider(
+                              //   color: Colors.teal,
+                              // ),
+                              // borderRadius:
+                              //     BorderRadius.all(Radius.circular(5)),
                               value: dropdownValue,
                               icon: const Icon(Icons.keyboard_arrow_down),
                               items: items.map((String items) {
@@ -2266,12 +2084,15 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
                                                 color: Colors.grey))),
                                     margin: EdgeInsets.only(bottom: 5),
                                     child: Text(
-                                      "$items gm",
+                                     /* items.toString() == "1000"
+                                          ? "1 kg"
+                                          : */"$items gm",
                                       style: TextStyle(fontSize: 12),
                                     ),
                                   ),
                                 );
                               }).toList(),
+                              isDense: true,
                               onChanged: (val) {
                                 setState(() {
                                   dropdownValue = val;
@@ -2316,9 +2137,11 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
                               ),
                               Text(
                                 " " +
-                                    CUR_CURRENCY+
+                                    CUR_CURRENCY +
                                     " " +
-                                  priceUpdate(price2: price.toStringAsFixed(2),grams2: subItem[index].defaultOrder) ,
+                                    priceUpdate(
+                                        price2: price.toStringAsFixed(2),
+                                        grams2: subItem[index].defaultOrder),
                                 style: TextStyle(
                                     fontSize: deviceHeight * 0.0200,
                                     color: colors.darkColor,
@@ -2560,20 +2383,18 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
       return Container();
   }
 
-
   String priceUpdate({String grams2, String price2}) {
     double price = double.parse(price2.toString());
     int gram = int.parse(grams2.toString());
     var gramPrice;
-    if(gram == 0){
+    if (gram == 0) {
       gramPrice = price;
-    }else{
-       gramPrice = (price * gram) / 1000;
+    } else {
+      gramPrice = (price * gram) / 1000;
     }
 
     return gramPrice.toString();
   }
-
 
   _setFav(int index, List<Product> subItem) async {
     if (index < subItem.length) {
@@ -2828,7 +2649,8 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
         _isProgress = true;
         _views[_tc.index] = createTabContent(_tc.index, subList);
       });
-///TODO : QTY REMOVE
+
+    ///TODO : QTY REMOVE
     ///if (int.parse(qty) < model.minOrderQuntity)
     if (int.parse(qty) < 1) {
       qty = model.minOrderQuntity.toString();
@@ -2840,7 +2662,7 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
       USER_ID: CUR_USERID,
       PRODUCT_VARIENT_ID: model.prVarientList[model.selVarient].id,
       QTY: qty,
-      "gram":model.defaultOrder
+      "gram": model.defaultOrder
     };
     print("manageCartApi Pass BODY ===> $parameter");
 
@@ -3023,7 +2845,7 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
             PRODUCT_VARIENT_ID: model.prVarientList[model.selVarient].id,
             USER_ID: CUR_USERID,
             QTY: qty.toString(),
-            "gram":model.defaultOrder
+            "gram": model.defaultOrder
           };
           print("manageCartApi Pass BODY ===> $parameter");
           Response response =
@@ -3073,388 +2895,6 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
           _isNetworkAvail = false;
         });
     }
-  }
-
-  _catList2() {
-    return Container(
-      height: 80,
-      child: ListView.builder(
-        itemCount: catList.length < 10 ? catList.length : 10,
-        scrollDirection: Axis.horizontal,
-        shrinkWrap: true,
-        physics: AlwaysScrollableScrollPhysics(),
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsetsDirectional.only(end: 10),
-            child: GestureDetector(
-              onTap: () async {
-                if (catList[index].subList == null ||
-                    catList[index].subList.length == 0) {
-                  await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ProductList(
-                            name: catList[index].name,
-                            id: catList[index].id,
-                            tag: false,
-                            updateHome: widget.updateHome),
-                      ));
-                  if (mounted) setState(() {});
-                } else {
-                  await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SubCat(
-                            title: catList[index].name,
-                            subList: catList[index].subList,
-                            updateHome: widget.updateHome),
-                      ));
-                  if (mounted) setState(() {});
-                }
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsetsDirectional.only(bottom: 5.0),
-                    child: new ClipRRect(
-                      borderRadius: BorderRadius.circular(25.0),
-                      child: new FadeInImage(
-                        fadeInDuration: Duration(milliseconds: 150),
-                        image: NetworkImage(
-                          catList[index].image,
-                        ),
-                        height: 50.0,
-                        width: 50.0,
-                        fit: BoxFit.cover,
-                        //  errorWidget: (context, url, e) => placeHolder(50),
-                        placeholder: placeHolder(50),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    child: Text(
-                      catList[index].name,
-                      style: Theme.of(context).textTheme.caption.copyWith(
-                          color: colors.fontColor,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 10),
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                    ),
-                    width: 50,
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  // _section() {
-  //   return _isCatLoading
-  //       ? getProgress()
-  //       : ListView.builder(
-  //     padding: EdgeInsets.all(0),
-  //     itemCount: sectionList.length,
-  //     shrinkWrap: true,
-  //     physics: NeverScrollableScrollPhysics(),
-  //     itemBuilder: (context, index) {
-  //       return _singleSection(index);
-  //     },
-  //   );
-  // }
-
-  // Future<Null> _refresh() {
-  //   if (mounted)
-  //     setState(() {
-  //       _isCatLoading = true;
-  //     });
-  //   return callApi();
-  // }
-
-  _singleSection(int index) {
-    return sectionList[index].productList.length > 0
-        ? Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              _getHeading(sectionList[index].title, index),
-              _getSection(index),
-              offerImages.length > index ? _getOfferImage(index) : Container(),
-            ],
-          )
-        : Container();
-  }
-
-  _getHeading(String title, int index) {
-    return Padding(
-      padding: const EdgeInsetsDirectional.only(top: 10.0, bottom: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Expanded(
-            child: Text(
-              title,
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
-          ),
-          InkWell(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                getTranslated(context, 'seeAll'),
-                style: Theme.of(context)
-                    .textTheme
-                    .caption
-                    .copyWith(color: colors.primary),
-              ),
-            ),
-            onTap: () {
-              SectionModel model = sectionList[index];
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SectionList(
-                      index: index,
-                      section_model: model,
-                      updateHome: updateHomePage,
-                    ),
-                  ));
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  _getOfferImage(index) {
-    return InkWell(
-      child: FadeInImage(
-          fadeInDuration: Duration(milliseconds: 150),
-          image: NetworkImage(offerImages[index].image),
-          width: double.maxFinite,
-          // errorWidget: (context, url, e) => placeHolder(50),
-          placeholder: AssetImage(
-            "assets/images/sliderph.png",
-          )),
-      onTap: () {
-        if (offerImages[index].type == "products") {
-          Product item = offerImages[index].list;
-
-          Navigator.push(
-            context,
-            PageRouteBuilder(
-                //transitionDuration: Duration(seconds: 1),
-                pageBuilder: (_, __, ___) => ProductDetail(
-                    model: item,
-                    updateParent: updateHomePage,
-                    secPos: 0,
-                    index: 0,
-                    updateHome: widget.updateHome,
-                    list: true
-                    //  title: sectionList[secPos].title,
-                    )),
-          );
-          setState(() {
-            homePage = true;
-          });
-        } else if (offerImages[index].type == "categories") {
-          Product item = offerImages[index].list;
-          if (item.subList == null || item.subList.length == 0) {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProductList(
-                      name: item.name,
-                      id: item.id,
-                      tag: false,
-                      updateHome: widget.updateHome),
-                ));
-          } else {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SubCat(
-                      title: item.name,
-                      subList: item.subList,
-                      updateHome: widget.updateHome),
-                ));
-          }
-        }
-      },
-    );
-  }
-
-  _getSection(int i) {
-    var orient = MediaQuery.of(context).orientation;
-
-    return sectionList[i].style == DEFAULT
-        ? GridView.count(
-            padding: EdgeInsetsDirectional.only(top: 5),
-            crossAxisCount: 2,
-            shrinkWrap: true,
-            childAspectRatio: 0.8,
-            physics: NeverScrollableScrollPhysics(),
-            children: List.generate(
-              sectionList[i].productList.length < 4
-                  ? sectionList[i].productList.length
-                  : 4,
-              (index) {
-                return productItem(i, index, index % 2 == 0 ? true : false);
-              },
-            ))
-        : sectionList[i].style == STYLE1
-            ? sectionList[i].productList.length > 0
-                ? Row(
-                    children: [
-                      Flexible(
-                          flex: 3,
-                          fit: FlexFit.loose,
-                          child: Container(
-                              height: orient == Orientation.portrait
-                                  ? MediaQuery.of(context).size.height * 0.4
-                                  : MediaQuery.of(context).size.height,
-                              child: productItem(i, 0, true))),
-                      Flexible(
-                        flex: 2,
-                        fit: FlexFit.loose,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                                height: orient == Orientation.portrait
-                                    ? deviceHeight * 0.2
-                                    : deviceHeight * 0.5,
-                                child: productItem(i, 1, false)),
-                            Container(
-                                height: orient == Orientation.portrait
-                                    ? deviceHeight * 0.2
-                                    : deviceHeight * 0.5,
-                                child: productItem(i, 2, false)),
-                          ],
-                        ),
-                      ),
-                    ],
-                  )
-                : Container()
-            : sectionList[i].style == STYLE2
-                ? Row(
-                    children: [
-                      Flexible(
-                        flex: 2,
-                        fit: FlexFit.loose,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                                height: orient == Orientation.portrait
-                                    ? deviceHeight * 0.2
-                                    : deviceHeight * 0.5,
-                                child: productItem(i, 0, true)),
-                            Container(
-                                height: orient == Orientation.portrait
-                                    ? deviceHeight * 0.2
-                                    : deviceHeight * 0.5,
-                                child: productItem(i, 1, true)),
-                          ],
-                        ),
-                      ),
-                      Flexible(
-                          flex: 3,
-                          fit: FlexFit.loose,
-                          child: Container(
-                              height: orient == Orientation.portrait
-                                  ? deviceHeight * 0.4
-                                  : deviceHeight,
-                              child: productItem(i, 2, false))),
-                    ],
-                  )
-                : sectionList[i].style == STYLE3
-                    ? Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Flexible(
-                              flex: 1,
-                              fit: FlexFit.loose,
-                              child: Container(
-                                  height: orient == Orientation.portrait
-                                      ? deviceHeight * 0.3
-                                      : deviceHeight * 0.6,
-                                  child: productItem(i, 0, false))),
-                          Container(
-                            height: orient == Orientation.portrait
-                                ? deviceHeight * 0.2
-                                : deviceHeight * 0.5,
-                            child: Row(
-                              children: [
-                                Flexible(
-                                    flex: 1,
-                                    fit: FlexFit.loose,
-                                    child: productItem(i, 1, true)),
-                                Flexible(
-                                    flex: 1,
-                                    fit: FlexFit.loose,
-                                    child: productItem(i, 2, true)),
-                                Flexible(
-                                    flex: 1,
-                                    fit: FlexFit.loose,
-                                    child: productItem(i, 3, false)),
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                    : sectionList[i].style == STYLE4
-                        ? Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Flexible(
-                                  flex: 1,
-                                  fit: FlexFit.loose,
-                                  child: Container(
-                                      height: orient == Orientation.portrait
-                                          ? deviceHeight * 0.3
-                                          : deviceHeight * 0.6,
-                                      child: productItem(i, 0, false))),
-                              Container(
-                                height: orient == Orientation.portrait
-                                    ? deviceHeight * 0.2
-                                    : deviceHeight * 0.5,
-                                child: Row(
-                                  children: [
-                                    Flexible(
-                                        flex: 1,
-                                        fit: FlexFit.loose,
-                                        child: productItem(i, 1, true)),
-                                    Flexible(
-                                        flex: 1,
-                                        fit: FlexFit.loose,
-                                        child: productItem(i, 2, false)),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          )
-                        : GridView.count(
-                            padding: EdgeInsetsDirectional.only(top: 5),
-                            crossAxisCount: 2,
-                            shrinkWrap: true,
-                            childAspectRatio: 1.0,
-                            physics: NeverScrollableScrollPhysics(),
-                            mainAxisSpacing: 0,
-                            crossAxisSpacing: 0,
-                            children: List.generate(
-                              sectionList[i].productList.length < 4
-                                  ? sectionList[i].productList.length
-                                  : 4,
-                              (index) {
-                                return productItem(
-                                    i, index, index % 2 == 0 ? true : false);
-                              },
-                            ));
   }
 
   Widget productItem(int secPos, int index, bool pad) {
@@ -3675,7 +3115,6 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
           catList =
               (data as List).map((data) => new Product.fromCat(data)).toList();
 
-          List<Product> productForOffers = [];
           subList = catList; //[0].subList;
           subList =
               new List.from([new Product(id: "0", name: "Offers", offset: 0)])
@@ -3821,7 +3260,7 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
           if (isVerion == "1") {
             String verionAnd = data['current_version'];
             String verionIOS = data['current_version_ios'];
-
+debugPrint("---> ${verionIOS.toString()}");
             PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
             String version = packageInfo.version;
@@ -3895,7 +3334,9 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
                         _url = iosLink;
                       }
 
+                      // ignore: deprecated_member_use
                       if (await canLaunch(_url)) {
+                        // ignore: deprecated_member_use
                         await launch(_url);
                       } else {
                         throw 'Could not launch $_url';
@@ -3950,6 +3391,9 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
     Response response =
         await post(getUpdateUserApi, body: data, headers: headers)
             .timeout(Duration(seconds: timeOut));
+
+    debugPrint(response.statusCode.toString());
+
   }
 
   // Future<Null> getOfferImages() async {
@@ -4109,6 +3553,7 @@ checkVersion(BuildContext context) async {
                       child: dismiss,
                       onPressed: dismissAction,
                     ),*/
+                        // ignore: deprecated_member_use
                         FlatButton(
                           child: Text('Update Now'),
                           onPressed: () => launchAppStore(

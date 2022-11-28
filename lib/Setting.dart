@@ -1,14 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:eshop/Helper/Color.dart';
 import 'package:eshop/Helper/Session.dart';
 import 'package:eshop/Privacy_Policy.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:http/http.dart';
-
 import 'Helper/AppBtn.dart';
 import 'Helper/Constant.dart';
 import 'Helper/String.dart';

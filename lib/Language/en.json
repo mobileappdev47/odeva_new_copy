@@ -74,7 +74,7 @@
   "timeWarning": "Please Select Delivery Time..!!",
   "payWarning": "Please Select Payment Method..!!",
   "cityWarning": "City is Required",
-  "areaWarning": "County is Required",
+  "areaWarning": "Country is Required",
   "locationWarning": "Please Select Location From Map",
   "emailWarning": "Email is Required",
   "phoneWarning": "Contact is Required",

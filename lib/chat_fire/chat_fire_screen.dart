@@ -20,8 +20,6 @@ import 'package:media_picker/media_picker.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:stacked/stacked.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 String roomId;
 
@@ -104,6 +102,7 @@ class _ChatFireScreenState extends State<ChatFireScreen> {
 
   void onCameraTap() async {
     isAttachment = false;
+    // ignore: deprecated_member_use
     final imagePath = await picker.getImage(source: ImageSource.camera);
     if (imagePath != null) {
       uploadingMedia = true;
@@ -254,6 +253,7 @@ class _ChatFireScreenState extends State<ChatFireScreen> {
         await MediaPicker.pickImages(quantity: 10, withCamera: false);
     uploadingMedia = true;
     uploadingMedia = false;
+    print("IMG ${result}");
   }
 
   void onLongPressMessage(MessageModel messageModel, bool sender) async {}
@@ -265,6 +265,7 @@ class _ChatFireScreenState extends State<ChatFireScreen> {
     if (result != null) {
       List<PlatformFile> fileList = result.files;
       uploadingMedia = true;
+      debugPrint(fileList.toString());
     }
   }
 
@@ -296,6 +297,7 @@ class _ChatFireScreenState extends State<ChatFireScreen> {
       List<PlatformFile> fileList = result.files;
       uploadingMedia = true;
       uploadingMedia = false;
+      print(fileList);
     }
   }
 

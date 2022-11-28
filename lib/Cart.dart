@@ -1,25 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
-import 'dart:ui';
-
 import 'package:eshop/Helper/Constant.dart';
 import 'package:eshop/Helper/Session.dart';
 import 'package:eshop/Home3.dart' as hm;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_paystack/flutter_paystack.dart';
-// import 'package:flutter_stripe/flutter_stripe.dart' as stripe;
-
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-
 import 'package:http/http.dart' as http;
-
-// import 'package:razorpay_flutter/razorpay_flutter.dart';
-
-import 'Add_Address.dart';
+import 'add_address.dart';
 import 'Helper/AppBtn.dart';
 import 'Helper/Color.dart';
 import 'Helper/SimBtn.dart';
@@ -31,9 +21,9 @@ import 'Model/Model.dart';
 import 'Model/Section_Model.dart';
 import 'Model/User.dart';
 import 'Order_Success.dart';
-import 'Payment.dart';
+
 import 'PaypalWebviewActivity.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
+
 
 String stripePayId = "";
 // bool isTimeSlot;
@@ -377,6 +367,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     );
   }
 
+  // ignore: missing_return
   Future<bool> onWillPop() {
     Navigator.pop(context, true);
 /*if(detail ==true){
@@ -868,7 +859,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           .split(',');
     }
 
-    String id, varId;
+
     bool avail = false;
 
     ///todo : set gram order wise
@@ -2061,6 +2052,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           int qty;
           if (remove) {
             qty = 0;
+            grams.removeAt(index);
+            gram = "0";
           } else {
             qty = (int.parse(cartList[index].qty) -
                 int.parse(cartList[index].productList[0].qtyStepSize));
@@ -2870,121 +2863,6 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     if (mounted) checkoutState(() {});
   }
 
-  razorpayPayment() async {
-    String contact = await getPrefrence(MOBILE);
-    String email = await getPrefrence(EMAIL);
-
-    String amt = ((totalPrice) * 100).toStringAsFixed(2);
-
-    if (contact != '' && email != '') {
-      if (mounted)
-        setState(() {
-          _isProgress = true;
-        });
-      checkoutState(() {});
-      var options = {
-        KEY: razorpayId,
-        AMOUNT: amt,
-        NAME: CUR_USERNAME,
-        'prefill': {CONTACT: contact, EMAIL: email},
-      };
-
-      try {
-        // _razorpay.open(options);
-      } catch (e) {
-        debugPrint(e);
-      }
-    } else {
-      if (email == '')
-        setSnackbar(getTranslated(context, 'emailWarning'), _checkscaffoldKey);
-      else if (contact == '')
-        setSnackbar(getTranslated(context, 'phoneWarning'), _checkscaffoldKey);
-    }
-  }
-
-  void paytmPayment() async {
-    String paymentResponse;
-    checkoutState(() {
-      _isProgress = true;
-    });
-
-    String orderId = DateTime.now().millisecondsSinceEpoch.toString();
-
-    String callBackUrl = (payTesting
-            ? 'https://securegw-stage.paytm.in'
-            : 'https://securegw.paytm.in') +
-        '/theia/paytmCallback?ORDER_ID=' +
-        orderId;
-
-    var parameter = {
-      AMOUNT: totalPrice.toString(),
-      USER_ID: CUR_USERID,
-      ORDER_ID: orderId
-    };
-
-    try {
-      final response = await http.post(
-        getPytmChecsumkApi,
-        body: parameter,
-        headers: headers,
-      );
-
-      var getdata = json.decode(response.body);
-
-      bool error = getdata["error"];
-
-      if (!error) {
-        String txnToken = getdata["txn_token"];
-
-        setState(() {
-          paymentResponse = txnToken;
-        });
-        // orderId, mId, txnToken, txnAmount, callback
-        /*     var paytmResponse = Paytm.payWithPaytm(paytmMerId, orderId, txnToken,
-            totalPrice.toString(), callBackUrl, payTesting);
-
-        paytmResponse.then((value) {
-          _isProgress = false;
-          _placeOrder = true;
-          setState(() {});
-          checkoutState(() {
-            if (value['error']) {
-              paymentResponse = value['errorMessage'];
-
-              if (value['response'] != null)
-                addTransaction(value['response']['TXNID'], orderId,
-                    value['response']['STATUS'] ?? '', paymentResponse, false);
-            } else {
-              if (value['response'] != null) {
-                paymentResponse = value['response']['STATUS'];
-                if (paymentResponse == "TXN_SUCCESS")
-                  placeOrder(value['response']['TXNID']);
-                else
-                  addTransaction(
-                      value['response']['TXNID'],
-                      orderId,
-                      value['response']['STATUS'],
-                      value['errorMessage'] ?? '',
-                      false);
-              }
-            }
-
-            setSnackbar(paymentResponse, _checkscaffoldKey);
-          });
-        });*/
-      } else {
-        checkoutState(() {
-          _isProgress = false;
-          _placeOrder = true;
-        });
-        setState(() {});
-
-        setSnackbar(getdata["message"], _checkscaffoldKey);
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
 
   Future<void> placeOrder(String tranId) async {
     _isNetworkAvail = await isNetworkAvailable();
@@ -3023,6 +2901,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
       //   payVia = "bank_transfer";
       try {
         var parameter = {
+          // "gram":grams.toString(),
           USER_ID: CUR_USERID,
           MOBILE: mob,
           PRODUCT_VARIENT_ID: varientId,
@@ -3065,6 +2944,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
             .timeout(Duration(seconds: timeOut));
         print("PLACE ORDER PERAMETER : $parameter");
         _placeOrder = true;
+        print("STATUS CODE ${response.statusCode}");
+        print(response.body);
         if (response.statusCode == 200) {
           //{\"error\":true,\"message\":\"Debited amount can't exceeds the user balance !\"}
           var getdata = json.decode(response.body);
@@ -3227,56 +3108,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     }
   }
 
-  // paystackPayment(BuildContext context) async {
-  //   if (mounted)
-  //     setState(() {
-  //       _isProgress = true;
-  //     });
-  //   checkoutState(() {});
-  //   String email = await getPrefrence(EMAIL);
-  //
-  //   Charge charge = Charge()
-  //     ..amount = totalPrice.toInt()
-  //     ..reference = _getReference()
-  //     ..email = email;
-  //
-  //   try {
-  //     CheckoutResponse response = await paystackPlugin.checkout(
-  //       context,
-  //       method: CheckoutMethod.card,
-  //       charge: charge,
-  //     );
-  //     if (response.status) {
-  //       placeOrder(response.reference);
-  //     } else {
-  //       setSnackbar(response.message, _checkscaffoldKey);
-  //       if (mounted)
-  //         setState(() {
-  //           _isProgress = false;
-  //           _placeOrder = true;
-  //         });
-  //       checkoutState(() {});
-  //     }
-  //   } catch (e) {
-  //     if (mounted) setState(() => _isProgress = false);
-  //     rethrow;
-  //   }
-  // }
-
-  String _getReference() {
-    String platform;
-    if (Platform.isIOS) {
-      platform = 'iOS';
-    } else {
-      platform = 'Android';
-    }
-
-    return 'ChargedFrom${platform}_${DateTime.now().millisecondsSinceEpoch}';
-  }
-
   stripePayment() async {
-    //stateSet(() {});
-
     var finalAmt = totalPrice.toStringAsFixed(2);
 
     var response = await StripeService.payWithPaymentSheet(
@@ -3453,86 +3285,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     );
   }
 
-  payment() {
-    String selectedDateTime = "";
-    if (selDate != null && selDate != "" && selTime != null && selTime != "") {
-      selectedDateTime = "Date : " + selDate + " " + "Time : " + selTime;
-    }
-    return Column(children: [
-      /*Card(
-        elevation: 0,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(4),
-          onTap: () async {
-            ScaffoldMessenger.of(context).removeCurrentSnackBar();
-            msg = '';
-            await Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        Payment(updateCheckout, msg, payment, checkoutState)));
-            checkoutState(() {
-              _placeOrder = true;
-            });
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Icon(Icons.calendar_today),
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(start: 8.0),
-                  child: Text(
-                    //SELECT_PAYMENT,
-                    selectedDateTime != null && selectedDateTime != ''
-                        ? selectedDateTime
-                        : getTranslated(context, 'PREFER_DATE_TIME'),
-                    style: TextStyle(
-                        color: colors.fontColor, fontWeight: FontWeight.bold),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-      ),*/
-      // Card(
-      //   elevation: 0,
-      //   child: InkWell(
-      //     borderRadius: BorderRadius.circular(4),
-      //     onTap: () async {
-      //       ScaffoldMessenger.of(context).removeCurrentSnackBar();
-      //       msg = '';
-      //       await Navigator.push(
-      //           context,
-      //           MaterialPageRoute(
-      //               builder: (BuildContext context) =>
-      //                   Payment(updateCheckout, msg)));
-      //       if (mounted) checkoutState(() {});
-      //     },
-      //     child: Padding(
-      //       padding: const EdgeInsets.all(8.0),
-      //       child: Row(
-      //         children: [
-      //           Icon(Icons.payment),
-      //           Padding(
-      //             padding: const EdgeInsetsDirectional.only(start: 8.0),
-      //             child: Text(
-      //               //SELECT_PAYMENT,
-      //               payMethod != null && payMethod != ''
-      //                   ? payMethod
-      //                   : getTranslated(context, 'SELECT_PAYMENT'),
-      //               style: TextStyle(
-      //                   color: colors.fontColor, fontWeight: FontWeight.bold),
-      //             ),
-      //           )
-      //         ],
-      //       ),
-      //     ),
-      //   ),
-      // ),
-    ]);
-  }
+
 
   cartItems() {
     return ListView.builder(
@@ -4891,7 +4644,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
         var getdata = json.decode(response.body);
 
         bool error = getdata["error"];
-        String msg = getdata["message"];
+        // String msg = getdata["message"];
 
         if (!error) {
           CUR_BALANCE = double.parse(getdata["new_balance"]).toStringAsFixed(2);

@@ -270,7 +270,8 @@ class StatePayPalWebview extends State<PaypalWebview> {
           await post(deleteOrderApi, body: parameter, headers: headers)
               .timeout(Duration(seconds: timeOut));
 
-    //  var getdata = json.decode(response.body);
+     var getdata = json.decode(response.body);
+     print(getdata);
     // bool error = getdata["error"];
       //  String msg = getdata["message"];
 

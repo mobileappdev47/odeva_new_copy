@@ -1,12 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:eshop/Helper/Session.dart';
 import 'package:eshop/Home.dart';
 import 'package:eshop/Home3.dart';
-import 'package:eshop/chat_fire/chat_fire_screen.dart';
-import 'package:eshop/chat_manager/chat_manager.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -921,6 +917,7 @@ class _StateSearch extends State<Search> with TickerProviderStateMixin {
 
           bool error = getdata["error"];
           String msg = getdata["message"];
+          debugPrint("===> $msg");
 
           notificationisgettingdata = false;
           if (notificationoffset == 0) notificationisnodata = error;
@@ -1016,6 +1013,7 @@ class _StateSearch extends State<Search> with TickerProviderStateMixin {
                 style: TextStyle(color: Colors.white),
               )))
           : NotificationListener<ScrollNotification>(
+              // ignore: missing_return
               onNotification: (scrollNotification) {},
               child: Container(
                 decoration: BoxDecoration(

@@ -1,14 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:eshop/Model/Order_Model.dart';
-import 'package:eshop/Model/Section_Model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart';
-import 'package:sms_autofill/sms_autofill.dart';
-
 import 'Helper/AppBtn.dart';
 import 'Helper/Color.dart';
 import 'Helper/Constant.dart';
@@ -110,24 +105,6 @@ class StateMyOrder extends State<MyOrder> with TickerProviderStateMixin {
     buttonController.dispose();
     super.dispose();
   }
-
-  // Future<void> searchOperation(String searchText) async {
-  //   orderList.addAll(searchList);
-  //   searchList.clear();
-
-  //   for (int i = 0; i < orderList.length; i++) {
-  //     for (int j = 0; j < orderList[i].itemList.length; j++) {
-  //       OrderModel map = orderList[i];
-
-  //       if (map.id.toLowerCase().contains(searchText) ||
-  //           map.itemList[j].name.toLowerCase().contains(searchText)) {
-  //         searchList.add(map);
-  //       }
-  //     }
-  //   }
-
-  //   if (mounted) setState(() {});
-  // }
 
   Future<Null> _playAnimation() async {
     try {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'Color.dart';
 
+// ignore: must_be_immutable
 class SimBtn extends StatelessWidget {
   final String title;
   final VoidCallback onBtnSelected;

@@ -35,69 +35,7 @@ class StripeService {
     // Stripe.merchantIdentifier = "App Identifier";
     // await Stripe.instance.applySettings();
   }
-  static Future<StripeTransactionResponse> payWithNewCard(
-      {String amount, String currency, String from,BuildContext context}) async {
-    try {
-      var paymentMethod =/* await stripe.StripePayment.paymentRequestWithCardForm(
-          stripe.CardFormPaymentRequest());*/await (StripeService.createPaymentIntent(
-          amount, currency, from, context));
 
-      var paymentIntent =await (StripeService.createPaymentIntent(
-          amount, currency, from, context));
-      // await  StripeService.createPaymentIntent(amount, currency, from);
-
-    /*  var response = await stripe.StripePayment.confirmPaymentIntent(
-        stripe.PaymentIntent(
-        clientSecret: paymentIntent['client_secret'],
-        paymentMethodId: paymentMethod.id,
-      ));*/
-      //
-      // await Stripe.instance.initPaymentSheet(
-      //     paymentSheetParameters: SetupPaymentSheetParameters(
-      //         paymentIntentClientSecret: paymentIntent['client_secret'],
-      //   /*      applePay: true,
-      //         googlePay: true,
-      //         merchantCountryCode: 'IN',*/
-      //         style: ThemeMode.light,
-      //         merchantDisplayName: 'Test'));
-      // await Stripe.instance.presentPaymentSheet();
-      stripePayId = paymentIntent['id'];
-      var response = await http.post(
-          Uri.parse('${StripeService.paymentApiUrl}/$stripePayId'),
-          headers: headers);
-      var getdata = json.decode(response.body);
-      var statusOfTransaction = getdata['status'];
-
-      if (statusOfTransaction == 'succeeded') {
-        return new StripeTransactionResponse(
-          id: "",
-            message: 'Transaction successful',
-            success: true,
-            status: statusOfTransaction);
-      } else if (statusOfTransaction== 'pending' ||
-          statusOfTransaction== "captured") {
-        return new StripeTransactionResponse(
-            message: 'Transaction pending',
-            success: true,
-            id: "",
-            status: statusOfTransaction);
-      } else {
-        return new StripeTransactionResponse(
-            message: 'Transaction failed',
-            success: false,
-            id: "",
-            status: statusOfTransaction);
-      }
-    } on PlatformException catch (err) {
-      return StripeService.getPlatformExceptionErrorResult(err);
-    } catch (err) {
-      return new StripeTransactionResponse(
-          message: 'Transaction failed: ${err.toString()}',
-          success: false,
-          id: "",
-          status: "fail");
-    }
-  }
 
 
   static Future<StripeTransactionResponse> payWithPaymentSheet(
@@ -108,37 +46,7 @@ class StripeService {
 
       }) async {
     try {
-      //payWarn =true;
-      //StateCart().setState(() {});
-      //create Payment intent
-      print(payWarn);
-      var paymentIntent = await (StripeService.createPaymentIntent(
-          amount, currency, from, context));
-      //payWarn = false;
-      //cnt = 0;
-    //  StateCart().setState(() {});
-      //setting up Payment Sheet
 
-      // await Stripe.instance.initPaymentSheet(
-      //     paymentSheetParameters: SetupPaymentSheetParameters(
-      //         paymentIntentClientSecret: paymentIntent['client_secret'],
-      //
-      //        /* merchantCountryCode: 'IN',*/
-      //         style: ThemeMode.light,
-      //         merchantDisplayName: 'Test'));
-      //
-      // //open payment sheet
-      // try{
-      //   await Stripe.instance.presentPaymentSheet();
-      // }catch(e){
-      //   print(e.toString());
-      //
-      // }
-      // //store paymentID of customer
-      // stripePayId = paymentIntent['id'];
-
-
-      //confirm payment
       var response = await http.post(
           Uri.parse('${StripeService.paymentApiUrl}/$stripePayId'),
           headers: headers);

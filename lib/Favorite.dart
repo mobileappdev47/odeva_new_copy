@@ -1,19 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:eshop/Home3.dart';
-import 'package:eshop/SignInUpAcc.dart';
-import 'package:eshop/chat_fire/chat_fire_screen.dart';
-import 'package:eshop/chat_manager/chat_manager.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'package:http/http.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share/share.dart';
-
 import 'Helper/AppBtn.dart';
 import 'Helper/Color.dart';
 import 'Helper/Constant.dart';
@@ -23,10 +16,11 @@ import 'Login.dart';
 import 'Model/Section_Model.dart';
 import 'Product_Detail.dart';
 
-class Favorite extends StatefulWidget {
+// ignore: must_be_immutable
+class Favourite extends StatefulWidget {
   Function update;
 
-  Favorite(this.update);
+  Favourite(this.update);
 
   @override
   State<StatefulWidget> createState() => StateFav();
@@ -38,7 +32,7 @@ int total = 0;
 bool isLoadingmore = true;
 List<SectionModel> favList = [];
 
-class StateFav extends State<Favorite> with TickerProviderStateMixin {
+class StateFav extends State<Favourite> with TickerProviderStateMixin {
   ScrollController controller = new ScrollController();
   List<SectionModel> tempList = [];
   String msg;
@@ -529,15 +523,16 @@ class StateFav extends State<Favorite> with TickerProviderStateMixin {
                 int.parse(favList[index].productList[0].qtyStepSize))
             .toString();
 
-        if (int.parse(qty) < favList[index].productList[0].minOrderQuntity) {
-          qty = favList[index].productList[0].minOrderQuntity.toString();
-          setSnackbar('Minimum order quantity is $qty');
-        }
+        // if (int.parse(qty) < favList[index].productList[0].minOrderQuntity) {
+        //   qty = favList[index].productList[0].minOrderQuntity.toString();
+        //   setSnackbar('Minimum order quantity is $qty');
+        // }
 
         var parameter = {
           PRODUCT_VARIENT_ID: favList[index].productList[0].prVarientList[0].id,
           USER_ID: CUR_USERID,
           QTY: qty,
+          "gram": "1000"
         };
 
         Response response =

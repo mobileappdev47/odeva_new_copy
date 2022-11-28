@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:eshop/Favorite.dart';
 import 'package:eshop/Helper/Color.dart';
 import 'package:eshop/Helper/Session.dart';
@@ -8,7 +7,6 @@ import 'package:eshop/Helper/String.dart';
 import 'package:eshop/MyTransactions.dart';
 import 'package:eshop/ReferEarn.dart';
 import 'package:eshop/Setting.dart';
-import 'package:eshop/SignInUpAcc.dart';
 import 'package:eshop/chat_fire/chat_fire_screen.dart';
 import 'package:eshop/chat_manager/chat_manager.dart';
 
@@ -23,18 +21,17 @@ import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import 'Faqs.dart';
 import 'Helper/Constant.dart';
 import 'Helper/Theme.dart';
 import 'Login.dart';
 import 'Manage_Address.dart';
 import 'MyOrder.dart';
-import 'My_Wallet.dart';
 import 'Privacy_Policy.dart';
 import 'Profile.dart';
 import 'main.dart';
 
+// ignore: must_be_immutable
 class MyProfile extends StatefulWidget {
   Function update;
 
@@ -996,6 +993,7 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
   }
 
   url(String url) async {
+    // ignore: deprecated_member_use
     await launch(url);
   }
 

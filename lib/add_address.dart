@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:core';
-
 import 'package:eshop/Helper/Constant.dart';
 import 'package:eshop/Helper/Session.dart';
 import 'package:eshop/Map.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
@@ -18,12 +16,14 @@ import 'Helper/Color.dart';
 import 'Helper/String.dart';
 import 'Model/User.dart';
 
+// ignore: must_be_immutable
 class AddAddress extends StatefulWidget {
   final bool update;
   final int index;
   Function refresh;
 
-  AddAddress({Key key, this.update, this.index, this.refresh}) : super(key: key);
+  AddAddress({Key key, this.update, this.index, this.refresh})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -34,7 +34,8 @@ class AddAddress extends StatefulWidget {
 String latitude, longitude, state, country, pincode;
 
 class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
-  String name1, name2,
+  String name1,
+      name2,
       mobile,
       city,
       area,
@@ -51,14 +52,16 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   List<User> cityList = [];
   List<User> areaList = [];
-  TextEditingController nameC1,nameC2,
+  TextEditingController nameC1,
+      nameC2,
       mobileC,
       pincodeC,
       addressC,
       landmarkC,
       stateC,
-      countryC,
       altMobC;
+  TextEditingController cityC = TextEditingController();
+  TextEditingController countryC = TextEditingController();
   int selectedType = 1;
   bool _isNetworkAvail = true;
   Animation buttonSqueezeanimation;
@@ -70,6 +73,8 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
       addFocus,
       landFocus,
       pinFocus,
+      cityFocus,
+      countryFocus,
       locationFocus = FocusNode();
 
   @override
@@ -127,7 +132,8 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
 
       checkedDefault = item.isDefault == "1" ? true : false;
     } else {
-      countryC.text="United Kingdom";
+      // countryC.text="United Kingdom";
+      countryC.text = "India";
       getCurrentLoc();
     }
   }
@@ -229,7 +235,9 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
       if (city == null || city.isEmpty) {
         setSnackbar(getTranslated(context, 'cityWarning'));
       } else if (area == null || area.isEmpty) {
-        setSnackbar(getTranslated(context, 'areaWarning'));
+        area = "India";
+        return true;
+        // setSnackbar(getTranslated(context, 'areaWarning'));
       }
       // else if (latitude == null || longitude == null) {
       //   setSnackbar(getTranslated(context, 'locationWarning'));
@@ -261,7 +269,7 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
     FocusScope.of(context).requestFocus(nextFocus);
   }
 
-  username(){
+  username() {
     return Container(
       child: Row(
         children: [
@@ -305,7 +313,7 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
                   getTranslated(context, 'SECONDNAME_REQUIRED'),
                   getTranslated(context, 'USER_LENGTH')),
               onSaved: (String value) {
-                name2= value;
+                name2 = value;
               },
               onFieldSubmitted: (v) {
                 _fieldFocusChange(context, secondnameFocus, monoFocus);
@@ -369,7 +377,6 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
             .subtitle2
             .copyWith(color: colors.fontColor),
         onSaved: (String value) {
-      
           altMob = value;
         },
         onFieldSubmitted: (v) {
@@ -382,7 +389,7 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
     );
   }
 
-  setCities() {
+  /*setCities() {
 
     return DropdownButtonFormField(
       iconEnabledColor: colors.fontColor,
@@ -426,9 +433,33 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
         contentPadding: new EdgeInsets.symmetric(vertical: 5),
       ),
     );
+  }*/
+
+  setCities() {
+    return TextFormField(
+      keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.next,
+      controller: cityC,
+      focusNode: cityFocus,
+      style: Theme.of(context)
+          .textTheme
+          .subtitle2
+          .copyWith(color: colors.fontColor),
+      //inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+      onSaved: (String value) {
+        city = value;
+      },
+      validator: (val) =>
+          validateField(val, getTranslated(context, 'FIELD_REQUIRED')),
+      decoration: InputDecoration(
+        hintText: "City Name",
+        isDense: true,
+      ),
+    );
   }
 
-  setArea() {
+  ///country list dropdown
+/*  setArea() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: DropdownButtonFormField(
@@ -474,6 +505,29 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
         ),
       ),
     );
+  }*/
+
+  setArea() {
+    return TextFormField(
+      keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.next,
+      controller: countryC,
+      focusNode: countryFocus,
+      style: Theme.of(context)
+          .textTheme
+          .subtitle2
+          .copyWith(color: colors.fontColor),
+      //inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+      onSaved: (String value) {
+        country = value;
+      },
+      validator: (val) =>
+          validateField(val, getTranslated(context, 'FIELD_REQUIRED')),
+      decoration: InputDecoration(
+        hintText: "Country Name",
+        isDense: true,
+      ),
+    );
   }
 
   setAddress() {
@@ -499,7 +553,8 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
               _fieldFocusChange(context, addFocus, locationFocus);
             },
             decoration: InputDecoration(
-              hintText: "First Line of Address",//getTranslated(context, 'ADDRESS_LBL'),
+              hintText: "First Line of Address",
+              //getTranslated(context, 'ADDRESS_LBL'),
               isDense: true,
             ),
           ),
@@ -532,20 +587,13 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
               if (mounted) setState(() {});
               List<Placemark> placemark = await placemarkFromCoordinates(
                   double.parse(latitude), double.parse(longitude));
-
-              state = "";//placemark[0].administrativeArea;
-              country = "United Kingdom";//placemark[0].country;
+              state = ""; //placemark[0].administrativeArea;
+              country = "United Kingdom"; //placemark[0].country;
               pincode = placemark[0].postalCode;
-              //  address = placemark[0].name;
               var address;
               address = placemark[0].name;
               address = address + " " + placemark[0].subLocality;
-              //address = address + " " + placemark[0].locality;
-              //address = address + "," + placemark[0].administrativeArea;
-              //address = address + "," + placemark[0].country;
-              //address = address + "," + placemark[0].postalCode;
               addressC.text = address;
-
               if (mounted)
                 setState(() {
                   //countryC.text = "United Kingdom";
@@ -577,7 +625,8 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
       validator: (val) =>
           validatePincode(val, getTranslated(context, 'PIN_REQUIRED')),
       decoration: InputDecoration(
-        hintText: "Postcode (Please enter space between sections)",//getTranslated(context, 'PINCODEHINT_LBL'),
+        hintText: "Postcode (Please enter space between sections)",
+        //getTranslated(context, 'PINCODEHINT_LBL'),
         isDense: true,
       ),
     );
@@ -724,7 +773,7 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
       keyboardType: TextInputType.text,
       textCapitalization: TextCapitalization.sentences,
       controller: countryC,
-      readOnly: true,
+      // readOnly: true,
       style: Theme.of(context)
           .textTheme
           .subtitle2
@@ -751,7 +800,7 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
     try {
       var data = {
         USER_ID: CUR_USERID,
-        NAME: name1+" "+name2,
+        NAME: name1 + " " + name2,
         MOBILE: mobile,
         PINCODE: pincode,
         CITY_ID: city,
@@ -761,12 +810,12 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
         COUNTRY: " ",
         TYPE: type,
         ISDEFAULT: checkedDefault.toString() == "true" ? "1" : "0",
-        LATITUDE: latitude!=0.0 && latitude!=null ? latitude:"0",
-        LONGITUDE: longitude!=0.0 && longitude!=null ?longitude:"0",
-        'landmark': landmark!=""?landmark:"",
+        LATITUDE: latitude != 0.0 && latitude != null ? latitude : "0",
+        LONGITUDE: longitude != 0.0 && longitude != null ? longitude : "0",
+        'landmark': landmark != "" ? landmark : "",
       };
       if (widget.update) data[ID] = addressList[widget.index].id;
-      print("Parametrs of add address: "+data.toString());
+      print("Parametrs of add address: " + data.toString());
       Response response = await post(
               widget.update ? updateAddressApi : getAddAddressApi,
               body: data,
@@ -792,7 +841,7 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
               addressList[widget.index].isDefault = "1";
 
               if (!ISFLAT_DEL) {
-                if (oriPrice  <
+                if (oriPrice <
                     double.parse(addressList[selectedAddress].freeAmt)) {
                   delCharge =
                       double.parse(addressList[selectedAddress].deliveryCharge);
@@ -832,7 +881,7 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
               addressList[widget.index].isDefault = "1";
 
               if (!ISFLAT_DEL && addressList.length != 1) {
-                if (oriPrice  <
+                if (oriPrice <
                     double.parse(addressList[selectedAddress].freeAmt)) {
                   delCharge =
                       double.parse(addressList[selectedAddress].deliveryCharge);
@@ -862,50 +911,46 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
               _isProgress = false;
             });
 
-          if(widget.refresh!=null) {
+          if (widget.refresh != null) {
             widget.refresh();
           }
 
           Navigator.of(context).pop();
         } else {
           setSnackbar(msg);
-            showAlertDialog(context, msg);
-
-
+          showAlertDialog(context, msg);
         }
       }
     } on TimeoutException catch (_) {
       setSnackbar(getTranslated(context, 'somethingMSg'));
-
     }
-
   }
 
   showAlertDialog(BuildContext context, String msg) {
-
     // set up the button
+    // ignore: deprecated_member_use
     Widget okButton = FlatButton(
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.blueAccent,width: 2.0),
+          border: Border.all(color: Colors.blueAccent, width: 2.0),
           borderRadius: BorderRadius.all(Radius.circular(5)),
         ),
         child: Text("OK"),
       ),
       onPressed: () {
-        if (mounted) setState(() {
-          _isProgress = false;
-          Navigator.pop(context);
-        });
-
+        if (mounted)
+          setState(() {
+            _isProgress = false;
+            Navigator.pop(context);
+          });
       },
     );
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       //title: Text("My title"),
-      content: Text(msg),//Text("Error Msg"),
+      content: Text(msg), //Text("Error Msg"),
       actions: [
         okButton,
       ],
@@ -1089,7 +1134,8 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
       children: [
         Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(begin: Alignment.topCenter,
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
                   // Color(0xFF280F43),
@@ -1123,7 +1169,7 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
                                     setMobileNo(),
                                     //setAltMobileNo(),
                                     setAddress(),
-                                     setLandmark(),
+                                    setLandmark(),
                                     setCities(),
                                     setArea(),
                                     setPincode(),
@@ -1154,9 +1200,10 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
                               stops: [0, 1]),
                         ),
                         child: Text(getTranslated(context, 'SAVE_LBL'),
-                            style: Theme.of(context).textTheme.subtitle1.copyWith(
-                                  color: colors.white,
-                                ))),
+                            style:
+                                Theme.of(context).textTheme.subtitle1.copyWith(
+                                      color: colors.white,
+                                    ))),
                     onTap: () {
                       validateAndSubmit();
                     },
@@ -1180,12 +1227,13 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
         localeIdentifier: "en");
 
     state = placemark[0].administrativeArea;
-    country = "United Kingdom";//placemark[0].country;
+    country = "United Kingdom"; //placemark[0].country;
     pincode = placemark[0].postalCode;
     // address = placemark[0].name;
     if (mounted)
       setState(() {
-        countryC.text = "United Kingdom";
+        // countryC.text = "United Kingdom";
+        countryC.text = "India";
         stateC.text = "";
         pincodeC.text = pincode;
         // addressC.text = address;

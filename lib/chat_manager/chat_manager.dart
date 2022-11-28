@@ -102,6 +102,7 @@ class _ChatManagerState extends State<ChatManager> {
                                     content: Text("Are you sure you want to delete?"),
                                     actions: <
                                         Widget>[
+                                      // ignore: deprecated_member_use
                                       FlatButton(
                                         onPressed:
                                             () {
@@ -111,6 +112,7 @@ class _ChatManagerState extends State<ChatManager> {
                                         child: Text(
                                             "No"),
                                       ),
+                                      // ignore: deprecated_member_use
                                       FlatButton(
                                         onPressed:
                                             () {

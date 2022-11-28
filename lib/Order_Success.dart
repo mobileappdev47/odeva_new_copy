@@ -4,7 +4,6 @@ import 'package:eshop/MyOrder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'Helper/String.dart';
@@ -243,6 +242,7 @@ class StateSuccess extends State<OrderSuccess> {
     );
   }
   url(String url) async {
+    // ignore: deprecated_member_use
     await launch(url);
   }
 }

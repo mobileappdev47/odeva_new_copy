@@ -1,11 +1,9 @@
 import 'package:eshop/Helper/Color.dart';
 import 'package:eshop/Product_Detail.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
-
 import 'Helper/Session.dart';
 import 'Model/Section_Model.dart';
 import 'Model/User.dart';

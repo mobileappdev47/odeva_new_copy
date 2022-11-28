@@ -59,7 +59,9 @@ class TextMessage extends StatelessWidget {
                       Flexible(
                         child: Linkify(
                           onOpen: (link) async {
+                            // ignore: deprecated_member_use
                             if (await canLaunch(link.url)) {
+                              // ignore: deprecated_member_use
                               await launch(link.url);
                             }
                           },
@@ -116,7 +118,9 @@ class TextMessage extends StatelessWidget {
                 Flexible(
                   child: Linkify(
                     onOpen: (link) async {
+                      // ignore: deprecated_member_use
                       if (await canLaunch(link.url)) {
+                        // ignore: deprecated_member_use
                         await launch(link.url);
                       }
                     },

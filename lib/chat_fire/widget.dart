@@ -1,7 +1,7 @@
 import 'package:eshop/Helper/Color.dart';
 import 'package:eshop/Model/message_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class InputBottomBar extends StatelessWidget {
   InputBottomBar(
       {this.message,

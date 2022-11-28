@@ -1,22 +1,18 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:country_code_picker/country_code_picker.dart';
 import 'package:eshop/Helper/String.dart';
 import 'package:eshop/Privacy_Policy.dart';
 import 'package:eshop/Verify_Otp.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
-import 'package:video_player/video_player.dart';
-
 import 'Helper/AppBtn.dart';
 import 'Helper/Color.dart';
 import 'Helper/Constant.dart';
 import 'Helper/Session.dart';
 
+// ignore: must_be_immutable
 class SendOtp extends StatefulWidget {
   String title;
 

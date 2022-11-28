@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eshop/Model/message_model.dart';
 import 'package:eshop/chat_fire/chat_fire_screen.dart';
-import 'package:flutter/material.dart';
 
 class ChatRoomservice {
   CollectionReference chatRoom =

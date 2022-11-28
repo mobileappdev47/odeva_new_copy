@@ -38,10 +38,12 @@ class _RatingDialogState extends State<RatingDialog> {
         ],
       ),
       actions: <Widget>[
+        // ignore: deprecated_member_use
         FlatButton(
           child: Text('CANCEL'),
           onPressed: Navigator.of(context).pop,
         ),
+        // ignore: deprecated_member_use
         FlatButton(
           child: Text('OK'),
           onPressed: () {

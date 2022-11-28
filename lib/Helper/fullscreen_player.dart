@@ -85,7 +85,7 @@ class _FullscreenPlayerState extends State<FullscreenPlayer> {
     setState(() {
       SystemChrome.setPreferredOrientations(
           [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
-      SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.bottom]);
     });
 
     super.initState();
@@ -98,8 +98,8 @@ class _FullscreenPlayerState extends State<FullscreenPlayer> {
       _controller.pause();
       SystemChrome.setPreferredOrientations(
           [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
-      SystemChrome.setEnabledSystemUIOverlays(
-          [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+      SystemChrome.setEnabledSystemUIMode(
+          SystemUiMode.manual, overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
     });
     Navigator.pop(context, _controller.value.position.inSeconds);
     return Future.value(true);
@@ -156,6 +156,7 @@ class _FullscreenPlayerState extends State<FullscreenPlayer> {
                         _controller.seekTo(Duration(seconds: position));
                         _seek = false;
                       }
+                      // ignore: deprecated_member_use
                       SystemChrome.setEnabledSystemUIOverlays(
                           [SystemUiOverlay.bottom]);
 
@@ -354,6 +355,7 @@ class _FullscreenPlayerState extends State<FullscreenPlayer> {
                           DeviceOrientation.portraitDown,
                           DeviceOrientation.portraitUp
                         ]);
+                        // ignore: deprecated_member_use
                         SystemChrome.setEnabledSystemUIOverlays(
                             [SystemUiOverlay.top, SystemUiOverlay.bottom]);
                       });

@@ -1,54 +1,31 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_code_picker/country_localizations.dart';
 import 'package:eshop/Helper/Color.dart';
 import 'package:eshop/Helper/Constant.dart';
 import 'package:eshop/Login.dart';
 import 'package:eshop/Splash.dart';
-import 'package:eshop/utils/rate_my_app_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-// import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:in_app_review/in_app_review.dart';
-import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
-import 'package:rate_my_app/rate_my_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:version/version.dart';
-
 import 'Helper/Demo_Localization.dart';
 import 'Helper/PushNotificationService.dart';
 import 'Helper/Session.dart';
 import 'Helper/String.dart';
 import 'Helper/Theme.dart';
-
-//import 'Home.dart';
-//import 'Home2.dart';
 import 'Home3.dart';
-
-//import 'Home1.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   loadSVG();
-  // Stripe.publishableKey =
-  //     "pk_test_51J3jqhC1MwKHfh2WkSH8jz6UQHRNEqZvNk7vRrJP7FsL2W6PFqP11wKjbc6aGW7r5l3Z6H1KTt4UqGIyzDYfHCqm00aNGqj647";
-  // Stripe.merchantIdentifier = 'merchant.flutter.stripe.test';
-  // Stripe.urlScheme = 'flutterstripe';
-  // await Stripe.instance.applySettings();
+
   await firebaseMessaging();
 
   FirebaseMessaging.onBackgroundMessage(myForgroundMessageHandler);
@@ -317,20 +294,13 @@ Future<void> firebaseMessaging() async {
   final IOSInitializationSettings initializationSettingsIOS =
       IOSInitializationSettings(
           onDidReceiveLocalNotification: onDidReceiveLocalNotification);
-/*  final InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid, iOS: initializationSettingsIOS);*/
-/*  flutterLocalNotificationsPlugin.initialize(initializationSettings,
+  final InitializationSettings initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+  flutterLocalNotificationsPlugin.initialize(initializationSettings,
       onSelectNotification: (String payload) async {
-        print("onSelectNotification Called");
-        if (payload != null) {
-         // final newPay = jsonDecode(payload);
-
-          */ /*         UserModel userModel = await userService.getUserModel(newPay['id']);
-              Get.offAll(
-                      () => new Person.ChatScreen(userModel, false, newPay['roomId']));*/ /*
-
-        }
-      });*/
+    print("onSelectNotification Called");
+    if (payload != null) {}
+  });
 
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<

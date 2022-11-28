@@ -1,23 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:eshop/Cart.dart';
 import 'package:eshop/Helper/Session.dart';
 import 'package:eshop/Model/Order_Model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_html_to_pdf/flutter_html_to_pdf.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-import 'Give_Rating.dart';
 import 'Helper/AppBtn.dart';
 import 'Helper/Color.dart';
 import 'Helper/Constant.dart';
@@ -57,7 +51,10 @@ class StateOrder extends State<OrderDetail> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     print("Order Status: " + widget.model.activeStatus.toString());
-    print("Order Add: " + widget.model.address.toString());
+    if (widget.model.address != null) {
+      print("Order Add: " + widget.model.address.toString());
+    }
+
     buttonController = new AnimationController(
         duration: new Duration(milliseconds: 2000), vsync: this);
     buttonSqueezeanimation = new Tween(
@@ -718,67 +715,88 @@ class StateOrder extends State<OrderDetail> with TickerProviderStateMixin {
 
   orders(OrderModel model) {
     return Card(
-        elevation: 0,
-        child: Padding(
-            padding: EdgeInsets.fromLTRB(0, 15.0, 0, 15.0),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Padding(
-                  padding: EdgeInsetsDirectional.only(start: 15.0, end: 15.0),
-                  child: Text("Items",
-                      style: Theme.of(context).textTheme.subtitle2.copyWith(
-                          color: colors.fontColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16))),
-              Divider(
-                color: colors.lightBlack,
+      elevation: 0,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(0, 15.0, 0, 15.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsetsDirectional.only(start: 15.0, end: 15.0),
+              child: Text(
+                "Items",
+                style: Theme.of(context).textTheme.subtitle2.copyWith(
+                    color: colors.fontColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
               ),
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: model.itemList.length,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (context, i) {
-                  OrderItem orderItem = model.itemList[i];
-                  proId = orderItem.orderNumber;
-                  return productItem(orderItem, model);
-                },
-              ),
-            ])));
+            ),
+            Divider(
+              color: colors.lightBlack,
+            ),
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: model.itemList.length,
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (context, i) {
+                OrderItem orderItem = model.itemList[i];
+                proId = orderItem.orderNumber;
+                return productItem(orderItem, model);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   shippingDetails() {
     return Card(
-        elevation: 0,
-        child: Padding(
-            padding: EdgeInsets.fromLTRB(0, 15.0, 0, 15.0),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Padding(
-                  padding: EdgeInsetsDirectional.only(start: 15.0, end: 15.0),
-                  child: Text(getTranslated(context, 'DELIVERY_ADDRESS'),
-                      style: Theme.of(context).textTheme.subtitle2.copyWith(
-                          color: colors.fontColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16))),
-              Divider(
-                color: colors.lightBlack,
+      elevation: 0,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(0, 15.0, 0, 15.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsetsDirectional.only(start: 15.0, end: 15.0),
+              child: Text(
+                getTranslated(context, 'DELIVERY_ADDRESS'),
+                style: Theme.of(context).textTheme.subtitle2.copyWith(
+                    color: colors.fontColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
               ),
-              Padding(
-                  padding: EdgeInsetsDirectional.only(start: 15.0, end: 15.0),
-                  child: Text(
-                    widget.model.name + ",",
-                  )),
-              Padding(
-                  padding: EdgeInsetsDirectional.only(start: 15.0, end: 15.0),
-                  child: Text(widget.model.address,
-                      style: TextStyle(color: colors.lightBlack2))),
-              Padding(
-                  padding: EdgeInsetsDirectional.only(start: 15.0, end: 15.0),
-                  child: Text(widget.model.mobile,
-                      style: TextStyle(
-                        color: colors.lightBlack2,
-                      ))),
-            ])));
+            ),
+            Divider(
+              color: colors.lightBlack,
+            ),
+            Padding(
+              padding: EdgeInsetsDirectional.only(start: 15.0, end: 15.0),
+              child: Text(
+                widget.model.name + ",",
+              ),
+            ),
+            Padding(
+              padding: EdgeInsetsDirectional.only(start: 15.0, end: 15.0),
+              child: Text(
+                widget.model.address ?? "",
+                style: TextStyle(color: colors.lightBlack2),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsetsDirectional.only(start: 15.0, end: 15.0),
+              child: Text(
+                widget.model.mobile,
+                style: TextStyle(
+                  color: colors.lightBlack2,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   productItem(OrderItem orderItem, OrderModel model) {
@@ -799,6 +817,8 @@ class StateOrder extends State<OrderDetail> with TickerProviderStateMixin {
     if (orderItem.listStatus.contains(CANCLED)) {
       cDate = orderItem.listDate[orderItem.listStatus.indexOf(CANCLED)];
     }
+
+    debugPrint("======>>> $pDate , $prDate , $sDate , $dDate , $cDate , $rDate");
     if (orderItem.listStatus.contains(RETURNED)) {
       rDate = orderItem.listDate[orderItem.listStatus.indexOf(RETURNED)];
     }
@@ -1494,6 +1514,7 @@ class StateOrder extends State<OrderDetail> with TickerProviderStateMixin {
                     label: getTranslated(context, 'VIEW'),
                     onPressed: () async {
                       final result = await OpenFile.open(filePath);
+                      print(result);
                     }),
                 backgroundColor: colors.white,
                 elevation: 1.0,

@@ -1,20 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:eshop/Cart.dart';
-import 'package:eshop/CompareList.dart';
 import 'package:eshop/ProductList.dart';
 import 'package:eshop/ReviewList.dart';
-import 'package:eshop/chat_fire/chat_fire_screen.dart';
-import 'package:eshop/chat_manager/chat_manager.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart';
@@ -33,7 +26,8 @@ import 'Model/Section_Model.dart';
 import 'Model/User.dart';
 import 'Product_Preview.dart';
 import 'Review_Gallary.dart';
-import 'SignInUpAcc.dart';
+
+import 'package:get/get.dart' as g;
 
 bool detail = false;
 
@@ -90,6 +84,15 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
   var isDarkTheme;
   ShortDynamicLink shortenedLink;
   String shareLink;
+
+  String dropdownValue;
+  var items = [
+    '50',
+    '100',
+    '250',
+    '500',
+    '1000',
+  ];
 
   @override
   void initState() {
@@ -156,6 +159,27 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
       ),
     ));
     qtySelected.text = getQty(widget.model);
+
+    dropdownValue = widget.model.defaultOrder;
+    if (int.parse(widget.model.minimumOrderQuantity) == 100) {
+      items.remove("50");
+    } else if (int.parse(widget.model.minimumOrderQuantity) == 250) {
+      items.remove("50");
+      items.remove("100");
+    } else if (int.parse(widget.model.minimumOrderQuantity) == 500) {
+      items.remove("50");
+      items.remove("100");
+      items.remove("250");
+    } else if (int.parse(widget.model.minimumOrderQuantity) == 1000) {
+      items.remove("50");
+      items.remove("100");
+      items.remove("250");
+      items.remove("500");
+    }
+
+    if (!items.contains(widget.model.defaultOrder)) {
+      items.add(widget.model.defaultOrder);
+    }
   }
 
   getSingleProduct() async {
@@ -274,6 +298,7 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
     );
   }
 
+  // ignore: missing_return
   Future<bool> onWillPop() {
     if (homePage == true) {
       Navigator.pushNamedAndRemoveUntil(
@@ -392,7 +417,7 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
               ],
             ),
             child: Card(
-            //  shadowColor: Colors.grey.withOpacity(0.5),
+              //  shadowColor: Colors.grey.withOpacity(0.5),
               elevation: 4,
               child: InkWell(
                 borderRadius: BorderRadius.circular(4),
@@ -595,40 +620,6 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
       });*/
   }
 
-  _rate() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          RatingBarIndicator(
-            rating: double.parse(widget.model.rating),
-            itemBuilder: (context, index) => Icon(
-              Icons.star,
-              color: colors.primary,
-            ),
-            itemCount: 5,
-            itemSize: 12.0,
-            direction: Axis.horizontal,
-          ),
-          Text(
-            " " + widget.model.rating,
-            style: Theme.of(context)
-                .textTheme
-                .caption
-                .copyWith(color: colors.lightBlack),
-          ),
-          Text(
-            " | " + widget.model.noOfRating + " Ratings",
-            style: Theme.of(context)
-                .textTheme
-                .caption
-                .copyWith(color: colors.lightBlack),
-          )
-        ],
-      ),
-    );
-  }
 
   _price(pos) {
     double price = double.parse(widget.model.prVarientList[pos].disPrice);
@@ -638,7 +629,7 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: Text(CUR_CURRENCY + " " + price.toString(),
+          child: Text(CUR_CURRENCY + " " + priceUpdate(price2: price.toString(),grams2: dropdownValue),
               style: Theme.of(context).textTheme.headline6),
         ),
       ],
@@ -689,14 +680,6 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
     );
   }
 
-  _desc() {
-    return widget.model.desc.isNotEmpty
-        ? Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Html(data: widget.model.desc),
-          )
-        : Container();
-  }
 
   setSnackbar(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
@@ -798,43 +781,6 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
     }
   }
 
-  void _extraDetail() {
-    showModalBottomSheet<dynamic>(
-        context: context,
-        isScrollControlled: true,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10), topRight: Radius.circular(10))),
-        builder: (builder) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
-            return Container(
-              constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height * 0.9),
-              child: ListView(shrinkWrap: true, children: [
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _desc(),
-                    widget.model.desc.isNotEmpty ? Divider() : Container(),
-                    _attr(),
-                    widget.model.attributeList.isNotEmpty
-                        ? Divider()
-                        : Container(),
-                    _madeIn(),
-                    _warrenty(),
-                    _gaurantee(),
-                    _otherDetail(widget.model.selVarient),
-                    _cancleable(),
-                  ],
-                )
-              ]),
-            );
-            //});
-          });
-        });
-  }
 
   void _chooseVarient() {
     bool available;
@@ -1164,10 +1110,10 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
                       (int.parse(model.qtyStepSize)))
                   .toString();
 
-          if (int.parse(qty) < model.minOrderQuntity) {
-            qty = model.minOrderQuntity.toString();
-            setSnackbar('Minimum order quantity is $qty');
-          }
+          // if (int.parse(qty) < model.minOrderQuntity) {
+          //   qty = model.minOrderQuntity.toString();
+          //   setSnackbar('Minimum order quantity is $qty');
+          // }
 
           var parameter = {
             USER_ID: CUR_USERID,
@@ -1622,8 +1568,9 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
                   ),
           ],
         ),
+
         ///todo : chat button 5
-       /* Positioned(
+        /* Positioned(
             bottom: 60,
             right: 10,
             child: FloatingActionButton(
@@ -1684,23 +1631,6 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
     );
   }
 
-  _madeIn() {
-    String madeIn = widget.model.madein;
-
-    return madeIn != null && madeIn.isNotEmpty
-        ? Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: ListTile(
-              trailing: Text(madeIn),
-              dense: true,
-              title: Text(
-                getTranslated(context, 'MADE_IN'),
-                style: Theme.of(context).textTheme.subtitle2,
-              ),
-            ),
-          )
-        : Container();
-  }
 
   Widget productItem(int index, bool pad) {
     String offPer;
@@ -1970,52 +1900,67 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
     }
   }
 
-  _otherDetail(int pos) {
-    String returnable = widget.model.isReturnable;
-    if (returnable == "1")
-      returnable = RETURN_DAYS + " Days";
-    else
-      returnable = "No";
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: ListTile(
-        trailing: Text(returnable),
-        dense: true,
-        title: Text(
-          getTranslated(context, 'RETURNABLE'),
-          style: Theme.of(context).textTheme.subtitle2,
-        ),
-      ),
-    );
-  }
 
-  _cancleable() {
-    String cancleable = widget.model.isCancelable;
-    if (cancleable == "1")
-      cancleable = "Till " + widget.model.cancleTill;
-    else
-      cancleable = "No";
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: ListTile(
-        trailing: Text(cancleable),
-        dense: true,
-        title: Text(
-          getTranslated(context, 'CANCELLABLE'),
-          style: Theme.of(context).textTheme.subtitle2,
-        ),
-      ),
-    );
-  }
 
   TextEditingController qtySelected = new TextEditingController();
 
   _incdcrement() {
     return Container(
-      margin: EdgeInsets.only(top: deviceWidth * 0.063),
+      // margin: EdgeInsets.only(top: deviceWidth * 0.063),
+      padding: EdgeInsets.symmetric(horizontal: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(left: 10),
+            width: g.Get.width / 2,
+            decoration: BoxDecoration(
+                // color: Colors.white38,
+                border: Border.all(color: Colors.grey.withOpacity(0.8))),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton(
+                // underline: Divider(
+                //   color: Colors.teal,
+                // ),
+                // borderRadius:
+                //     BorderRadius.all(Radius.circular(5)),
+                value: dropdownValue,
+                icon: const Icon(Icons.keyboard_arrow_down),
+                items: items.map((String items) {
+                  return DropdownMenuItem(
+                    enabled: true,
+                    value: items,
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          border:
+                              Border(bottom: BorderSide(color: Colors.grey))),
+                      margin: EdgeInsets.only(bottom: 5),
+                      child: Text(
+                        "$items gm",
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ),
+                  );
+                }).toList(),
+                isDense: true,
+                onChanged: (val) {
+                  setState(() {
+                    dropdownValue = val;
+                    widget.model.defaultOrder = val;
+                  });
+                  addTocart(
+                      (int.parse(qtySelected.text.toString()) +
+                          int.parse("0"))
+                          .toString(),
+                      widget.model);
+                  print("SELECTED DROPDOWN VAL : $dropdownValue");
+                  // updateHomePage();
+                },
+              ),
+            ),
+          ),
+          Spacer(),
           GestureDetector(
             child: Container(
               padding: EdgeInsets.all(4),
@@ -2120,15 +2065,16 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
               // _views[_tc.index] = createTabContent(_tc.index, subList);
             });
 
-          if (int.parse(qty) < model.minOrderQuntity) {
-            qty = model.minOrderQuntity.toString();
-            setSnackbar('Minimum order quantity is $qty');
-          }
+          // if (int.parse(qty) < model.minOrderQuntity) {
+          //   qty = model.minOrderQuntity.toString();
+          //   setSnackbar('Minimum order quantity is $qty');
+          // }
 
           var parameter = {
             USER_ID: CUR_USERID,
             PRODUCT_VARIENT_ID: model.prVarientList[model.selVarient].id,
-            QTY: qty
+            QTY: qty,
+            "gram": widget.model.defaultOrder.toString()
           };
 
           Response response =
@@ -2196,14 +2142,15 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
           qty = (int.parse(qtySelected.text.toString()) -
               int.parse(model.qtyStepSize));
 
-          if (qty < model.minOrderQuntity) {
-            qty = 0;
-          }
+          // if (qty < model.minOrderQuntity) {
+          //   qty = 0;
+          // }
 
           var parameter = {
             PRODUCT_VARIENT_ID: model.prVarientList[model.selVarient].id,
             USER_ID: CUR_USERID,
-            QTY: qty.toString()
+            QTY: qty.toString(),
+            "gram":model.defaultOrder.toString()
           };
 
           Response response =
@@ -2254,37 +2201,6 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
     qtySelected.text = getQty(model);
   }
 
-  _specification() {
-    return GestureDetector(
-      child: ListTile(
-        dense: true,
-        title: Text(
-          getTranslated(context, 'SPECIFICATION'),
-          style: TextStyle(color: colors.lightBlack),
-        ),
-        trailing: Icon(Icons.keyboard_arrow_right),
-      ),
-      onTap: _extraDetail,
-    );
-  }
-
-  _discountCoupon() {
-    return GestureDetector(
-      child: ListTile(
-        dense: true,
-        title: Text(
-          getTranslated(context, 'DISCOUPON'),
-          style: TextStyle(color: colors.lightBlack),
-        ),
-        trailing: Icon(Icons.keyboard_arrow_right),
-        subtitle: Text(
-          getTranslated(context, 'COMINGSOON'),
-          style: TextStyle(color: colors.primary),
-        ),
-      ),
-    );
-  }
-
   _reviewTitle() {
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
@@ -2315,6 +2231,19 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
             ),
           ],
         ));
+  }
+
+  String priceUpdate({String grams2, String price2}) {
+    double price = double.parse(price2.toString());
+    int gram = int.parse(grams2.toString());
+    var gramPrice;
+    if(gram == 0){
+      gramPrice = price;
+    }else{
+      gramPrice = (price * gram) / 1000;
+    }
+
+    return gramPrice.toString();
   }
 
   reviewImage(int i) {
@@ -2375,91 +2304,31 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
         : Container();
   }
 
-  _attr() {
-    return widget.model.attributeList.isNotEmpty
-        ? Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: widget.model.attributeList.length,
-              itemBuilder: (context, i) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          widget.model.attributeList[i].name,
-                          style: Theme.of(context).textTheme.subtitle2,
-                        ),
-                      ),
-                      Expanded(
-                          flex: 2,
-                          child: Text(
-                            widget.model.attributeList[i].value,
-                            textAlign: TextAlign.right,
-                          )),
-                    ],
-                  ),
-                );
-              },
-            ),
-          )
-        : Container();
-  }
+
 
   Future<void> getShare() async {
-    final DynamicLinkParameters parameters = DynamicLinkParameters(
-      uriPrefix: deepLinkUrlPrefix,
-      link: Uri.parse(
-          'https://$deepLinkName/?index=${widget.index}&secPos=${widget.secPos}&list=${widget.list}&id=${widget.model.id}'),
-      androidParameters: AndroidParameters(
-        packageName: packageName,
-        minimumVersion: 1,
-      ),
-      iosParameters: IOSParameters(
-        bundleId: iosPackage,
-        minimumVersion: '1',
-        appStoreId: appStoreId,
-      ),
-    );
-
-    final Uri longDynamicUrl = await parameters.link;
+    // final DynamicLinkParameters parameters = DynamicLinkParameters(
+    //   uriPrefix: deepLinkUrlPrefix,
+    //   link: Uri.parse(
+    //       'https://$deepLinkName/?index=${widget.index}&secPos=${widget.secPos}&list=${widget.list}&id=${widget.model.id}'),
+    //   androidParameters: AndroidParameters(
+    //     packageName: packageName,
+    //     minimumVersion: 1,
+    //   ),
+    //   iosParameters: IOSParameters(
+    //     bundleId: iosPackage,
+    //     minimumVersion: '1',
+    //     appStoreId: appStoreId,
+    //   ),
+    // );
 
 
-    final ShortDynamicLink shortenedLink = ShortDynamicLink(
-        type: ShortDynamicLinkType.short, shortUrl: longDynamicUrl);
-
-/*    shortenedLink = await DynamicLinkParameters.shortenUrl(
-      longDynamicUrl,
-      new DynamicLinkParametersOptions(
-          shortDynamicLinkPathLength: ShortDynamicLinkPathLength.unguessable),
-    );*/
     new Future.delayed(Duration.zero, () {
       shareLink =
           "\n$appName\n${getTranslated(context, 'APPFIND')}$androidLink$packageName\n${getTranslated(context, 'IOSLBL')}\n$iosLink$iosPackage";
     });
   }
 
-  _warrenty() {
-    String warranty = widget.model.warranty;
-
-    return warranty != null && warranty.isNotEmpty
-        ? Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: ListTile(
-              trailing: Text(warranty),
-              dense: true,
-              title: Text(
-                getTranslated(context, 'WARRENTY'),
-                style: Theme.of(context).textTheme.subtitle2,
-              ),
-            ),
-          )
-        : Container();
-  }
 
   playIcon() {
     return Align(
@@ -2592,67 +2461,4 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
         : Container();
   }
 
-  _gaurantee() {
-    String gaurantee = widget.model.gurantee;
-
-    return gaurantee != null && gaurantee.isNotEmpty
-        ? Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: ListTile(
-              trailing: Text(gaurantee),
-              dense: true,
-              title: Text(
-                getTranslated(context, 'GAURANTEE'),
-                style: Theme.of(context).textTheme.subtitle2,
-              ),
-            ),
-          )
-        : Container();
-  }
-
-  _compareProduct() {
-    return Container(
-      height: 25,
-      alignment: Alignment.bottomRight,
-      child: Padding(
-        padding: const EdgeInsetsDirectional.only(end: 8.0),
-        child: TextButton.icon(
-            onPressed: () {
-              if (compareList.length > 0 &&
-                  compareList.contains(widget.model)) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => CompareList()));
-              } else {
-                setState(() {
-                  compareList.add(widget.model);
-                });
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              primary: colors.lightWhite,
-              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0)),
-            ),
-            icon: Icon(
-              (compareList.length > 0 && compareList.contains(widget.model))
-                  ? Icons.login
-                  : Icons.compare,
-              size: 15,
-              color: colors.fontColor,
-            ),
-            label: Text(
-              (compareList.length > 0 && compareList.contains(widget.model))
-                  ? getTranslated(context, 'GOTO_COMPARE')
-                  : getTranslated(context, 'COMPARE_PRO'),
-              style: Theme.of(context)
-                  .textTheme
-                  .caption
-                  .copyWith(color: colors.fontColor),
-            )),
-      ),
-    );
-  }
 }

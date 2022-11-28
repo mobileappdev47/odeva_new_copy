@@ -1,13 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:eshop/Helper/Session.dart';
 import 'package:eshop/Home.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart';
-
 import 'Cart.dart';
 import 'Favorite.dart';
 import 'Helper/AppBtn.dart';
@@ -20,6 +17,7 @@ import 'Model/Section_Model.dart';
 import 'Product_Detail.dart';
 import 'Search.dart';
 
+// ignore: must_be_immutable
 class SectionList extends StatefulWidget {
   final int index;
   SectionModel section_model;

@@ -72,7 +72,7 @@ class _GettingStartedScreenState extends State<IntroSlider>
     _pageController.dispose();
     buttonController.dispose();
 
-    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
   }
 
   _onPageChanged(int index) {
@@ -221,7 +221,7 @@ class _GettingStartedScreenState extends State<IntroSlider>
 
     deviceHeight = MediaQuery.of(context).size.height;
     deviceWidth = MediaQuery.of(context).size.width;
-    SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
 
     return Scaffold(
         body: SafeArea(

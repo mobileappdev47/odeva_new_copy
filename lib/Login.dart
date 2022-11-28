@@ -8,17 +8,13 @@ import 'package:eshop/SendOtp.dart';
 import 'package:eshop/chat_fire/chat_room_service.dart';
 import 'package:eshop/firebase_message/firebase_message_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:http/http.dart';
 import 'Helper/AppBtn.dart';
 import 'Helper/Color.dart';
 import 'Helper/Constant.dart';
 import 'Helper/Session.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -178,10 +174,10 @@ class _LoginPageState extends State<Login> with TickerProviderStateMixin {
       if (user.user.uid != null) {
         doc = await ChatRoomservice().isRoomAvailable(mobileNo);
         if (doc.exists) {
-          DocumentSnapshot docs = await FirebaseFirestore.instance
-              .collection("chatroom")
-              .doc(mobileNo)
-              .get();
+          // DocumentSnapshot docs = await FirebaseFirestore.instance
+          //     .collection("chatroom")
+          //     .doc(mobileNo)
+          //     .get();
           Map data = doc.data() as Map;
           if (data["isManager"].toString() == "true") {
             await FirebaseFirestore.instance.collection("chatroom").doc(mobileNo).update({"fcmToken":fcmToken});

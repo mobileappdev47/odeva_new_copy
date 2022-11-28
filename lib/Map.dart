@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:eshop/Add_Address.dart';
+import 'package:eshop/add_address.dart';
 import 'package:eshop/Helper/Constant.dart';
 import 'package:eshop/Helper/String.dart';
 import 'package:flutter/material.dart';
@@ -157,6 +157,7 @@ class _MapState extends State<Map> {
         String msg = getdata["message"];
         if (!error) {
           var data = getdata["data"];
+          debugPrint("---> $data");
           if(widget.from==getTranslated(context,'ADDADDRESS'))
           {
             latitude=latlong.latitude.toString();
@@ -230,6 +231,7 @@ class _MapState extends State<Map> {
   showAlertDialog(BuildContext context, String msg) {
 
     // set up the button
+    // ignore: deprecated_member_use
     Widget okButton = FlatButton(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),

@@ -1,5 +1,4 @@
 import 'package:eshop/Model/message_model.dart';
-import 'package:eshop/chat_fire/chat_fire_screen.dart';
 import 'package:eshop/chat_fire/image_message.dart';
 import 'package:eshop/chat_fire/text_message.dart';
 import 'package:flutter/material.dart';

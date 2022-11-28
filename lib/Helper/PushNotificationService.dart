@@ -11,7 +11,6 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
 import '../All_Category.dart';
-import '../My_Wallet.dart';
 import '../Product_Detail.dart';
 import '../Splash.dart';
 import '../main.dart';
@@ -144,8 +143,10 @@ class PushNotificationService {
             .timeout(Duration(seconds: timeOut));
 
     var getdata = json.decode(response.body);
+    debugPrint(getdata);
   }
 
+  // ignore: missing_return
   Future onSelectNotification(String payload) {
     if (payload != null) {
       List<String> pay = payload.split(",");
@@ -189,6 +190,7 @@ class PushNotificationService {
       var getdata = json.decode(response.body);
       bool error = getdata["error"];
       String msg = getdata["message"];
+      debugPrint(msg);
       if (!error) {
         var data = getdata["data"];
 
@@ -216,6 +218,7 @@ class PushNotificationService {
 Future<dynamic> myForgroundMessageHandler(RemoteMessage message) async {
   await setPrefrenceBool(ISFROMBACK, true);
   bool back = await getPrefrenceBool(ISFROMBACK);
+  debugPrint(back.toString());
   return Future<void>.value();
 }
 

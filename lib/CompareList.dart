@@ -1,8 +1,6 @@
 import 'package:eshop/Helper/Session.dart';
 import 'package:eshop/Model/Section_Model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import 'Helper/Color.dart';

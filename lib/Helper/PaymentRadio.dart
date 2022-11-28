@@ -1,7 +1,4 @@
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'Color.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 class RadioItem extends StatelessWidget {

@@ -1,17 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:eshop/Home3.dart';
 import 'package:eshop/Model/Notification_Model.dart';
-import 'package:eshop/SignInUpAcc.dart';
-import 'package:eshop/chat_fire/chat_fire_screen.dart';
-import 'package:eshop/chat_manager/chat_manager.dart';
 import 'package:eshop/utils/color_res.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'package:http/http.dart';
-
 import 'Helper/AppBtn.dart';
 import 'Helper/Color.dart';
 import 'Helper/Constant.dart';
