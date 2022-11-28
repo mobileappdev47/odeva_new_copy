@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html_to_pdf/flutter_html_to_pdf.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart';
-import 'package:open_file/open_file.dart';
+// import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'Helper/AppBtn.dart';
@@ -1510,12 +1510,12 @@ class StateOrder extends State<OrderDetail> with TickerProviderStateMixin {
                   textAlign: TextAlign.center,
                   style: TextStyle(color: colors.black),
                 ),
-                action: SnackBarAction(
+              /*  action: SnackBarAction(
                     label: getTranslated(context, 'VIEW'),
                     onPressed: () async {
                       final result = await OpenFile.open(filePath);
                       print(result);
-                    }),
+                    }),*/
                 backgroundColor: colors.white,
                 elevation: 1.0,
               ));

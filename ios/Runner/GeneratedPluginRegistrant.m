@@ -84,12 +84,6 @@
 @import flutter_phone_direct_caller;
 #endif
 
-#if __has_include(<flutter_share_me/SwiftFlutterShareMePlugin.h>)
-#import <flutter_share_me/SwiftFlutterShareMePlugin.h>
-#else
-@import flutter_share_me;
-#endif
-
 #if __has_include(<flutter_webview_plugin/FlutterWebviewPlugin.h>)
 #import <flutter_webview_plugin/FlutterWebviewPlugin.h>
 #else
@@ -136,12 +130,6 @@
 #import <media_picker/MediasPickerPlugin.h>
 #else
 @import media_picker;
-#endif
-
-#if __has_include(<open_file/OpenFilePlugin.h>)
-#import <open_file/OpenFilePlugin.h>
-#else
-@import open_file;
 #endif
 
 #if __has_include(<package_info/FLTPackageInfoPlugin.h>)
@@ -232,7 +220,6 @@
   [InAppWebViewFlutterPlugin registerWithRegistrar:[registry registrarForPlugin:@"InAppWebViewFlutterPlugin"]];
   [FlutterLocalNotificationsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterLocalNotificationsPlugin"]];
   [FlutterPhoneDirectCallerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterPhoneDirectCallerPlugin"]];
-  [SwiftFlutterShareMePlugin registerWithRegistrar:[registry registrarForPlugin:@"SwiftFlutterShareMePlugin"]];
   [FlutterWebviewPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterWebviewPlugin"]];
   [GeocodingPlugin registerWithRegistrar:[registry registrarForPlugin:@"GeocodingPlugin"]];
   [GeolocatorPlugin registerWithRegistrar:[registry registrarForPlugin:@"GeolocatorPlugin"]];
@@ -241,7 +228,6 @@
   [InAppReviewPlugin registerWithRegistrar:[registry registrarForPlugin:@"InAppReviewPlugin"]];
   [LibphonenumberPlugin registerWithRegistrar:[registry registrarForPlugin:@"LibphonenumberPlugin"]];
   [MediasPickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"MediasPickerPlugin"]];
-  [OpenFilePlugin registerWithRegistrar:[registry registrarForPlugin:@"OpenFilePlugin"]];
   [FLTPackageInfoPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTPackageInfoPlugin"]];
   [FLTPathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTPathProviderPlugin"]];
   [PermissionHandlerPlugin registerWithRegistrar:[registry registrarForPlugin:@"PermissionHandlerPlugin"]];
