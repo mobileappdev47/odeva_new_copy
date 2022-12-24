@@ -19,7 +19,7 @@ final String deepLinkName = 'eshop';
 // final String baseUrl = 'http://54.234.149.241/odeva_production/app/v1/api/';-- removed
 
  // final String baseUrl = 'http://174.129.77.127/odeva/app/v1/api/';
- final String baseUrl = 'http://codeskipinfotech.com/nikshop/app/v1/api/';
+ final String baseUrl = 'https://codeskipinfotech.com/nikshop/app/v1/api/';
 
 
 final int timeOut = 50;

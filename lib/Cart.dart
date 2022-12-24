@@ -24,7 +24,6 @@ import 'Order_Success.dart';
 
 import 'PaypalWebviewActivity.dart';
 
-
 String stripePayId = "";
 // bool isTimeSlot;
 int cnt = 0;
@@ -89,6 +88,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
   Animation buttonSqueezeanimation;
   AnimationController buttonController;
   bool _isNetworkAvail = true;
+
   // stripe.CardFieldInputDetails _card;
 
   List<TextEditingController> _controller = [];
@@ -100,10 +100,12 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
   List<SectionModel> saveLaterList = [];
   String msg;
   bool _isLoading = true;
+
   // Razorpay _razorpay;
   TextEditingController promoC = new TextEditingController();
   TextEditingController deliveryC = new TextEditingController();
   StateSetter checkoutState;
+
   // final paystackPlugin = PaystackPlugin();
   ScrollController _scrollController = new ScrollController();
   bool deliverable = false;
@@ -419,7 +421,6 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     cartList[index].perItemPrice = price.toString();
 
     ///per Item
-
     double gm = double.parse(grams[index].toString());
     double p = (gm == 0 ? price : ((gm * price) / 1000));
 
@@ -449,7 +450,10 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
 
     ///todo : set gram order wise
     //   String dropdownValue = cartList[index].productList[0].defaultOrder;
-    String dropdownValue = grams[index];
+    String dropdownValue =
+        cartList[index].productList[0].productVolumeType == "piece"
+            ? "1"
+            : grams[index];
 
     var items = [
       '50',
@@ -458,26 +462,35 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
       '500',
       '1000',
     ];
-    if (int.parse(cartList[index].productList[0].minimumOrderQuantity) == 100) {
-      items.remove("50");
-    } else if (int.parse(cartList[index].productList[0].minimumOrderQuantity) ==
-        250) {
-      items.remove("50");
-      items.remove("100");
-    } else if (int.parse(cartList[index].productList[0].minimumOrderQuantity) ==
-        500) {
-      items.remove("50");
-      items.remove("100");
-      items.remove("250");
-    } else if (int.parse(cartList[index].productList[0].minimumOrderQuantity) ==
-        1000) {
-      items.remove("50");
-      items.remove("100");
-      items.remove("250");
-      items.remove("500");
-    }
-    if (!items.contains(cartList[index].productList[0].defaultOrder)) {
-      items.add(cartList[index].productList[0].defaultOrder);
+
+    if (cartList[index].productList[0].productVolumeType == "piece") {
+      items = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+    } else {
+      if (int.parse(cartList[index].productList[0].minimumOrderQuantity) ==
+          100) {
+        items.remove("50");
+      } else if (int.parse(
+              cartList[index].productList[0].minimumOrderQuantity) ==
+          250) {
+        items.remove("50");
+        items.remove("100");
+      } else if (int.parse(
+              cartList[index].productList[0].minimumOrderQuantity) ==
+          500) {
+        items.remove("50");
+        items.remove("100");
+        items.remove("250");
+      } else if (int.parse(
+              cartList[index].productList[0].minimumOrderQuantity) ==
+          1000) {
+        items.remove("50");
+        items.remove("100");
+        items.remove("250");
+        items.remove("500");
+      }
+      if (!items.contains(cartList[index].productList[0].defaultOrder)) {
+        items.add(cartList[index].productList[0].defaultOrder);
+      }
     }
 
     return Card(
@@ -859,7 +872,6 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           .split(',');
     }
 
-
     bool avail = false;
 
     ///todo : set gram order wise
@@ -873,26 +885,36 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
       '500',
       '1000',
     ];
-    if (int.parse(cartList[index].productList[0].minimumOrderQuantity) == 100) {
-      items.remove("50");
-    } else if (int.parse(cartList[index].productList[0].minimumOrderQuantity) ==
-        250) {
-      items.remove("50");
-      items.remove("100");
-    } else if (int.parse(cartList[index].productList[0].minimumOrderQuantity) ==
-        500) {
-      items.remove("50");
-      items.remove("100");
-      items.remove("250");
-    } else if (int.parse(cartList[index].productList[0].minimumOrderQuantity) ==
-        1000) {
-      items.remove("50");
-      items.remove("100");
-      items.remove("250");
-      items.remove("500");
-    }
-    if (!items.contains(cartList[index].productList[0].defaultOrder)) {
-      items.add(cartList[index].productList[0].defaultOrder);
+
+    if (cartList[index].productList[0].productVolumeType == "piece") {
+      items = [];
+      items = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+    } else {
+      if (int.parse(cartList[index].productList[0].minimumOrderQuantity) ==
+          100) {
+        items.remove("50");
+      } else if (int.parse(
+              cartList[index].productList[0].minimumOrderQuantity) ==
+          250) {
+        items.remove("50");
+        items.remove("100");
+      } else if (int.parse(
+              cartList[index].productList[0].minimumOrderQuantity) ==
+          500) {
+        items.remove("50");
+        items.remove("100");
+        items.remove("250");
+      } else if (int.parse(
+              cartList[index].productList[0].minimumOrderQuantity) ==
+          1000) {
+        items.remove("50");
+        items.remove("100");
+        items.remove("250");
+        items.remove("500");
+      }
+      if (!items.contains(cartList[index].productList[0].defaultOrder)) {
+        items.add(cartList[index].productList[0].defaultOrder);
+      }
     }
 
     return Card(
@@ -2603,7 +2625,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                                     }
 
                                                     /// todo : payment screen
-                                                      placeOrder('');
+                                                    placeOrder('');
                                                   }
                                                 : chec)
                                         //}),
@@ -2863,7 +2885,6 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     if (mounted) checkoutState(() {});
   }
 
-
   Future<void> placeOrder(String tranId) async {
     _isNetworkAvail = await isNetworkAvailable();
     if (_isNetworkAvail) {
@@ -2878,7 +2899,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
             varientId != null ? varientId + "," + sec.varientId : sec.varientId;
         quantity = quantity != null ? quantity + "," + sec.qty : sec.qty;
       }
-      String payVia ="COD";
+      String payVia = "COD";
       // if (payMethod == getTranslated(context, 'COD_LBL'))
       //   payVia = "COD";
       // else if (payMethod == getTranslated(context, 'PAYPAL_LBL'))
@@ -3284,8 +3305,6 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
       ),
     );
   }
-
-
 
   cartItems() {
     return ListView.builder(

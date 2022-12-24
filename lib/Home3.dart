@@ -1860,7 +1860,7 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
         att = model.prVarientList[model.selVarient].attr_name.split(',');
         val = model.prVarientList[model.selVarient].varient_value.split(',');
       }
-      debugPrint("------------- >> "+att.toString() + val.toString());
+      debugPrint("------------- >> " + att.toString() + val.toString());
       print("New Length : " +
           index.toString() +
           " : " +
@@ -1875,7 +1875,7 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
       }
       _controller2[tabIndex][index].text = getQty(model);
       print("QTY FROM API : ${_controller2[tabIndex][index].text}");
-      String dropdownValue = "${subItem[index].defaultOrder}";
+      String dropdownValue = subItem[index].productVolumeType == "piece" ? "1":"${subItem[index].defaultOrder}";
 
       var items = [
         '50',
@@ -1885,23 +1885,29 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
         '1000',
       ];
 
-      if (!items.contains(subItem[index].defaultOrder)) {
-        items.add(subItem[index].defaultOrder);
-      }
-      if (int.parse(subItem[index].minimumOrderQuantity) == 100) {
-        items.remove("50");
-      } else if (int.parse(subItem[index].minimumOrderQuantity) == 250) {
-        items.remove("50");
-        items.remove("100");
-      } else if (int.parse(subItem[index].minimumOrderQuantity) == 500) {
-        items.remove("50");
-        items.remove("100");
-        items.remove("250");
-      } else if (int.parse(subItem[index].minimumOrderQuantity) == 1000) {
-        items.remove("50");
-        items.remove("100");
-        items.remove("250");
-        items.remove("500");
+      ///todo: piece set here
+      if (subItem[index].productVolumeType == "piece") {
+        items=[];
+        items = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+      } else {
+        if (!items.contains(subItem[index].defaultOrder)) {
+          items.add(subItem[index].defaultOrder);
+        }
+        if (int.parse(subItem[index].minimumOrderQuantity) == 100) {
+          items.remove("50");
+        } else if (int.parse(subItem[index].minimumOrderQuantity) == 250) {
+          items.remove("50");
+          items.remove("100");
+        } else if (int.parse(subItem[index].minimumOrderQuantity) == 500) {
+          items.remove("50");
+          items.remove("100");
+          items.remove("250");
+        } else if (int.parse(subItem[index].minimumOrderQuantity) == 1000) {
+          items.remove("50");
+          items.remove("100");
+          items.remove("250");
+          items.remove("500");
+        }
       }
 
       return subItem.length >= index
@@ -2084,9 +2090,10 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
                                                 color: Colors.grey))),
                                     margin: EdgeInsets.only(bottom: 5),
                                     child: Text(
-                                     /* items.toString() == "1000"
+                                      /* items.toString() == "1000"
                                           ? "1 kg"
-                                          : */"$items gm",
+                                          : */
+                                      "$items gm",
                                       style: TextStyle(fontSize: 12),
                                     ),
                                   ),
@@ -2110,7 +2117,7 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
                         ),
                       ),
 
-                      ///price and off price
+                      ///price and off prfrtxice
                       Positioned(
                         top: deviceWidth * 0.495 - 10,
                         //deviceWidth * 0.430 + 25, //deviceHeight*0.210,
@@ -2662,13 +2669,17 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
       USER_ID: CUR_USERID,
       PRODUCT_VARIENT_ID: model.prVarientList[model.selVarient].id,
       QTY: qty,
-      "gram": model.defaultOrder
+      "gram": model.defaultOrder,
+      PRODUCT_VOLUME_TYPE: model.productVolumeType
     };
     print("manageCartApi Pass BODY ===> $parameter");
 
-    Response response =
-        await post(manageCartApi, body: parameter, headers: headers)
-            .timeout(Duration(seconds: timeOut));
+    Response response = await post(
+            Uri.parse(
+                'https://codeskipinfotech.com/nikshop/app/v1/api/manage_cart'),
+            body: parameter,
+            headers: headers)
+        .timeout(Duration(seconds: timeOut));
 
     var getdata = json.decode(response.body);
 
@@ -2845,7 +2856,8 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
             PRODUCT_VARIENT_ID: model.prVarientList[model.selVarient].id,
             USER_ID: CUR_USERID,
             QTY: qty.toString(),
-            "gram": model.defaultOrder
+            "gram": model.defaultOrder,
+            PRODUCT_VOLUME_TYPE: model.productVolumeType
           };
           print("manageCartApi Pass BODY ===> $parameter");
           Response response =
@@ -3260,7 +3272,7 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
           if (isVerion == "1") {
             String verionAnd = data['current_version'];
             String verionIOS = data['current_version_ios'];
-debugPrint("---> ${verionIOS.toString()}");
+            debugPrint("---> ${verionIOS.toString()}");
             PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
             String version = packageInfo.version;
@@ -3393,7 +3405,6 @@ debugPrint("---> ${verionIOS.toString()}");
             .timeout(Duration(seconds: timeOut));
 
     debugPrint(response.statusCode.toString());
-
   }
 
   // Future<Null> getOfferImages() async {
@@ -3684,34 +3695,22 @@ checkVersion(BuildContext context) async {
 }
 
 getMessageCount() async {
-  if (isManager == "true") {
-    await FirebaseFirestore.instance.collection("chatroom").get().then((value) {
-      for (int i = 0; i < value.docs.length; i++) {
-        Map<String, dynamic> map = value.docs[i].data();
-        if (map[map['id'] + "_newMessage"] >= 1) {
-          totalmessageCount = 1;
-          print(totalmessageCount);
-          break;
-        } else {
-          totalmessageCount = 0;
-        }
-      }
-    });
-  } else {
-    var mobileNo = await getPrefrence(MOBILE);
-
-    await FirebaseFirestore.instance
-        .collection("chatroom")
-        .doc(mobileNo)
-        .get()
-        .then((value) {
-      if (value.exists) {
-        Map map = value.data();
-        if (map['manager_newMessage'] >= 1)
-          totalmessageCount = 1;
-        else
-          totalmessageCount = 0;
-      }
-    });
-  }
+  // if (isManager == "true") {
+  //   await FirebaseFirestore.instance.collection("chatroom").get().then((value) {
+  //     for (int i = 0; i < value.docs.length; i++) {
+  //       Map<String, dynamic> map = value.docs[i].data();
+  //       if (map[map['id'] + "_newMessage"] >= 1) {
+  //         totalmessageCount = 1;
+  //         print(totalmessageCount);
+  //         break;
+  //       } else {
+  //         totalmessageCount = 0;
+  //       }
+  //     }
+  //   });
+  // } else {
+  //
+  //
+  //
+  // }
 }

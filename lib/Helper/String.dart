@@ -59,6 +59,7 @@ const String IMGS = 'images[]';
 const String NAME = 'name';
 const String DEFAULT_ORDER = 'default_order';
 const String MINIMUM_ORDER_QUANTITY = 'minimum_order_quantity';
+const String PRODUCT_VOLUME_TYPE = 'product_volume_type';
 const String SUBTITLE = 'subtitle';
 const String TAX = 'tax';
 const String SLUG = 'slug';

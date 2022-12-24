@@ -160,21 +160,28 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
     ));
     qtySelected.text = getQty(widget.model);
 
-    dropdownValue = widget.model.defaultOrder;
-    if (int.parse(widget.model.minimumOrderQuantity) == 100) {
-      items.remove("50");
-    } else if (int.parse(widget.model.minimumOrderQuantity) == 250) {
-      items.remove("50");
-      items.remove("100");
-    } else if (int.parse(widget.model.minimumOrderQuantity) == 500) {
-      items.remove("50");
-      items.remove("100");
-      items.remove("250");
-    } else if (int.parse(widget.model.minimumOrderQuantity) == 1000) {
-      items.remove("50");
-      items.remove("100");
-      items.remove("250");
-      items.remove("500");
+    dropdownValue = widget.model.productVolumeType == "piece"
+        ? "1"
+        : widget.model.defaultOrder;
+    if (widget.model.productVolumeType == "piece") {
+      items = [];
+      items = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+    } else {
+      if (int.parse(widget.model.minimumOrderQuantity) == 100) {
+        items.remove("50");
+      } else if (int.parse(widget.model.minimumOrderQuantity) == 250) {
+        items.remove("50");
+        items.remove("100");
+      } else if (int.parse(widget.model.minimumOrderQuantity) == 500) {
+        items.remove("50");
+        items.remove("100");
+        items.remove("250");
+      } else if (int.parse(widget.model.minimumOrderQuantity) == 1000) {
+        items.remove("50");
+        items.remove("100");
+        items.remove("250");
+        items.remove("500");
+      }
     }
 
     if (!items.contains(widget.model.defaultOrder)) {
@@ -620,7 +627,6 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
       });*/
   }
 
-
   _price(pos) {
     double price = double.parse(widget.model.prVarientList[pos].disPrice);
     if (price == 0) price = double.parse(widget.model.prVarientList[pos].price);
@@ -629,7 +635,10 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: Text(CUR_CURRENCY + " " + priceUpdate(price2: price.toString(),grams2: dropdownValue),
+          child: Text(
+              CUR_CURRENCY +
+                  " " +
+                  priceUpdate(price2: price.toString(), grams2: dropdownValue),
               style: Theme.of(context).textTheme.headline6),
         ),
       ],
@@ -679,7 +688,6 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
       ),
     );
   }
-
 
   setSnackbar(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
@@ -780,7 +788,6 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
       return Container();
     }
   }
-
 
   void _chooseVarient() {
     bool available;
@@ -1631,7 +1638,6 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
     );
   }
 
-
   Widget productItem(int index, bool pad) {
     String offPer;
     double price = double.parse(productList[index].prVarientList[0].disPrice);
@@ -1900,8 +1906,6 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
     }
   }
 
-
-
   TextEditingController qtySelected = new TextEditingController();
 
   _incdcrement() {
@@ -1950,8 +1954,7 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
                     widget.model.defaultOrder = val;
                   });
                   addTocart(
-                      (int.parse(qtySelected.text.toString()) +
-                          int.parse("0"))
+                      (int.parse(qtySelected.text.toString()) + int.parse("0"))
                           .toString(),
                       widget.model);
                   print("SELECTED DROPDOWN VAL : $dropdownValue");
@@ -2150,7 +2153,7 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
             PRODUCT_VARIENT_ID: model.prVarientList[model.selVarient].id,
             USER_ID: CUR_USERID,
             QTY: qty.toString(),
-            "gram":model.defaultOrder.toString()
+            "gram": model.defaultOrder.toString()
           };
 
           Response response =
@@ -2237,9 +2240,9 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
     double price = double.parse(price2.toString());
     int gram = int.parse(grams2.toString());
     var gramPrice;
-    if(gram == 0){
+    if (gram == 0) {
       gramPrice = price;
-    }else{
+    } else {
       gramPrice = (price * gram) / 1000;
     }
 
@@ -2304,8 +2307,6 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
         : Container();
   }
 
-
-
   Future<void> getShare() async {
     // final DynamicLinkParameters parameters = DynamicLinkParameters(
     //   uriPrefix: deepLinkUrlPrefix,
@@ -2322,13 +2323,11 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
     //   ),
     // );
 
-
     new Future.delayed(Duration.zero, () {
       shareLink =
           "\n$appName\n${getTranslated(context, 'APPFIND')}$androidLink$packageName\n${getTranslated(context, 'IOSLBL')}\n$iosLink$iosPackage";
     });
   }
-
 
   playIcon() {
     return Align(
@@ -2460,5 +2459,4 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
           )
         : Container();
   }
-
 }

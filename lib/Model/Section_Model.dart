@@ -96,7 +96,8 @@ class Product {
       openStoreTime,
       closeStoreTime,
       defaultOrder,
-      minimumOrderQuantity;
+      minimumOrderQuantity,
+      productVolumeType;
 
   List<String> itemsCounter;
   List<String> otherImage;
@@ -176,6 +177,7 @@ class Product {
     this.closeStoreTime,
     this.defaultOrder,
     this.minimumOrderQuantity,
+    this.productVolumeType,
     this.minOrderQuntity,
     this.itemsCounter,
     this.reviewList,
@@ -259,6 +261,9 @@ class Product {
         closeStoreTime: json[CLOSE_STORE_TIME],
         defaultOrder: json[DEFAULT_ORDER],
         minimumOrderQuantity: json[MINIMUM_ORDER_QUANTITY],
+        productVolumeType: json[PRODUCT_VOLUME_TYPE]/* == ""
+            ? "piece"
+            : json[PRODUCT_VOLUME_TYPE]*/,
         reviewList: reviewList
         // totalImg: tImg,
         // totalReviewImg: json[REV_IMG][TOTALIMGREVIEW],

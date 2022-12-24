@@ -10,7 +10,9 @@ class MessageService {
       'AAAAAAcXNYE:APA91bF29Tc5rKfq6bQZ3EonQwS4m-JO75h3HRuhnMqsghYGOEypbgK2Kr2lk4OjzvyFP6lnWUIMBRmwnhBAca4pFqgnDM-JGNw7lrWNhsqwW0l69VeeHX-fuMqC6jZMTgBPn0GyICA0';
 
   Future<String> getFcmToken() async {
-    return await messaging.getToken();
+    String token = await messaging.getToken();
+    print("DEVICE TOKEN :: $token");
+    return token;
   }
 
   void sendNotification(SendNotificationModel notification) async {
