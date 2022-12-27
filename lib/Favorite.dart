@@ -532,7 +532,8 @@ class StateFav extends State<Favourite> with TickerProviderStateMixin {
           PRODUCT_VARIENT_ID: favList[index].productList[0].prVarientList[0].id,
           USER_ID: CUR_USERID,
           QTY: qty,
-          "gram": "1000"
+          "gram": "1000",
+          // PRODUCT_VOLUME_TYPE:favList[index].productList[0].productVolumeType
         };
 
         Response response =

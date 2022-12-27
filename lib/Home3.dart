@@ -1875,7 +1875,8 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
       }
       _controller2[tabIndex][index].text = getQty(model);
       print("QTY FROM API : ${_controller2[tabIndex][index].text}");
-      String dropdownValue = subItem[index].productVolumeType == "piece" ? "1":"${subItem[index].defaultOrder}";
+      String
+          dropdownValue = /*subItem[index].productVolumeType == "piece" ? "1":*/ "${subItem[index].defaultOrder}";
 
       var items = [
         '50',
@@ -1887,8 +1888,11 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
 
       ///todo: piece set here
       if (subItem[index].productVolumeType == "piece") {
-        items=[];
+        items = [];
         items = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+        if (!items.contains(subItem[index].defaultOrder)) {
+          items.add(subItem[index].defaultOrder);
+        }
       } else {
         if (!items.contains(subItem[index].defaultOrder)) {
           items.add(subItem[index].defaultOrder);
@@ -2093,7 +2097,13 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
                                       /* items.toString() == "1000"
                                           ? "1 kg"
                                           : */
-                                      "$items gm",
+                                      subItem[index].productVolumeType ==
+                                              "piece"
+                                          ? "$items piece"
+                                          : subItem[index].productVolumeType ==
+                                                  "liter"
+                                              ? "$items ml"
+                                              : "$items gm",
                                       style: TextStyle(fontSize: 12),
                                     ),
                                   ),
@@ -2148,7 +2158,9 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
                                     " " +
                                     priceUpdate(
                                         price2: price.toStringAsFixed(2),
-                                        grams2: subItem[index].defaultOrder),
+                                        grams2: subItem[index].defaultOrder,
+                                        productVolumeType:
+                                            subItem[index].productVolumeType),
                                 style: TextStyle(
                                     fontSize: deviceHeight * 0.0200,
                                     color: colors.darkColor,
@@ -2390,14 +2402,18 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
       return Container();
   }
 
-  String priceUpdate({String grams2, String price2}) {
+  String priceUpdate({String grams2, String price2, String productVolumeType}) {
     double price = double.parse(price2.toString());
     int gram = int.parse(grams2.toString());
     var gramPrice;
-    if (gram == 0) {
-      gramPrice = price;
+    if (productVolumeType == "piece") {
+      gramPrice = price * gram;
     } else {
-      gramPrice = (price * gram) / 1000;
+      if (gram == 0) {
+        gramPrice = price;
+      } else {
+        gramPrice = (price * gram) / 1000;
+      }
     }
 
     return gramPrice.toString();
@@ -2670,13 +2686,13 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
       PRODUCT_VARIENT_ID: model.prVarientList[model.selVarient].id,
       QTY: qty,
       "gram": model.defaultOrder,
-      PRODUCT_VOLUME_TYPE: model.productVolumeType
+      // PRODUCT_VOLUME_TYPE: model.productVolumeType,
     };
     print("manageCartApi Pass BODY ===> $parameter");
 
     Response response = await post(
-            Uri.parse(
-                'https://codeskipinfotech.com/nikshop/app/v1/api/manage_cart'),
+            // Uri.parse('https://codeskipinfotech.com/nikshop/app/v1/api/manage_cart'),
+        manageCartApi,
             body: parameter,
             headers: headers)
         .timeout(Duration(seconds: timeOut));
@@ -2857,7 +2873,7 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
             USER_ID: CUR_USERID,
             QTY: qty.toString(),
             "gram": model.defaultOrder,
-            PRODUCT_VOLUME_TYPE: model.productVolumeType
+            // PRODUCT_VOLUME_TYPE: model.productVolumeType
           };
           print("manageCartApi Pass BODY ===> $parameter");
           Response response =

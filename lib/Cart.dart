@@ -295,7 +295,6 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                             ],
                           )
                         : noInternet(context),
-
                     ///todo : chat button 5
                     /*      Positioned(
                         bottom: 60,
@@ -390,16 +389,19 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     // Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
   }
 
-  String priceUpdate({String grams2, String price2}) {
+  String priceUpdate({String grams2, String price2, String productVolumeType}) {
     double price = double.parse(price2.toString());
     int gram = int.parse(grams2.toString());
     var gramPrice;
-    if (gram == 0) {
-      gramPrice = price;
+    if (productVolumeType == "piece") {
+      gramPrice = price * gram;
     } else {
-      gramPrice = (price * gram) / 1000;
+      if (gram == 0) {
+        gramPrice = price;
+      } else {
+        gramPrice = (price * gram) / 1000;
+      }
     }
-
     return gramPrice.toString();
   }
 
@@ -422,7 +424,9 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
 
     ///per Item
     double gm = double.parse(grams[index].toString());
-    double p = (gm == 0 ? price : ((gm * price) / 1000));
+    double p = gm < 50
+        ? (gm == 0 ? price : ((gm * price)))
+        : (gm == 0 ? price : ((gm * price) / 1000));
 
     cartList[index].perItemTotal =
         (/*price*/ p * double.parse(cartList[index].qty)).toString();
@@ -450,10 +454,10 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
 
     ///todo : set gram order wise
     //   String dropdownValue = cartList[index].productList[0].defaultOrder;
-    String dropdownValue =
-        cartList[index].productList[0].productVolumeType == "piece"
+    String dropdownValue = grams[index];
+    /*cartList[index].productList[0].productVolumeType == "piece"
             ? "1"
-            : grams[index];
+            :*/
 
     var items = [
       '50',
@@ -465,6 +469,12 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
 
     if (cartList[index].productList[0].productVolumeType == "piece") {
       items = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+      if (!items.contains(cartList[index].productList[0].defaultOrder)) {
+        items.add(cartList[index].productList[0].defaultOrder);
+      }
+      if (!items.contains(grams[index])) {
+        items.add(grams[index]);
+      }
     } else {
       if (int.parse(cartList[index].productList[0].minimumOrderQuantity) ==
           100) {
@@ -490,6 +500,9 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
       }
       if (!items.contains(cartList[index].productList[0].defaultOrder)) {
         items.add(cartList[index].productList[0].defaultOrder);
+      }
+      if (!items.contains(grams[index])) {
+        items.add(grams[index]);
       }
     }
 
@@ -621,8 +634,10 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                               " " +
                               priceUpdate(
                                   price2: price.toString(),
-                                  grams2: dropdownValue
-                                      .toString()) /*price.toString()*/,
+                                  grams2: dropdownValue.toString(),
+                                  productVolumeType: cartList[index]
+                                      .productList[0]
+                                      .productVolumeType) /*price.toString()*/,
                           style: TextStyle(
                               color: colors.fontColor,
                               fontWeight: FontWeight.bold),
@@ -653,7 +668,17 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                             BorderSide(color: Colors.grey))),
                                 margin: EdgeInsets.only(bottom: 5),
                                 child: Text(
-                                  "$items gm",
+                                  cartList[index]
+                                              .productList[0]
+                                              .productVolumeType ==
+                                          "piece"
+                                      ? "$items piece"
+                                      : cartList[index]
+                                                  .productList[0]
+                                                  .productVolumeType ==
+                                              "liter"
+                                          ? "$items ml"
+                                          : "$items gm",
                                   style: TextStyle(fontSize: 12),
                                 ),
                               ),
@@ -665,6 +690,18 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                               grams.removeAt(index);
                               grams.insert(index, val);
                             });
+                            addToCartCheckout(
+                                index,
+                                (int.parse(cartList[index]
+                                        .qty) /* +
+                                        int.parse(cartList[
+                                        index]
+                                            .productList[0]
+                                            .qtyStepSize)*/
+                                    )
+                                    .toString(),
+                                grams[index]);
+                            // if (widget.updateHome != null) widget.updateHome();
                             print("SELECTED DROPDOWN VAL : $dropdownValue");
                             // updateHomePage();
                           },
@@ -850,7 +887,9 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
 
     ///per item
     double gm = double.parse(grams[index].toString());
-    double p = (gm == 0 ? price : ((gm * price) / 1000));
+    double p = gm < 50
+        ? (gm == 0 ? price : ((gm * price)))
+        : (gm == 0 ? price : ((gm * price) / 1000));
     cartList[index].perItemTotal =
         (/*price*/ p * double.parse(cartList[index].qty)).toString();
     print("PER ITEM TOTAL ${cartList[index].perItemTotal}");
@@ -889,6 +928,9 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     if (cartList[index].productList[0].productVolumeType == "piece") {
       items = [];
       items = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+      if (!items.contains(cartList[index].productList[0].defaultOrder)) {
+        items.add(cartList[index].productList[0].defaultOrder);
+      }
     } else {
       if (int.parse(cartList[index].productList[0].minimumOrderQuantity) ==
           100) {
@@ -1069,7 +1111,10 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                             price2: price
                                                 .toStringAsFixed(2)
                                                 .toString(),
-                                            grams2: grams[index]),
+                                            grams2: grams[index],
+                                            productVolumeType: cartList[index]
+                                                .productList[0]
+                                                .productVolumeType),
                                     style: TextStyle(
                                         color: colors.fontColor,
                                         fontWeight: FontWeight.bold),
@@ -1239,7 +1284,17 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                                 color: Colors.grey))),
                                     margin: EdgeInsets.only(bottom: 5),
                                     child: Text(
-                                      "$items gm",
+                                      cartList[index]
+                                                  .productList[0]
+                                                  .productVolumeType ==
+                                              "piece"
+                                          ? "$items piece"
+                                          : cartList[index]
+                                                      .productList[0]
+                                                      .productVolumeType ==
+                                                  "liter"
+                                              ? "$items ml"
+                                              : "$items gm",
                                       style: TextStyle(fontSize: 12),
                                     ),
                                   ),
@@ -1624,7 +1679,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           PRODUCT_VARIENT_ID: cartList[index].varientId,
           USER_ID: CUR_USERID,
           QTY: qty,
-          "gram": gram
+          "gram": gram,
+          // PRODUCT_VOLUME_TYPE: cartList[index].productList[0].productVolumeType
         };
         http.Response response = await http
             .post(manageCartApi, body: parameter, headers: headers)
@@ -1732,7 +1788,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           PRODUCT_VARIENT_ID: cartList[index].varientId,
           USER_ID: CUR_USERID,
           QTY: qty,
-          "gram": gram
+          "gram": gram,
+          // PRODUCT_VOLUME_TYPE: cartList[index].productList[0].productVolumeType
         };
 
         http.Response response = await http
@@ -1836,7 +1893,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           USER_ID: CUR_USERID,
           QTY: qty,
           SAVE_LATER: save,
-          "gram": gram
+          "gram": gram,
         };
 
         http.Response response = await http
@@ -1956,7 +2013,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
             PRODUCT_VARIENT_ID: cartList[index].varientId,
             USER_ID: CUR_USERID,
             QTY: qty.toString(),
-            "gram": gram
+            "gram": gram,
+            // PRODUCT_VOLUME_TYPE: cartList[index].productList[0].productVolumeType
           };
 
           http.Response response = await http
@@ -2091,7 +2149,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
             PRODUCT_VARIENT_ID: cartList[index].varientId,
             USER_ID: CUR_USERID,
             QTY: qty.toString(),
-            "gram": gram
+            "gram": gram,
+            // PRODUCT_VOLUME_TYPE: cartList[index].productList[0].productVolumeType
           };
 
           http.Response response = await http
@@ -4706,3 +4765,5 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     ));
   }
 }
+
+

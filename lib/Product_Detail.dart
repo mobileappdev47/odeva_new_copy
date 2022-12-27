@@ -160,12 +160,16 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
     ));
     qtySelected.text = getQty(widget.model);
 
-    dropdownValue = widget.model.productVolumeType == "piece"
+    dropdownValue = /*widget.model.productVolumeType == "piece"
         ? "1"
-        : widget.model.defaultOrder;
+        :*/
+        widget.model.defaultOrder;
     if (widget.model.productVolumeType == "piece") {
       items = [];
       items = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+      if (!items.contains(widget.model.defaultOrder)) {
+        items.add(widget.model.defaultOrder);
+      }
     } else {
       if (int.parse(widget.model.minimumOrderQuantity) == 100) {
         items.remove("50");
@@ -638,7 +642,10 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
           child: Text(
               CUR_CURRENCY +
                   " " +
-                  priceUpdate(price2: price.toString(), grams2: dropdownValue),
+                  priceUpdate(
+                      price2: price.toString(),
+                      grams2: dropdownValue,
+                      productVolumeType: widget.model.productVolumeType),
               style: Theme.of(context).textTheme.headline6),
         ),
       ],
@@ -1941,7 +1948,11 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
                               Border(bottom: BorderSide(color: Colors.grey))),
                       margin: EdgeInsets.only(bottom: 5),
                       child: Text(
-                        "$items gm",
+                        widget.model.productVolumeType == "piece"
+                            ? "$items piece"
+                            : widget.model.productVolumeType == "liter"
+                                ? "$items ml"
+                                : "$items gm",
                         style: TextStyle(fontSize: 12),
                       ),
                     ),
@@ -2077,7 +2088,8 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
             USER_ID: CUR_USERID,
             PRODUCT_VARIENT_ID: model.prVarientList[model.selVarient].id,
             QTY: qty,
-            "gram": widget.model.defaultOrder.toString()
+            "gram": widget.model.defaultOrder.toString(),
+            // PRODUCT_VOLUME_TYPE:widget.model.productVolumeType
           };
 
           Response response =
@@ -2153,7 +2165,8 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
             PRODUCT_VARIENT_ID: model.prVarientList[model.selVarient].id,
             USER_ID: CUR_USERID,
             QTY: qty.toString(),
-            "gram": model.defaultOrder.toString()
+            "gram": model.defaultOrder.toString(),
+            // PRODUCT_VOLUME_TYPE:model.productVolumeType
           };
 
           Response response =
@@ -2236,14 +2249,19 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
         ));
   }
 
-  String priceUpdate({String grams2, String price2}) {
+  String priceUpdate({String grams2, String price2, String productVolumeType}) {
     double price = double.parse(price2.toString());
     int gram = int.parse(grams2.toString());
     var gramPrice;
-    if (gram == 0) {
-      gramPrice = price;
+
+    if (productVolumeType == "piece") {
+      gramPrice = price * gram;
     } else {
-      gramPrice = (price * gram) / 1000;
+      if (gram == 0) {
+        gramPrice = price;
+      } else {
+        gramPrice = (price * gram) / 1000;
+      }
     }
 
     return gramPrice.toString();
