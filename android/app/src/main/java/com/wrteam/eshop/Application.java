@@ -1,4 +1,4 @@
-package com.ramanandi.fruits;
+package com.businesspartnership.portal;
 
 import io.flutter.app.FlutterApplication;
 import io.flutter.plugin.common.PluginRegistry;

@@ -1,6 +1,6 @@
 final String appName = 'ShreeRamandi';
 
-final String packageName = 'com.ramanandi.fruits';
+final String packageName = 'com.businesspartnership.portal';
 final String androidLink = 'https://play.google.com/store/apps/details?id=';
 
 final String iosPackage = 'odeva.click';

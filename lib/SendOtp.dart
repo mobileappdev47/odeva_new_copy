@@ -214,7 +214,7 @@ class _SendOtpState extends State<SendOtp> with TickerProviderStateMixin {
       height: deviceHeight * 0.15,
       width: deviceWidth * 0.765,
       child: Center(
-        child: new Image.asset('assets/images/homelogo.png'),
+        child: new Image.asset('assets/images/Frame 28.png'),
       ),
     );
   }

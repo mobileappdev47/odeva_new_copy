@@ -3,6 +3,7 @@ import 'package:eshop/Helper/Color.dart';
 import 'package:eshop/Helper/Constant.dart';
 import 'package:eshop/Login.dart';
 import 'package:eshop/Splash.dart';
+import 'package:eshop/first_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -223,11 +224,13 @@ class _MyAppState extends State<MyApp> {
               .apply(bodyColor: colors.fontColor),
         ),
         debugShowCheckedModeBanner: false,
-        initialRoute: '/',
+        // initialRoute: '/',
+        initialRoute:  '/',
         routes: {
           '/': (context) => Splash(),
           '/home': (context) => Home(),
-          '/login': (context) => Login()
+          '/login': (context) => Login(),
+          '/firstScreen': (context) => FirstScreen(),
         },
 
         darkTheme: ThemeData(

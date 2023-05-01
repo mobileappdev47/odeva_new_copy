@@ -91,7 +91,7 @@ class StateHome extends State<Home> {
         updateHome: updateHome,
       ),
       Favourite(updateHome),
-      NotificationList(),
+      // NotificationList(),
       MyProfile(updateHome),
     ];
   }
@@ -608,25 +608,25 @@ class StateHome extends State<Home> {
                       style: TextStyle(color: Colors.black54))*/
                       "Favourite",
                 ),
+          // curhome3Selected == 3
+          //     ? BottomNavigationBarItem(
+          //         icon: SvgPicture.asset("assets/images/sel_notification.svg"),
+          //         //label: 'Home',
+          //         label:
+          //             "Notification" /*Text('Notification',
+          //             style: TextStyle(color: Colors.black54))*/
+          //         ,
+          //       )
+          //     : BottomNavigationBarItem(
+          //         icon:
+          //             SvgPicture.asset("assets/images/desel_notification.svg"),
+          //         //label: 'Home',
+          //         label:
+          //             "Notification" /*Text('Notification',
+          //             style: TextStyle(color: Colors.black54))*/
+          //         ,
+          //       ),
           curhome3Selected == 3
-              ? BottomNavigationBarItem(
-                  icon: SvgPicture.asset("assets/images/sel_notification.svg"),
-                  //label: 'Home',
-                  label:
-                      "Notification" /*Text('Notification',
-                      style: TextStyle(color: Colors.black54))*/
-                  ,
-                )
-              : BottomNavigationBarItem(
-                  icon:
-                      SvgPicture.asset("assets/images/desel_notification.svg"),
-                  //label: 'Home',
-                  label:
-                      "Notification" /*Text('Notification',
-                      style: TextStyle(color: Colors.black54))*/
-                  ,
-                ),
-          curhome3Selected == 4
               ? BottomNavigationBarItem(
                   icon: SvgPicture.asset("assets/images/sel_user.svg"),
                   //label: 'Home',
@@ -962,7 +962,7 @@ class StateHomePage extends State<HomePage> with TickerProviderStateMixin {
                           //   color: colors.white,
                           // ),
                           child:
-                              Image.asset("assets/images/new_title_logo.png"),
+                              Image.asset("assets/images/Frame 28.png"),
                         ),
                         Padding(
                           padding: const EdgeInsetsDirectional.only(

@@ -22,7 +22,7 @@ class _SignInUpAccState extends State<SignInUpAcc> {
           height: deviceHeight * 0.365,
           width: deviceWidth * 0.765,
           child: Image.asset(
-            'assets/images/homelogo.png',
+            'assets/images/Frame 28.png',
           ),
         ));
   }

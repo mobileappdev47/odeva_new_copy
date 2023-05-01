@@ -65,6 +65,7 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
 
   Future<void> loadPictures() async {
     // await precachePicture(ExactAssetPicture((SvgPicture.svgStringDecoder),onboardImage), null);
+
   }
 
   @override
@@ -636,33 +637,33 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
           // _getDrawerItem(getTranslated(context, 'ABOUT_LBL'),
           //     'assets/images/pro_aboutus.svg'),
           _getDividerRefer(),
-          _getDrawerItem(getTranslated(context, 'CONTACT_LBL'),
-              'assets/images/pro_customersupport.svg'),
+          // _getDrawerItem(getTranslated(context, 'CONTACT_LBL'),
+              // 'assets/images/pro_customersupport.svg'),
           // _getDivider(),
           // _getDrawerItem(
           //     getTranslated(context, 'FAQS'), 'assets/images/pro_faq.svg'),
           _getDivider(),
-          _getDrawerItem(
-              getTranslated(context, 'PRIVACY'), 'assets/images/pro_pp.svg'),
-          _getDivider(),
-          _getDrawerItem(
-              getTranslated(context, 'TERM'), 'assets/images/pro_tc.svg'),
-          _getDivider(),
-          _getDrawerItem(getTranslated(context, 'RATE_US'),
-              'assets/images/pro_rateus.svg'),
-          _getDivider(),
+          // _getDrawerItem(
+          //     getTranslated(context, 'PRIVACY'), 'assets/images/pro_pp.svg'),
+          // _getDivider(),
+          // _getDrawerItem(
+          //     getTranslated(context, 'TERM'), 'assets/images/pro_tc.svg'),
+          // _getDivider(),
+          // _getDrawerItem(getTranslated(context, 'RATE_US'),
+          //     'assets/images/pro_rateus.svg'),
+          // _getDivider(),
           /*       _getDrawerItem(getTranslated(context, 'chat'),
               'assets/images/pro_customersupport.svg'),*/
           // _getDrawerItem(getTranslated(context, 'livechat'),
           //     'assets/images/pro_customersupport.svg'),
-          _getDrawerItem(getTranslated(context, 'SHARE_APP'),
-              'assets/images/pro_share.svg'),
-          CUR_USERID == "" || CUR_USERID == null ? Container() : _getDivider(),
-          CUR_USERID == "" || CUR_USERID == null
-              ? Container()
-              : _getDrawerItem(getTranslated(context, 'LOGOUT'),
-                  'assets/images/pro_logout.svg'),
-          _getDivider(),
+          // _getDrawerItem(getTranslated(context, 'SHARE_APP'),
+          //     'assets/images/pro_share.svg'),
+          // CUR_USERID == "" || CUR_USERID == null ? Container() : _getDivider(),
+          // CUR_USERID == "" || CUR_USERID == null
+          //     ? Container()
+          //     : _getDrawerItem(getTranslated(context, 'LOGOUT'),
+          //         'assets/images/pro_logout.svg'),
+          // _getDivider(),
           _getDrawerItem(getTranslated(context, 'DeleteUser'), 'assets/images/pro_logout.svg'),
           SizedBox(
             height: 20,

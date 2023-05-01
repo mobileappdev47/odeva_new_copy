@@ -246,10 +246,10 @@ print("DATE LOGIN :  $data");
   _subLogo() {
     return Container(
       // padding: EdgeInsets.only(top: 10),
-      height: deviceHeight * 0.15,
+      height: deviceHeight * 0.246,
       width: deviceWidth * 0.765,
       child: Image.asset(
-        'assets/images/homelogo.png',
+        'assets/images/Frame 28.png',
         fit: BoxFit.fill,
       ),
     );

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:eshop/Helper/Constant.dart';
 import 'package:eshop/SignInUpAcc.dart';
+import 'package:eshop/first_screen.dart';
 import 'package:eshop/utils/color_res.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -86,7 +87,7 @@ class _SplashScreen extends State<Splash> with TickerProviderStateMixin {
             },
           ),*/
           child: Center(
-            child: Image.asset("assets/images/new_title_logo.png",height: 100,),
+            child: Image.asset("assets/images/Frame 28.png",height: 100,),
           ),
         ));
   }
@@ -186,7 +187,7 @@ class _SplashScreen extends State<Splash> with TickerProviderStateMixin {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => SignInUpAcc(),
+            builder: (context) => FirstScreen(),
           ));
     }
     // } else {

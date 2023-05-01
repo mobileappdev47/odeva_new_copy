@@ -206,7 +206,7 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
         child: Container(
             height: deviceHeight*0.365,
             width: deviceWidth*0.765,
-            child: new Image.asset('assets/images/homelogo.png')),
+            child: new Image.asset('assets/images/Frame 28.png')),
       ),
     );
   }
