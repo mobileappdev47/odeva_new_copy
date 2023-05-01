@@ -16,7 +16,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:media_picker/media_picker.dart';
+
 import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -248,12 +248,12 @@ class _ChatFireScreenState extends State<ChatFireScreen> {
   }
 
   void onGalleryTap(BuildContext context) async {
-    isAttachment = false;
-    List<String> result =
-        await MediaPicker.pickImages(quantity: 10, withCamera: false);
-    uploadingMedia = true;
-    uploadingMedia = false;
-    print("IMG ${result}");
+    // isAttachment = false;
+    // List<String> result =
+    //     await MediaPicker.pickImages(quantity: 10, withCamera: false);
+    // uploadingMedia = true;
+    // uploadingMedia = false;
+    // print("IMG ${result}");
   }
 
   void onLongPressMessage(MessageModel messageModel, bool sender) async {}

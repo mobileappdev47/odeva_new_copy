@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:eshop/Helper/Session.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:http/http.dart';
 import 'Helper/AppBtn.dart';
 import 'Helper/Color.dart';
@@ -129,43 +128,9 @@ class StatePrivacy extends State<PrivacyPolicy> with TickerProviderStateMixin {
             body: getProgress(),
           )
         : privacy != null
-            ? WebviewScaffold(
-                appBar: AppBar(
-                  backgroundColor: colors.darkColor,
-                  titleSpacing: 0,
-                  leading: Builder(builder: (BuildContext context) {
-                    return Container(
-                      margin: EdgeInsets.all(10),
-                      decoration: shadow(),
-                      child: Card(
-                        elevation: 0,
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(4),
-                          onTap: () => Navigator.of(context).pop(),
-                          child: Center(
-                            child: Icon(
-                              Icons.keyboard_arrow_left,
-                              color: colors.primary,
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  }),
-                  title: Text(
-                    widget.title,
-                    style: TextStyle(
-                      color: colors.fontColor,
-                    ),
-                  ),
-                ),
-                withJavascript: true,
-                appCacheEnabled: true,
-                scrollBar: false,
-                url: new Uri.dataFromString(privacy,
-                        mimeType: 'text/html', encoding: utf8)
-                    .toString(),
-              )
+            ?
+    //
+    SizedBox()
             : Scaffold(
                 key: _scaffoldKey,
                 appBar: AppBar(
