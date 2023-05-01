@@ -3,34 +3,34 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>1041062081588-but0ic8on7vbjqm39cbvolg8fss7noko.apps.googleusercontent.com</string>
+	<string>518616233196-ug075lk6119564aud7e5osdbmr8d4v1r.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.1041062081588-but0ic8on7vbjqm39cbvolg8fss7noko</string>
+	<string>com.googleusercontent.apps.518616233196-ug075lk6119564aud7e5osdbmr8d4v1r</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>1041062081588-vqhusj4qb37545f10215445g775bdnqi.apps.googleusercontent.com</string>
+	<string>518616233196-td9tintg950ro0rf7jncke54cfe1m6ma.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyA3JpuSl7ESi03-zKdnn9ldm6yaidbsgYo</string>
+	<string>AIzaSyBn2fwkvSFa4OyDLoBmtxtoQFyLpp2CC50</string>
 	<key>GCM_SENDER_ID</key>
-	<string>1041062081588</string>
+	<string>518616233196</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.businesspartnership.portal</string>
 	<key>PROJECT_ID</key>
-	<string>shreeramandi</string>
+	<string>bpp-project-ce9c9</string>
 	<key>STORAGE_BUCKET</key>
-	<string>shreeramandi.appspot.com</string>
+	<string>bpp-project-ce9c9.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1041062081588:ios:5220f088b88862948a4661</string>
+	<string>1:518616233196:ios:f266afa7f0e13d404161c9</string>
 </dict>
 </plist>
