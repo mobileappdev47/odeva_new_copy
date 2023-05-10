@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eshop/Helper/Constant.dart';
 import 'package:eshop/SignInUpAcc.dart';
 import 'package:eshop/first_screen.dart';
 import 'package:eshop/utils/color_res.dart';
+import 'package:eshop/web_view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:in_app_review/in_app_review.dart';
@@ -20,10 +22,24 @@ class Splash extends StatefulWidget {
 class _SplashScreen extends State<Splash> with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  bool isHide;
+
+
   @override
   void initState() {
     super.initState();
     startTime();
+
+    firestore.collection("accountHide").get().then((value) {
+      print(value);
+
+      for (int i = 0; i < value.docs.length; i++) {
+        isHide = value.docs[i]["isHide"];
+        setState(() {});
+      }
+    });
     // startTime();
   }
 
@@ -187,7 +203,7 @@ class _SplashScreen extends State<Splash> with TickerProviderStateMixin {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => FirstScreen(),
+            builder: (context) =>  (isHide == false) ? WebViewScreen() : FirstScreen(),
           ));
     }
     // } else {

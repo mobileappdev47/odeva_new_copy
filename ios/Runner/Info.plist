@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Shree Ramandi</string>
+	<string>BPP</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -32,6 +32,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>com.googleusercontent.apps.118961537-63uq4ivsqmij9kijic0ige2rc8mqpmpm</string>
+				<string>app-1-518616233196-ios-f266afa7f0e13d404161c9</string>
 			</array>
 		</dict>
 	</array>
