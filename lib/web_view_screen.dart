@@ -28,8 +28,10 @@ class _WebViewScreenState extends State<WebViewScreen> {
               ),
               Expanded(
                   child: WebView(
+
                     initialUrl: "https://businesspartnershipportal.com",
                     javascriptMode: JavascriptMode.unrestricted,
+                    userAgent: 'random',
                     onWebViewCreated: (WebViewController webViewController) {
                       controller.complete(webViewController);
                     },
