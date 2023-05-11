@@ -29,10 +29,11 @@ class _WebViewScreenState extends State<WebViewScreen> {
               ),
               Expanded(
                   child: WebView(
-
+                   
                     initialUrl: "https://businesspartnershipportal.com",
                     javascriptMode: JavascriptMode.unrestricted,
-                    userAgent: 'random',
+                    // userAgent: 'random',
+                    userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36",
                     onWebViewCreated: (WebViewController webViewController) {
                       controller.complete(webViewController);
                     },
@@ -42,15 +43,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
           ),
         ),
 
-    return Scaffold(
-      body: WebView(
-        initialUrl: "https://businesspartnershipportal.com",
-        javascriptMode: JavascriptMode.unrestricted,
-        onWebViewCreated: (WebViewController webViewController) {
-          controller.complete(webViewController);
-        },
-
-      ),
+    
 
     );
   }
