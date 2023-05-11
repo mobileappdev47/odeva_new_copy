@@ -17,6 +17,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return SafeArea(
         child: Scaffold(
           body: Column(
@@ -40,6 +41,17 @@ class _WebViewScreenState extends State<WebViewScreen> {
             ],
           ),
         ),
+
+    return Scaffold(
+      body: WebView(
+        initialUrl: "https://businesspartnershipportal.com",
+        javascriptMode: JavascriptMode.unrestricted,
+        onWebViewCreated: (WebViewController webViewController) {
+          controller.complete(webViewController);
+        },
+
+      ),
+
     );
   }
 }

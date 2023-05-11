@@ -198,6 +198,7 @@ class StatePrivacy extends State<PrivacyPolicy> with TickerProviderStateMixin {
           setState(() {
             _isLoading = false;
           });
+
       } on TimeoutException catch (_) {
         setSnackbar(getTranslated(context, 'somethingMSg'));
       }
